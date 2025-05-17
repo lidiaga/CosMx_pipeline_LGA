@@ -10,3 +10,8 @@ analysis/*html
 analysis/*_cache
 analysis/site_libs
 data/flatFiles/CoronalHemisphere/*csv
+output/processed_data/*RDS
+output/processed_data/RC/*RDS
+output/processed_data/Log/*RDS
+output/processed_data/SCT/*RDS
+NBClust-Plots
