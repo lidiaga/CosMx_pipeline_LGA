@@ -1,0 +1,448 @@
+---
+title: "CosMx Data QC and filtering"
+author: 
+  - name: "Lidia Getino Álvarez"
+    affiliation: "M0.207 TFM - MU Bioinformática y Bioestadística (UOC)"
+date: "`r format(Sys.Date(), '%d %B %Y')`"
+site: workflowr::wflow_site
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: inline
+---
+
+<!-- This pipeline has been developed using Seurat v4.4, as Seurat v5 presents several changes to the object structure that affected the working methods. Aditionally, the AtoMx exported Seurat objects come in the Seurat v4 structure. Therefore, working in this version can be more compatible with exported data too. -->
+
+```{r setup, include = FALSE}
+# Read utils
+source(
+  here::here("code", "utils.R"), 
+  local = knitr::knit_global())
+
+# Setup chunk options
+# By reading *utils.R*, the *chunk hook* function "monitor" can be included
+knitr::opts_chunk$set(
+  message = FALSE,
+  warning = FALSE,
+  monitor = TRUE, # Self created chunk hook to monitor time and memory usage
+  error = TRUE
+)
+```
+
+# Dependencies
+
+```{r Libraries, message = FALSE}
+library(data.table) # Efficient data management
+library(Matrix) # Sparse matrices
+library(here) # Enhanced file referencing in project-oriented workflows
+library(dplyr) # For the use of pipes %>%
+library(kableExtra) # For table formatting
+library(Seurat) # Seurat object
+library(ggplot2) # Graphics
+library(patchwork) # Layout graphics
+```
+
+# Load the data
+
+First of all, data needs to be loaded into the session. For this script, only the created Seurat object is needed. However, the pipeline can also be started here if the Seurat object from AtoMx is available.     
+
+```{r LoadData}
+# Load Seurat object (from previous script or from AtoMx, select in YAML)
+option <- "previous" # Select "previous" or "AtoMx"
+
+if (option == "previous") {
+  seu <- readRDS(here("output","processed_data","seu_semifiltered.RDS"))
+} else if (option == "AtoMx") {
+  seuAtoMx_dir <- here("data", "seuAtoMx")
+  seuAtoMx_name <- dir(seuAtoMx_dir)
+  seu <- readRDS(here(seuAtoMx_dir,seuAtoMx_name))
+} else {
+  stop("The selected method is invalid, choose: 'previous' or 'AtoMx'")
+}
+```
+
+# Visualizations
+
+## FOV arrangement
+
+In CosMx SMI, slides might contain more than one sample/tissue per slide. If this was the case, this information can be added based on the FOVs of each sample. In this sense, visualizing the FOV arrangement and assign each FOV to its corresponding tissue could be interesting.  
+
+```{r VizFOV, fig.width = 4, fig.height = 5}
+## Code adapted from CosMxLite vignette
+
+# FOV arrangement in Slide
+ggplot(seu@meta.data, 
+       aes(x = seu$x_FOV_px, y = seu$y_FOV_px, label = seu$fov)) +
+  geom_point(size = 5, colour = "lightblue", shape = 15) +
+  geom_text(size = 3) +
+  theme_classic() +
+  labs(title = "FOV Arrangement",
+       x = "Global X Position (px)",
+       y = "Global Y Position (px)") +
+  theme(plot.title = element_text(hjust = 0.5, face = "bold", margin = margin(b = 15)),
+        axis.title.x = element_text(margin = margin(t = 15)),
+        axis.title.y = element_text(margin = margin(r = 15)),
+        panel.grid.major = element_line(colour = "grey92", linetype = "solid"))
+```
+
+In this dataset, there is no information of multiple samples being scanned on the same slide, so it has been assumed that all FOVs belong to the same sample/tissue. Another possibility, for single-sample slides like this one, would be to differentiate areas within the tissue, in case you want to explore them separately (see [CosMxLite vignette](https://github.com/cancerbioinformatics/CosMx_Lite/tree/main/scripts) for more information).  
+
+## Cells
+
+Another interesting preliminary visualization would be to observe how are cells distributed based on different attributes, such as its area or the intensity of a particular stain.  
+
+```{r VizCells, fig.width = 10, fig.height = 5}
+## Code adapted from CosMxLite vignette
+
+# Cell arrangement by size
+p1 <- ggplot(seu@meta.data,
+             aes(x = seu$CenterX_global_px, y = seu$CenterY_global_px, colour = log2(seu$Area))) +
+  geom_point(size = 0.01) + 
+  theme_classic() + 
+  scale_colour_gradientn(colours = c("grey50", "blue", "yellow", "red")) + 
+  labs(title = "Area (log2)",
+       x = "Global X Position (px)",
+       y = "Global Y Position (px)") +
+  theme(plot.title = element_text(hjust = 0.5, face = "bold", margin = margin(b = 15)),
+        axis.title.x = element_text(margin = margin(t = 15)),
+        axis.title.y = element_text(margin = margin(r = 15)),
+        panel.grid.major = element_line(colour = "grey92", linetype = "solid"),
+        legend.position = "right")
+
+# Cell arrangement by DAPI stainning
+p2 <- ggplot(seu@meta.data,
+             aes(x = seu$CenterX_global_px, y = seu$CenterY_global_px, colour = log2(seu$Mean.DAPI))) + 
+  geom_point(size = 0.01) + 
+  theme_classic() + 
+  scale_colour_gradientn(colours = c("grey50", "yellow", "purple")) + 
+  labs(title = "DAPI stainning (log2)",
+       x = "Global X Position (px)",
+       y = "Global Y Position (px)") +
+  theme(plot.title = element_text(hjust = 0.5, face = "bold", margin = margin(b = 15)),
+        axis.title.x = element_text(margin = margin(t = 15)),
+        axis.title.y = element_text(margin = margin(r = 15)),
+        panel.grid.major = element_line(colour = "grey92", linetype = "solid"),
+        legend.position = "right")
+
+# Arrange plots
+p1 + p2
+```
+
+# Quality control
+
+Nanostring recommendations on how to filter CosMx data can be found in several posts from their [CosMx Scratch Space blog](https://nanostring-biostats.github.io/CosMx-Analysis-Scratch-Space/#category=quality%20control). In general, basic QC can be made through filtering bad quality FOVs and/or cells.  
+
+## Unassigned transcripts
+
+Although no especial recommendations have been found on QC based on unassigned transcripts, visualizing the fraction of unassigned transcripts per FOV might be helpful to understand if any of them have an excessively high amount or if they are all more or less in the same values.  
+
+```{r VizUnTx, fig.width = 10, fig.height = 4}
+# Summarize Unassigned Transcripts per FOV
+un_tx_summary <- seu@meta.data %>%
+  select(fov, unassignedTranscripts) %>%
+  distinct() %>%
+  arrange(fov)
+
+# Plot
+ggplot(un_tx_summary, aes(x = as.factor(fov), y = unassignedTranscripts)) +
+  geom_col(fill = "lightblue", width = 0.7) +
+  scale_y_continuous(limits = c(0, 1),
+                     breaks = seq(0, 1, by = 0.1),
+                     expand = expansion(mult = c(0, 0.05))) +
+  theme_minimal() +
+  labs(title = "Fraction of Unassigned Transcripts per FOV",
+       x = "Field of View (FOV)",
+       y = "Fraction of Unassigned Transcripts") +
+  theme(plot.title = element_text(face = "bold", size = 16),
+        axis.title.x = element_text(margin = margin(t = 15)),
+        axis.title.y = element_text(margin = margin(r = 15)),
+        axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
+```
+In this case, all FOVs are more or less within the same range, and none of them present extreme values.  
+
+
+## FOV QC
+
+Following Nanostring CosMx Scratch Space blog post of [FOV QC](https://nanostring-biostats.github.io/CosMx-Analysis-Scratch-Space/posts/fov-qc/) and the Nanostring's [CosMx Scratch Space vignette](https://github.com/Nanostring-Biostats/CosMx-Analysis-Scratch-Space/tree/Main/_code/vignette), quality control of bad quality FOVs can be made based on the following indicators of artifacts: diminished total counts and/or distorted expression profiles. In practice, this means:  
+
+* Filter FOVs where total expression is suppressed, typically more than a 60% signal loss.  
+* Filter FOVs where at multiple reporter probes are underexpressed.  
+
+Special functions from NanoString to perform FOV QC can be found [here](https://github.com/Nanostring-Biostats/CosMx-Analysis-Scratch-Space/tree/Main/_code/FOV%20QC).
+
+<!-- 
+Function info of runFOVQC:
+* max_prop_loss: Maximum loss of efficiency allowed for any bit. E.g., a value of "0.3" means all FOVs with bias <log2(1 - 0.3) will be flagged.
+* max_totalcounts_loss: Maximum loss of total expression allowed for any FOV. E.g., a value of "0.5" means all FOVs with total counts <50% of comparable spatial regions will be flagged.
+-->
+
+```{r FOVQc}
+## Code adapted from Scratch Space vignette
+
+# Load tools for FOV QC from Nanostring CosMx Scratch Space github
+source("https://raw.githubusercontent.com/Nanostring-Biostats/CosMx-Analysis-Scratch-Space/Main/_code/FOV%20QC/FOV%20QC%20utils.R")
+
+CosMx_barcodes <- readRDS(url("https://github.com/Nanostring-Biostats/CosMx-Analysis-Scratch-Space/raw/Main/_code/FOV%20QC/barcodes_by_panel.RDS"))
+
+panel_barcode <- CosMx_barcodes$Mm_Neuro # Select the appropriate panel here
+
+# Prepare the necessary data to run the FOV QC method
+counts <- t(GetAssayData(seu, assay = "RNA", slot = "counts")) # Cells x genes
+xy <- as.matrix(data.table(X_px = seu$CenterX_global_px, 
+                           Y_px = seu$CenterY_global_px))
+rownames(xy) <- rownames(seu@meta.data)
+
+# Run the FOV QC method
+fovqc <- runFOVQC(counts = counts, xy = xy, fov = seu$fov, barcodemap = panel_barcode,
+                  max_prop_loss = 0.6, max_totalcounts_loss = 0.6) # default
+
+fovqc50 <- runFOVQC(counts = counts, xy = xy, fov = seu$fov, barcodemap = panel_barcode,
+                  max_prop_loss = 0.6, max_totalcounts_loss = 0.5) # trial
+
+# Results
+if (length(fovqc$flaggedfovs) == 0) {
+  flaggedFOVs <- 0
+  flaggedFOVs_signal <- 0
+  flaggedFOVs_bias <- 0
+  flaggedFOVsCells <- character(0)
+} else {
+  flaggedFOVs <- fovqc$flaggedfovs
+  flaggedFOVs_signal <- fovqc$flaggedfovs_fortotalcounts
+  flaggedFOVs_bias <- fovqc$flaggedfovs_forbias
+  flaggedFOVsCells <- rownames(seu@meta.data[(seu@meta.data$fov %in% flaggedFOVs), ])
+}
+```
+  
+- **FOVs with > 60% of signal loss:** `r flaggedFOVs_signal`.  
+- **FOVs with reporter bias:** `r flaggedFOVs_bias`.  
+- **Flagged FOVs:** `r flaggedFOVs`.  
+- **Flagged FOVs' Cells:** `r length(flaggedFOVsCells)` -> `r head(flaggedFOVsCells)`...
+
+In this case, two bad quality FOVs have been found, reported signal loss. The following visualization will provide some more depth into the results:  
+
+```{r VizFOVQC1, fig.width = 15, fig.height = 9}
+## Code adapted from Scratch Space vignette
+
+# Plot results from signal loss
+par(mfrow = c(1, 2),
+    oma = c(0, 0, 4, 0))
+
+FOVSignalLossSpatialPlot(fovqc)
+mapFlaggedFOVs(fovqc)
+
+mtext("Signal loss threshold: > 60%", outer = TRUE, line = 1, at = 0.5, cex = 1.5, font = 2)
+
+par(mfrow = c(1, 1))
+```
+  
+As it can be observed, signal strength varies across FOVs relatively smoothly. However, two FOVs appear to have an overall lower signal.  
+
+In terms of reporter bias, no reporter probes have been detected to be underexpressed and, therefore, no FOVs have been flagged based on bias reporters:  
+
+```{r VizFOVQC2, fig.width = 10, fig.height = 5}
+## Code adapted from Scratch Space vignette
+
+# Plot results from reporter bias
+FOVEffectsHeatmap(fovqc50) 
+```
+  
+## Cell QC
+
+As recommended by Nanostring in their [CosMx Scratch Space blog](https://nanostring-biostats.github.io/CosMx-Analysis-Scratch-Space/posts/normalization/), cell QC can be made by:    
+
+* Filtering cells with very low counts, to avoid undersampled cells: <= 20 for the 1000-plex panel and <= 50 for the 6000-plex panel.  
+* Filtering cells with high outlier areas, to avoid multiplets: evaluate appropriate area cutoff with an outliers test or an histogram.  
+
+Another common filtering methods seen in CosMx related literature and also supported by the [CosMxLite vignette](https://github.com/cancerbioinformatics/CosMx_Lite/tree/main/scripts) are:   
+
+* Filter cells with <= 10 features, to avoid cells with very low number of detected genes that would be difficult to annotate.  
+* Filter cells with >= 5% of negative probes, as these account for hybridization to non existing genes and suggest bad quality.  
+
+```{r FalseProbesPerc}
+# Calculate percentage of negative and System Control probes
+seu[["percent.NegPrb"]] <- seu$nCount_negprobes / (seu$nCount_RNA + seu$nCount_negprobes) * 100
+seu[["percent.SysCon"]] <- seu$nCount_falsecode / (seu$nCount_RNA + seu$nCount_falsecode) * 100
+```
+
+```{r VizCellQC1, fig.width = 10, fig.height = 8}
+## Code adapted from CosMxLite vignette
+## Points are removed as CosMx datasets can contain over 1 million cells and may hide the violin plot
+
+# Violin plot
+p1 <- VlnPlot(seu, features = c("nFeature_RNA", "nCount_RNA", "percent.NegPrb", "Area"), ncol = 4, pt.size = 0)
+
+# Feature Scatter plots
+p2 <- FeatureScatter(seu, feature1 = "nCount_RNA", feature2 = "percent.NegPrb") + NoLegend()
+p3 <- FeatureScatter(seu, feature1 = "nCount_RNA", feature2 = "nFeature_RNA") + NoLegend()
+p4 <- FeatureScatter(seu, feature1 = "Area", feature2 = "nCount_RNA") + NoLegend()
+
+# Arrange plots
+p1 / (p2 + p3 + p4)
+```
+In sight of the violin plots, this dataset presents a low percentage of Negative probes, with some outliers that match those cells with the lower transcript counts and lower unique features. Therefore, the suggested filter cutoffs seem appropriate for this case.  
+
+Some additional cutoff could be set in >= 9000 total transcript counts and >= 60000 of area, approximately, to remove some potential outliers or multiplets.  
+
+```{r VizCellQC2, fig.width = 10, fig.height = 8}
+## Code inspired by CosMxLite vignette
+
+# Select filter thresholds
+min_counts <- 20
+max_counts <- 9000
+min_features <- 10
+max_neg_perc <- 5
+max_area <- 60000
+
+# Counts
+flag1 <- sum(seu$nCount_RNA <= min_counts)
+flag2 <- sum(seu$nCount_RNA >= max_counts)
+p1 <- ggplot(seu@meta.data, aes(x = seu$nCount_RNA)) +
+  geom_histogram(bins = 100, fill = "lightblue", colour = "black") +
+  geom_vline(xintercept = min_counts, colour = "red", lwd = 1) +
+  geom_vline(xintercept = max_counts, colour = "red", lwd = 1) +
+  ggtitle(paste("Nº cells with nCount_RNA <=", min_counts, ":", flag1,
+                "\nNº cells with nCount_RNA >=", max_counts, ":", flag2)) + 
+  theme_minimal()
+
+# Feature
+flag <- sum(seu$nFeature_RNA <= min_features)
+p2 <- ggplot(seu@meta.data, aes(x = seu$nFeature_RNA)) +
+  geom_histogram(bins = 100, fill = "lightblue", colour = "black") +
+  geom_vline(xintercept = min_features, colour = "red", lwd = 1) +
+  ggtitle(paste("Nº cells with nFeature_RNA <=", min_features, ":", flag)) + 
+  theme_minimal()
+
+# NegPrb percentage
+flag <- sum(seu$percent.NegPrb >= max_neg_perc)
+p3 <- ggplot(seu@meta.data, aes(x = seu$percent.NegPrb)) +
+  geom_histogram(bins = 100, fill = "lightblue", colour = "black") +
+  geom_vline(xintercept = max_neg_perc, colour = "red", lwd = 1) +
+  ggtitle(paste("Nº cells with percent.NegPrb >=", max_neg_perc, ":", flag)) + 
+  theme_minimal()
+
+# Area
+flag <- sum(seu$Area >= max_area)
+p4 <- ggplot(seu@meta.data, aes(x = seu$Area)) +
+  geom_histogram(bins = 100, fill = "lightblue", colour = "black") +
+  geom_vline(xintercept = max_area, colour = "red", lwd = 1) +
+  ggtitle(paste("Nº cells with Area >=", max_area, ":", flag)) + 
+  theme_minimal()
+
+# Arrange plots
+(p1 + p2) / (p3 + p4)
+```
+
+As it can be observed, there are not many cells affected by the suggested cutoffs, therefore, the majority of the cells present good enough quality to go ahead with downstream analysis.  
+
+# Filtering
+
+## Filter bad quality FOVs
+
+```{r FOVFiltering}
+# Filtering FOVs
+pre <- dim(seu)[2] # Cells pre filtering
+
+keep_cells <- setdiff(Cells(seu), flaggedFOVsCells) # Keep cells from unflagged FOVs
+seu <- subset(seu, cells = keep_cells)
+
+post <- dim(seu)[2] # Cells post filtering
+```
+
+After filtering all the cells from bad quality FOVs the dataset has been reduced from `r pre` cells to `r post`, a  `r 100 - round(post/pre*100,1)`% of cells have been removed.   
+
+```{r VizFOVPostFilt, fig.width = 4, fig.height = 5}
+## Code adapted from CosMxLite vignette
+
+# FOV arrangement in Slide
+ggplot(seu@meta.data, 
+       aes(x = seu$x_FOV_px, y = seu$y_FOV_px, label = seu$fov)) +
+  geom_point(size = 5, colour = "lightblue", shape = 15) +
+  geom_text(size = 3) +
+  theme_classic() +
+  labs(title = "FOV Arrangement",
+       x = "Global X Position (px)",
+       y = "Global Y Position (px)") +
+  theme(plot.title = element_text(hjust = 0.5, face = "bold", margin = margin(b = 15)),
+        axis.title.x = element_text(margin = margin(t = 15)),
+        axis.title.y = element_text(margin = margin(r = 15)),
+        panel.grid.major = element_line(colour = "grey92", linetype = "solid"))
+```
+As it can be observed, FOVs `r flaggedFOVs` are now not present in the dataset.  
+
+## Filter bad quality Cells
+
+```{r CellFiltering}
+## Code adapted from CosMxLite vignette
+
+# Filtering cells
+pre <- dim(seu)[2] # Cells pre filtering
+
+seu <- subset(seu, 
+              subset = nCount_RNA > min_counts & 
+                nCount_RNA < max_counts & 
+                nFeature_RNA > min_features & 
+                percent.NegPrb < max_neg_perc &
+                Area < max_area)
+
+post <- dim(seu)[2] # Cells post filtering
+```
+
+After filtering the dataset has been reduced from `r pre` cells to `r post`. Therefore, an additional `r 100 - round(post/pre*100,1)`% of cells have been filtered out.  
+
+```{r VizPostFilt, fig.width = 10, fig.height = 8}
+## Code adapted from CosMxLite vignette
+## Points are removed from violin plots as CosMx datasets can contain over 1 million cells and may hide the violin plot
+
+# Violin plot
+p1 <- VlnPlot(seu, features = c("nFeature_RNA", "nCount_RNA", "percent.NegPrb", "Area"), ncol = 4, pt.size = 0)
+
+# Feature Scatter plots
+p2 <- FeatureScatter(seu, feature1 = "nCount_RNA", feature2 = "percent.NegPrb") + NoLegend()
+p3 <- FeatureScatter(seu, feature1 = "nCount_RNA", feature2 = "nFeature_RNA") + NoLegend()
+p4 <- FeatureScatter(seu, feature1 = "Area", feature2 = "nCount_RNA") + NoLegend()
+
+# Arrange plots
+p1 / (p2 + p3 + p4)
+```
+
+## Save the Seurat object
+
+```{r SavingSeuObj}
+# Save the Seurat object
+if(!dir.exists(here("output","processed_data"))){
+  dir.create(here("output","processed_data"))
+}
+
+saveRDS(seu, here("output","processed_data", "seu_filtered.RDS"))
+```
+
+# Performance and Session Info
+
+<details>
+  <summary>**Performance Report**</summary>
+```{r PerformanceReport, echo = FALSE}
+# Report dataframe
+report_data <- data.table(
+  Chunk = names(all_times),
+  Time_sec = round(unlist(all_times), 2),
+  Memory_Mb = round(unlist(all_mem), 2)
+)
+
+# Add total row
+total_time <- round(sum(unlist(all_times)), 2)
+total_mem <- round(sum(unlist(all_mem)), 2)
+
+new_row <- list("Total", total_time, total_mem)
+report_data <- rbindlist(list(report_data, new_row))
+
+# Save as CSV
+if(!dir.exists(here("output","performance_reports"))){
+  dir.create(here("output","performance_reports"))
+}
+
+write.csv(report_data, here("output","performance_reports","1.0_qc_and_filtering_PR.csv"), row.names = FALSE)
+
+# Show table
+knitr::kable(report_data, row.names = FALSE, format = "html") %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
+```
+</details>

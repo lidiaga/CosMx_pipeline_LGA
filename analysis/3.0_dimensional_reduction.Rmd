@@ -1,0 +1,279 @@
+---
+title: "CosMx Data Dimensional reduction"
+author: 
+  - name: "Lidia Getino Álvarez"
+    affiliation: "M0.207 TFM - MU Bioinformática y Bioestadística (UOC)"
+date: "`r format(Sys.Date(), '%d %B %Y')`"
+site: workflowr::wflow_site
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: inline
+---
+
+<!-- This pipeline has been developed using Seurat v4.4, as Seurat v5 presents several changes to the object structure that affected the working methods. Aditionally, the AtoMx exported Seurat objects come in the Seurat v4 structure. Therefore, working in this version can be more compatible with exported data too. -->
+
+```{r setup, include = FALSE}
+# Read utils
+source(
+  here::here("code", "utils.R"), 
+  local = knitr::knit_global())
+
+# Setup chunk options
+# By reading *utils.R*, the *chunk hook* function "monitor" can be included
+knitr::opts_chunk$set(
+  message = FALSE,
+  warning = FALSE,
+  monitor = TRUE, # Self created chunk hook to monitor time and memory usage
+  error = TRUE
+)
+```
+
+# Dependencies
+
+```{r Libraries, message = FALSE}
+library(data.table) # Efficient data management
+library(here) # Enhanced file referencing in project-oriented workflows
+library(dplyr) # For the use of pipes %>%
+library(kableExtra) # For table formatting
+library(Seurat) # Seurat object
+library(ggplot2) # Graphics
+library(patchwork) # Layout graphics
+library(viridis) # Viridis color scale
+```
+
+# Load the data
+
+First of all, data needs to be loaded into the session. For this script, only the normalized/transformed Seurat object is needed.  
+
+For simplicity, this pipeline uses the "SCTransform" object, however, the code is parameterized so that the user can execute a different normalization method in the previous script and select its object here by  indicating the corresponding folder. 
+
+```{r LoadData}
+# Indicate the object folder
+folder <- "SCT" # Choose between "RC", "Log" or "SCT"
+
+if (!folder %in% c("RC", "Log", "SCT")) {
+  stop("The selected folder is invalid, choose: 'RC', 'Log' or 'SCT'")
+}
+
+# Load Seurat object
+name <- paste0("seu_", folder, ".RDS")
+seu <- readRDS(here("output","processed_data",folder,name))
+```
+
+# PCA
+
+Now that the data is normalized and scaled, the next step is to perform linear dimensional reduction with Principal Components Analysis, or PCA.  
+
+One of the benefits of using a Seurat object along the pipeline, apart from keeping the data organised, is that well established and extended packages, like Seurat, offer a great variety of functions that cover the most important steps of a genomic analysis, specifically designed to work with the object. Therefore, in this pipeline, PCA will be executed using the Seurat function "RunPCA()", followed by different visualizations performed with different functions of this same package.  
+
+<!-- In this case, as the panel covers only 1K genes, all of them will be used in the PCA. However, if analyzing data from a 6K panel or a WTx panel. Only variable features can be selected setting *features* to VariableFeatures(seu). -->
+
+```{r PCA}
+## Code adapted from CosMxLite vignette
+
+# Run PCA
+seu <- RunPCA(seu, features = rownames(seu))
+```
+
+One way of exploring the resulting PCs would be to visualize the genes that are contributing the most to each PC, for example, by printing the resulting list of genes with most positive and negative loadings or using "VizDimLoadings()".  
+
+```{r VizPCA1, fig.width = 6, fig.height = 5}
+## Code adapted from CosMxLite vignette
+
+# Run PCA
+print(seu[["pca"]], dims = 1:5, nfeatures = 5)
+VizDimLoadings(seu, dims = 1:2, reduction = 'pca')
+```
+The loadings for each PC show which genes are driving the variance in the data along that axis. In this case, for example, cells with a high score for PC 1 would have a higher expression of genes like `r names(sort(Loadings(seu[["pca"]])[, 1], decreasing = TRUE))[1:5]`, while cells with a lower score for PC 1, would instead have higher expression of genes like `r names(sort(Loadings(seu[["pca"]])[, 1], decreasing = FALSE))[1:5]`.  
+
+Some other the visualization tools that allow for easy exploration of the resulted PCs are "DimPlot()", "DimHeatmap()" and "ElbowPlot()":  
+
+## PCA DimPlot
+
+```{r VizPCA2, fig.width = 4, fig.height = 4}
+## Code adapted from CosMxLite vignette
+
+# DimPlot
+DimPlot(seu, reduction = "pca", raster = FALSE) +
+  ggtitle("PCA DimPlot") +
+  theme(plot.title = element_text(hjust = 0.5, face = "bold")) +
+  NoLegend()
+```
+In this plot, cells that are far from each other in the X-axis (PC 1) are more different than cells separated the same distance in the Y-axis (PC 2). In this case, no clear differentiations are observed.  
+
+## PCA DimHeatmap
+
+```{r VizPCA3, fig.width = 15, fig.height = 10}
+## Code adapted from CosMxLite vignette
+
+# DimHeatmap
+heat_list <- DimHeatmap(seu, dims = 1:6, cells = 500, balanced = TRUE,
+                        fast = FALSE, combine = TRUE)
+
+# Add individual titles
+titles <- paste0("PC", 1:6)
+
+heat_list <- lapply(seq_along(heat_list), function(i) {
+  heat_list[[i]] + ggtitle(titles[i])
+})
+
+# Combine with global title
+wrap_plots(heat_list, guides = "collect") + 
+  plot_annotation(
+    title = "Multiple PCA DimHeatmaps",
+    theme = theme(plot.title = element_text(hjust = 0.5, face = "bold"))
+    ) &
+  theme(legend.position = "right")
+```
+This type of plots represent cells (ranked through its PC score) in columns and genes (top loadings) in rows, the color in each intersection represents the expression level of the gene in the cell. By setting the "cells" parameter to a number, such as 500, the plot only shows the most extreme cells of each end. Therefor, the more clear the "blocks" of high vs low expressing genes, the more likely that PC is capturing a major biological distinction.  
+
+## Elbow Plot
+
+Finally, the Elbow Plot, or Scree Plot, ranks PCs based on how much variance is explained by them. This type of plot is usually used to determine the number of PCs that would be consider to "represent" the dataset, leaving out those which could be considered to represent technical noise.  
+
+Technically, the elbow method determines the optimal PC number in the "elbow" of the curve. However, this might be subjective and there are some quantitative approaches that can help determine the appropriate number (see an example in the [Harvard Chan Bioinformatics Core (HBC) scRNA-seq trainning](https://hbctraining.github.io/scRNA-seq/lessons/elbow_plot_metric.html)).  
+
+```{r ElbowMetrics, fig.width = 9, fig.height = 4}
+## Code adapted from hbctraining.github.io
+
+# Metric 1 (first PC with <5% variance but >90% of cumulative variance)
+pct <- seu[["pca"]]@stdev / sum(seu[["pca"]]@stdev) * 100
+cumu <- cumsum(pct)
+
+m1 <- which(cumu > 90 & pct < 5)[1]
+
+# Metric 2 (first PC with <0.1% variance difference with the consecutive PC)
+m2 <- sort(which((pct[1:length(pct) - 1] - pct[2:length(pct)]) > 0.1),
+           decreasing = T)[1] + 1
+
+
+## Code adapted from CosMxLite vignette
+
+# Elbow plot
+npcs <- 30 # Select the PCs to use
+
+ElbowPlot(seu, ndims = 50) + 
+  geom_vline(xintercept = m1, linetype = "dotted", color = "blue") + 
+  annotate("text", x = m1, y = 10, label = "m1", hjust = -0.5, color = "blue") +
+  geom_vline(xintercept = m2, linetype = "dotted", color = "blue") + 
+  annotate("text", x = m2, y = 10, label = "m2", hjust = -0.5, color = "blue") + 
+  ggtitle("Elbow Plot Metrics") +
+  theme(plot.title = element_text(hjust = 0.5, face = "bold"))
+```
+In this case, the elbow might be observed around 15-25 PCs and the calculated metrics are found in PCs `r m1` or `r m2` PCs. In the HBC training, they suggest selecting the lower those metrics. However, it is usually preferable to err on the higher side, so for this example the number of selected PCs will be 30, as an intermediate between both (although it is recommended to test downstream analysis using different numbers of PCs).  
+
+```{r ElbowPCA, fig.width = 9, fig.height = 4}
+## Code adapted from CosMxLite vignette
+
+# Elbow plot
+npcs <- 30 # Select the PCs to use
+
+ElbowPlot(seu, ndims = 50) + 
+  geom_vline(xintercept = npcs, linetype = "dotted", color = "red") + 
+  geom_hline(yintercept = seu@reductions$pca@stdev[npcs], linetype = "dotted", color = "red") +
+  ggtitle("Elbow Plot") +
+  theme(plot.title = element_text(hjust = 0.5, face = "bold"))
+```
+
+# UMAP
+
+In contrast to PCA, where there are up to 50 PCs generated through the algorithm, UMAP is a non-linear dimensional reduction method that generates only two coordinates which can be visualize in a 2D plot. In standard single-cell expression analysis, UMAP is usually calculated from the selected PCs previously calculated.  
+
+```{r UMAP}
+## Code adapted from CosMxLite vignette
+
+# Run UMAP
+seu <- RunUMAP(seu, dims = 1:npcs)
+```
+
+## UMAP DimPlot
+
+```{r VizUMAP1, fig.width = 4, fig.height = 4}
+## Code adapted from CosMxLite vignette
+
+# UMAP DimPlot
+DimPlot(seu, reduction = "umap", cols = "stepped", raster = FALSE) + NoLegend()
+```
+Currently, no clusters have been calculated, so every cell is represented as part of one same group. However, at this point, UMAP plotting can still be useful to visualize how are cells distributed based on different variables, such as tissue (if there is more than one tissue on the slide), slide ID (if there is more than one slide), total counts or stains of interest.
+
+```{r VizUMAP2, fig.width = 15, fig.height = 7}
+# Code inspired by Scratch Space vignette
+
+# Random point order so no tissue or slide is on top by default 
+random <- sample(Cells(seu))
+
+# By tissue (shown as an example, not applicable to this dataset)
+# p1 <- DimPlot(seu, reduction = "umap", cells = random, cols = "stepped",
+#               raster = FALSE, group.by = "tissue") +
+#   ggtitle("By tissue")
+
+# By slide ID (shown as an example, not applicable to this dataset)
+# p2 <- DimPlot(seu, reduction = "umap", cells = random, cols = "stepped",
+#               raster = FALSE, group.by = "slide_ID_numeric") +
+#   ggtitle("By Slide ID")
+
+## By total counts
+seu$log_nCount_RNA <- log2(1 + seu$nCount_RNA)
+
+p3 <- FeaturePlot(seu, reduction = "umap", cells = random, 
+                  features = "log_nCount_RNA") +
+  scale_color_viridis_c(option = "B") + 
+  ggtitle("By Total Counts")
+
+## By DAPI stain
+seu$log_DAPI <- log2(1 + seu$Mean.DAPI)
+
+p4 <- FeaturePlot(seu, reduction = "umap", cells = random, 
+                  features = "log_DAPI") +
+  scale_color_viridis_c(option = "B") + 
+  ggtitle("By DAPI stain")
+
+# Arrange plots
+p3 | p4
+```
+
+This type is visualizations would help to determine if any technical factor is influencing the data, i.e. batch effect related to the cells being in different slides.  
+
+## Save the Seurat object
+
+```{r SavingSeuObj}
+# Save the Seurat object
+name <- paste0("seu_", folder, "_um.RDS")
+saveRDS(seu, here("output","processed_data",folder,name))
+
+# Save the number of PCs used
+name <- paste0("npcs_", folder, ".RDS")
+saveRDS(npcs, here("output","processed_data",folder,name))
+```
+
+# Performance and Session Info
+
+<details>
+  <summary>**Performance Report**</summary>
+```{r PerformanceReport, echo = FALSE}
+# Report dataframe
+report_data <- data.table(
+  Chunk = names(all_times),
+  Time_sec = round(unlist(all_times), 2),
+  Memory_Mb = round(unlist(all_mem), 2)
+)
+
+# Add total row
+total_time <- round(sum(unlist(all_times)), 2)
+total_mem <- round(sum(unlist(all_mem)), 2)
+
+new_row <- list("Total", total_time, total_mem)
+report_data <- rbindlist(list(report_data, new_row))
+
+# Save as CSV
+if(!dir.exists(here("output","performance_reports"))){
+  dir.create(here("output","performance_reports"))
+}
+
+write.csv(report_data, here("output","performance_reports","3.0_dimensional_reduction_PR.csv"), row.names = FALSE)
+
+# Show table
+knitr::kable(report_data, row.names = FALSE, format = "html") %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
+```
+</details>

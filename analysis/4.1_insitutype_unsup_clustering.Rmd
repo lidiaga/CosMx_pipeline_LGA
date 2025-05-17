@@ -1,0 +1,478 @@
+---
+title: "CosMx Data Insitutype Unsupervised Clustering and scType annotation"
+author: 
+  - name: "Lidia Getino Álvarez"
+    affiliation: "M0.207 TFM - MU Bioinformática y Bioestadística (UOC)"
+date: "`r format(Sys.Date(), '%d %B %Y')`"
+site: workflowr::wflow_site
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: inline
+---
+
+<!-- This pipeline has been developed using Seurat v4.4, as Seurat v5 presents several changes to the object structure that affected the working methods. Aditionally, the AtoMx exported Seurat objects come in the Seurat v4 structure. Therefore, working in this version can be more compatible with exported data too. -->
+
+```{r setup, include = FALSE}
+# Read utils
+source(
+  here::here("code", "utils.R"), 
+  local = knitr::knit_global())
+
+source(
+  here::here("code", "aux_functions.R"), 
+  local = knitr::knit_global())
+
+# Setup chunk options
+## By reading *utils.R*, the *chunk hook* function "monitor" can be included
+knitr::opts_chunk$set(
+  message = FALSE,
+  warning = FALSE,
+  monitor = TRUE, # Self created chunk hook to monitor time and memory usage
+  error = TRUE
+)
+```
+
+# Dependencies
+
+```{r Libraries, message = FALSE}
+library(data.table) # Efficient data management
+library(Matrix) # Sparse matrices
+library(here) # Enhanced file referencing in project-oriented workflows
+library(dplyr) # For the use of pipes %>%
+library(kableExtra) # For table formatting
+library(Seurat) # Seurat object
+library(ggplot2) # Graphics
+library(patchwork) # Layout graphics
+library(pheatmap) # Heatmap plot
+library(HGNChelper) # For scType annotation
+
+#remotes::install_github("Nanostring-Biostats/InSituType")
+library(InSituType)
+```
+
+# Load the data
+
+First of all, data needs to be loaded into the session. For this script, two inputs will be needed:  
+
+* The Seurat object from the "Dimensional reduction" script.  
+* The Negative probe matrix from the "Data loading" script.  
+
+<!-- Insitutype algorithm uses not normalized raw counts to cluster the cells. However, the UMAP reduction will be used for plot visualizations, and is therefore needed. For the main pipeline I will use the SCT Seurat object. -->
+
+```{r LoadData}
+# Indicate the object folder
+folder <- "SCT" # Choose between "RC", "Log" or "SCT"
+
+if (!folder %in% c("RC", "Log", "SCT")) {
+  stop("The selected folder is invalid, choose: 'RC', 'Log' or 'SCT'")
+}
+
+# Load Seurat object
+name <- paste0("seu_", folder, "_um.RDS")
+seu <- readRDS(here("output","processed_data",folder,name))
+
+# Load negMat
+negcounts <- readRDS(here("output","processed_data","negMat_unfiltered.RDS"))
+
+# Load the number of PCs used for dimensional reduction
+name <- paste0("npcs_", folder, ".RDS")
+npcs <- readRDS(here("output","processed_data",folder,name))
+```
+
+In this script, clustering will be done using the unsupervised clustering method by *InSituType*. This method was developed by Nanostring, owner of the CosMx SMI technology, and is, therefore, optimized to work with this type of data specifically.  
+
+# Prepare the data
+
+In order to apply the InSituType algorithm, it is necessary to provide the function with the following information:  
+
+* Raw expression counts matrix (not normalized), with cells in columns and genes in rows.  
+* A vector of the mean negative control value per cell.  
+
+```{r PrepData}
+# Extract raw counts from the Seurat object
+counts <- t(seu@assays[["RNA"]]@counts)
+
+# Note the matrix is transposed to have cells in rows and genes in cols
+
+# Ensure negcounts has the same cells as counts
+if (!identical(rownames(counts), rownames(negcounts))) {
+    negcounts <- negcounts[rownames(counts),] # Filter and/or re-order if needed
+} 
+
+# Calculate Negative control means per cell
+negmean <- rowMeans(negcounts)
+```
+
+Additionally, the function can take the following optional inputs, if available:  
+
+* A vector of background counts per gene in each cell --> *Insitutype can automatically estimate this with the negative control counts*.   
+* A reference profile matrix with genes in rows and cell types in columns --> *This is only necessary for supervised or semi-supervised clustering*.  
+* Additional information incorporated as "cohort", such as inmunofluorescence stains or precomputed spatial niches --> *Including this option is low-risk, as it will not be taken into account if it is uninformative*.  
+
+For this example, immunofluoresce data will be included as a cohort.  
+
+<!-- In case no cohort wants to be included, this chunk can be commented so that it is not executed -->
+
+```{r PrepCohort}
+# Extract Immunoflurence data (seen in Alex Soupir video's)
+imm_fluor <- seu@meta.data %>%
+  select(contains(c("Mean","Max"))) %>%
+  select(-contains("DAPI"))
+
+# Set as cohort with InSituType function "fastCohorting"
+cohort <- fastCohorting(imm_fluor, gaussian_transform = TRUE)
+
+# This function creates "groups" or similar cells based on their immunofluoresce,
+# as that is the input I have given it
+
+table(cohort)
+```
+
+As it can be observed, the "fastCohorting" function has created "groups" of similar cells based on their immunofluoresce abundances.  
+
+# Unsupervised Insitutype clustering
+
+In this method, the user provides a number or a range of clusters to evaluate. Then the function will cluster the cells on the selected number of clusters.  
+
+```{r Unsup}
+## Code adapted from the InSituType vignette
+
+# Unsupervised Insitutye clustering with immunofluoresce cohort
+unsup <- insitutype(
+  x = counts,
+  neg = negmean,
+  assay_type = "RNA",
+  cohort = cohort,
+  bg = NULL, # The function will estimate it automatically
+  reference_profiles = NULL, # Not needed for unsupervised clustering
+  n_clusts = 5:20, # Will test all these clusters and select the better fit
+  n_phase1 = 200,
+  n_phase2 = 500,
+  n_phase3 = 2000,
+  n_starts = 1,
+  max_iters = 5
+)
+```
+
+As a result the function provides a list with:  
+
+* Vector of cluster assignments.  
+* Vector of probabilities, or confidence, of each cell's cluster.  
+* Matrix of log-likelihoods with cells on rows and clusters in columns.  
+* Matrix of cluster-specific expression profiles.  
+
+```{r UnsupProb}
+## Code adapted from the InSituType vignette
+
+# Clusters
+n_clus <- length(unique(unsup$clust))
+
+# Example of probabilities
+round(head(unsup$prob), 2)
+summary(unsup$prob)
+```
+As it can be observed, the algorithm has selected `r n_clus` clusters as the better fit, with the majority of cells presenting a high confidence of belonging to the selected cluster.  
+
+Now, it might be interesting to explore the confidence ratios in order to select an appropriate threshold for low probability assignments, and/or see if the low probabilities are concentrated in any particular cluster.  
+
+## Exploration of cell assignment scores
+
+As per the [InSituType vignette](https://github.com/Nanostring-Biostats/InSituType/blob/main/vignettes/NSCLC-clustering-vignette.Rmd), clusters with an average probability of less than 75% are unreliable. Therefore, for the exploration a threshold of 75% will be selected.  
+
+```{r ExporingUnsupProb}
+# Determine initial low confidence cells
+thresh <- 0.75 
+low_conf_cells <- names(unsup$prob[unsup$prob < thresh])
+n_low <- length(low_conf_cells)
+perc_low <- round(n_low / length(unsup$prob) * 100, 1)
+
+# Create dataframe for plotting
+df <- data.frame(clust = unsup$clust,
+                 prob = unsup$prob)
+```
+
+```{r VizUnsupProb, fig.width = 10, fig.height = 5}
+# Histogram of confidence
+p1 <- ggplot(df, aes(x = prob)) +
+  geom_histogram(bins = 50, fill = "lightblue", colour = "black") +
+  geom_vline(xintercept = thresh, colour = "red", lwd = 1) +
+  ggtitle(paste("Nº cells with prob <", thresh, ":", n_low)) +
+  labs(title = paste("Nº cells with prob <", thresh, ":", n_low),
+       x = "Assignment Confidence (%)",
+       y = "Nº Cells")
+
+# Boxplots of confidence by cluster
+p2 <- ggplot(df, aes(x = clust, y = prob)) +
+  geom_boxplot() +
+  geom_hline(yintercept = thresh, colour = "red", lwd = 1) +
+  labs(title = "Confidence per Cluster",
+       x = "Cluster", 
+       y = "Assignment Confidence (%)")
+
+# Arrange plots
+p1 + p2
+```
+
+All clusters have an average probability of more than 75%, although many outliers are observed. Finally, there are `r n_low` (`r perc_low` %) cells with an assignment confidence of less than `r thresh*100` %, showing that most of the cells have been clustered very confidently.  
+
+## Flightpath exploration 
+
+The InSituType package includes an interesting visualization tool called "flightpath_plot", which represents cells according to their cluster probabilities. This will allow refining the clustering assignation.  
+
+```{r VizFPUnsup, fig.width = 7, fig.height = 7}
+## Code adapted from the InSituType vignette
+
+# Create custom color palette
+cols <- gg_color_hue(n_clus)
+names(cols) <- unique(unsup$clust)
+
+# Flightpath plot
+flightpath_plot(insitutype_result = unsup,
+                col = cols[unsup$clust])
+```
+
+As before, it can be seen that all clusters are very well defined, with average probabilities of nearly 100%. A few connections are observed between some clusters, representing cells whose expression profiles could be confused between said clusters.   
+
+## Clustering refining
+
+After exploration, using the function "refineClusters", the user can determine whether some clusters should be deleted, merged or subclustered.  
+
+However, in this case, all clusters seem very well defined and present good quality assignments scores, so no refining is needed.
+
+```{r RefinedUnsup, include = FALSE}
+## Code adapted from the InSituType vignette
+
+# Clustering refining (left as an example, if used, delete "include = FALSE")
+# newclusts <- refineClusters(logliks = sup$logliks,
+#                             assay_type = "RNA",
+#                             merges = NULL,
+#                             to_delete = NULL,
+#                             subcluster = NULL,
+#                             counts = counts,
+#                             neg = negmean)
+```
+
+## Add clustering to Seurat object
+
+Now, the clusters can be included in the Seurat object for UMAP visualization.  
+
+```{r AddClus}
+# Add new metadata column to seurat object
+seu$IST_unsup_clus <- as.factor(unsup$clust)
+#seu$IST_unsup_clus_refined <- as.factor(newclusts$clust) # Refined clusters
+
+# Set as default idents
+Idents(seu) <- seu$IST_unsup_clus
+```
+
+```{r VizClus, fig.width = 5, fig.height = 5}
+# Create custom color palette
+n <- length(unique(Idents(seu)))
+cols <- gg_color_hue(n)
+
+# DimPlot of selected resolution
+DimPlot(seu, reduction = "umap", label = TRUE, cols = cols, raster = FALSE)
+```
+
+Finally, the visualization of "nFeature" and "nCount" allows to identify clusters with better/lower representation by the CosMx panel.  
+
+```{r VizClus2, fig.width = 6, fig.height = 4}
+## Code adapted from CosMxLite vignette
+## Points are removed as CosMx datasets can contain over 1 million cells and may hide the violin plot
+
+# Violin plot
+VlnPlot(seu, features = c("nFeature_RNA", "nCount_RNA"), ncol = 1, pt.size = 0, group.by = "IST_unsup_clus")
+```
+
+# Cell annotation - scType
+
+In this script, clusters will be annotated based on their top markers using the "scType" package and its "Brain" reference. For more information about this method check its documentation and vignette  [here](https://github.com/IanevskiAleksandr/sc-type).  
+
+```{r scTypePrep}
+## Code adapted from scType vignette
+
+# Load gene set preparation and cell type annotation function
+source("https://raw.githubusercontent.com/IanevskiAleksandr/sc-type/master/R/gene_sets_prepare.R")
+source("https://raw.githubusercontent.com/IanevskiAleksandr/sc-type/master/R/sctype_score_.R")
+
+# Prepare DB file and select tissue
+db_ <- "https://raw.githubusercontent.com/IanevskiAleksandr/sc-type/master/ScTypeDB_full.xlsx";
+tissue <- "Brain" # e.g. Immune system, Pancreas, Liver, Kidney, Brain...
+
+# Prepare gene sets
+gs_list <- gene_sets_prepare(db_, tissue)
+
+# Extract scaled data from the Seurat object
+if (folder == "SCT") {
+  slot <- "SCT"
+} else {
+  slot <- "RNA"  
+}
+
+scaled_data <- as.matrix(seu[[paste0(slot)]]@scale.data) 
+```
+
+```{r RunscType}
+## Code adapted from scType vignette
+
+# Run ScType
+es.max <- sctype_score(scaled_data, scaled = TRUE, 
+                       gs = gs_list$gs_positive, 
+                       gs2 = gs_list$gs_negative)
+
+# Merge by cluster
+cL_resutls <- do.call("rbind", lapply(unique(seu@meta.data$IST_unsup_clus), function(cl) {
+    es.max.cl = sort(rowSums(es.max[ ,rownames(seu@meta.data[seu@meta.data$IST_unsup_clus==cl, ])]), 
+                     decreasing = !0)
+    head(data.frame(cluster = cl, type = names(es.max.cl), scores = es.max.cl, 
+                    ncells = sum(seu@meta.data$IST_unsup_clus==cl)), 10)
+}))
+
+sctype_scores <- cL_resutls %>% group_by(cluster) %>% top_n(n = 1, wt = scores)
+
+# Set low-confident (low ScType score) clusters to "unknown"
+sctype_scores$type[as.numeric(as.character(sctype_scores$scores)) < sctype_scores$ncells/4] <- "Unknown"
+
+## Self coded addition
+# Maintain original cluster separation
+sctype_scores$cl_type <- paste0(sctype_scores$cluster, "_", sctype_scores$type)
+
+# Sort by cluster
+sctype_scores <- sctype_scores %>% arrange(as.numeric(sctype_scores$cluster))
+print(sctype_scores)
+```
+
+In this case the "Brain" database has confidently annotated all clusters but has merged a lot clusters that got the same label: clusters a, b, d, e and j as GABAergic neurons; c and h as Dopaminergic neurons; g and q as Glutamatergic neurons; f and i as Oligodendrocytes; and o and p as Cancer stem cells.  
+
+## Add annotations to Seurat object
+
+In order not to loose information, both the scType annotation and a "cluster+scType" annotation will be saved in the seurat object.  
+
+```{r AddAnn}
+# Convert to data.frame and select columns
+annot_df <- sctype_scores %>% 
+  dplyr::select(cluster, type, cl_type) %>%
+  dplyr::mutate(cluster = as.character(cluster))
+
+# Create named vectors for easy mapping
+scType_ann <- setNames(annot_df$type, annot_df$cluster)
+cl_scType_ann <- setNames(annot_df$cl_type, annot_df$cluster)
+
+# Add new metadata columns to seurat object
+seu$scType_ann <- factor(scType_ann[as.character(seu$IST_unsup_clus)],
+                         levels = unique(annot_df$type))
+
+seu$cl_scType_ann <- factor(cl_scType_ann[as.character(seu$IST_unsup_clus)],
+                            levels = annot_df$cl_type)
+
+# Set the cl_scType annotation as default
+Idents(seu) <- seu$scType_ann
+```
+
+```{r VizAnn, fig.width = 20, fig.height = 8}
+# Save old custom palette for original clusters
+n_cl <- n
+cols_cl <- cols
+
+# Create custom color palettes
+n <- length(unique(Idents(seu)))
+cols <- gg_color_hue(n)
+
+# Inspect UMAP scType annotation
+p1 <- DimPlot(seu, reduction = "umap", label = FALSE, raster = FALSE, 
+              repel = TRUE, cols = cols_cl, group.by = "cl_scType_ann")
+
+p2 <- DimPlot(seu, reduction = "umap", label = FALSE, raster = FALSE, 
+              repel = TRUE, cols = cols, group.by = "scType_ann")
+
+# Arrange plots
+p1 + p2
+```
+
+## Save the Seurat object
+
+```{r SavingSeuObj}
+# Save the annotated Seurat object
+name <- paste0("seu_", folder, "_ISTUnsup.RDS")
+saveRDS(seu, here("output","processed_data",folder,name))
+```
+
+# Final spatial visualizations
+
+Now that cells have been annotated, visualizing them in their spatial context becomes more informative. For example, all cells can be visualized simultaneously in the sample or one cell type can be specifically highlighted:     
+
+```{r SpatialViz, fig.width = 13, fig.height = 7, , dpi = 300}
+## Code adapted from Seurat Spatial vignette
+p1 <- ImageDimPlot(seu, fov = "globalFOV", axes = TRUE, cols = cols) +
+  theme_classic()
+
+p2 <- ImageDimPlot(seu, fov = "globalFOV", axes = TRUE, cols = cols[3],
+                   cells = WhichCells(seu, idents = "Oligodendrocytes")) +
+  ggtitle("Oligodendrocytes") + 
+  theme_minimal() +
+  theme(plot.title = element_text(face = "bold", hjust = 0.5))
+
+# Arrange plots
+p1 + p2
+```
+
+Another interesting visualization would be to plot gene expression markers in its spatial context. For example, one typical maker for Oligodendrocytes is *Olig1*:
+
+```{r MarkerViz1, fig.width = 7, fig.height = 5}
+## Code adapted from Seurat Spatial vignette
+## Points are removed from violin plots as CosMx datasets can contain over 1 million cells and may hide the violin plot
+
+VlnPlot(seu, features = "Olig1", pt.size = 0, y.max = 20) + NoLegend()
+```
+As expected, it is highly expressed in Oligodendrocytes and Oligodendrocyte precursor cells, but it can also be observed in its spatial context:
+
+```{r SpatialViz2, fig.width = 13, fig.height = 7, dpi = 300}
+## Code adapted from CosMxLite vignette
+p1 <- ImageFeaturePlot(seu, fov = "globalFOV", features = "Olig1") +
+  theme_classic() +
+  theme(plot.title = element_text(face = "bold", hjust = 0.5))
+
+p2 <- ImageDimPlot(seu, fov = "globalFOV", axes = TRUE, cols = cols[3],
+                   cells = WhichCells(seu, idents = "Oligodendrocytes")) +
+  ggtitle("Oligodendrocytes") + 
+  theme_minimal() +
+  theme(plot.title = element_text(face = "bold", hjust = 0.5),
+        legend.position = "bottom")
+
+# Arrange plots
+p1 + p2
+```
+
+# Performance and Session Info
+
+<details>
+  <summary>**Performance Report**</summary>
+```{r PerformanceReport, echo = FALSE}
+# Report dataframe
+report_data <- data.table(
+  Chunk = names(all_times),
+  Time_sec = round(unlist(all_times), 2),
+  Memory_Mb = round(unlist(all_mem), 2)
+)
+
+# Add total row
+total_time <- round(sum(unlist(all_times)), 2)
+total_mem <- round(sum(unlist(all_mem)), 2)
+
+new_row <- list("Total", total_time, total_mem)
+report_data <- rbindlist(list(report_data, new_row))
+
+# Save as CSV
+if(!dir.exists(here("output","performance_reports"))){
+  dir.create(here("output","performance_reports"))
+}
+
+write.csv(report_data, here("output","performance_reports","4.1_insitutype_unsup_clustering_PR.csv"), row.names = FALSE)
+
+# Show table
+knitr::kable(report_data, row.names = FALSE, format = "html") %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
+```
+</details>
+
+

@@ -1,0 +1,143 @@
+---
+title: "CosMx Data Normalization"
+author: 
+  - name: "Lidia Getino Álvarez"
+    affiliation: "M0.207 TFM - MU Bioinformática y Bioestadística (UOC)"
+date: "`r format(Sys.Date(), '%d %B %Y')`"
+site: workflowr::wflow_site
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: inline
+---
+
+<!-- This pipeline has been developed using Seurat v4.4, as Seurat v5 presents several changes to the object structure that affected the working methods. Aditionally, the AtoMx exported Seurat objects come in the Seurat v4 structure. Therefore, working in this version can be more compatible with exported data too. -->
+
+```{r setup, include = FALSE}
+# Read utils
+source(
+  here::here("code", "utils.R"), 
+  local = knitr::knit_global())
+
+source(
+  here::here("code", "aux_functions.R"), 
+  local = knitr::knit_global())
+
+# Setup chunk options
+# By reading *utils.R*, the *chunk hook* function "monitor" can be included
+knitr::opts_chunk$set(
+  message = FALSE,
+  warning = FALSE,
+  monitor = TRUE, # Self created chunk hook to monitor time and memory usage
+  error = TRUE
+)
+```
+
+# Dependencies
+
+```{r Libraries, message = FALSE}
+library(data.table) # Efficient data management
+library(here) # Enhanced file referencing in project-oriented workflows
+library(dplyr) # For the use of pipes %>%
+library(kableExtra) # For table formatting
+library(Seurat) # Seurat object
+library(ggplot2) # Graphics
+library(patchwork) # Layout graphics
+```
+
+# Load the data
+
+First of all, data needs to be loaded into the session. For this script, only the filtered Seurat object is needed.  
+
+```{r LoadData}
+# Load Seurat object
+seu <- readRDS(here("output","processed_data","seu_filtered.RDS"))
+```
+
+# Normalization
+
+According to Nanostring recommendations (see [CosMx Scratch Space blog](https://nanostring-biostats.github.io/CosMx-Analysis-Scratch-Space/posts/normalization/)), CosMx SMI data should be normalize using total counts. Further transformations, such as *log1p*, square root or "Pearson residuals", are only recommended for UMAP or distance-based clustering methods. Instead, they suggest using linear-scale data for the rest of the analysis.  
+
+In the [CosMx Scratch Space vignette](https://github.com/Nanostring-Biostats/CosMx-Analysis-Scratch-Space/tree/Main/_code/vignette), for example, normalization is made by total counts. Afterwards, square root transformation is implemented to create a UMAP plot. Finally, downstream analysis are performed: raw counts are used for cell typing (with UMAP visualization) and normalize (non-transformed) counts are used for neighborhood expression analysis.  
+
+However, the [CosMxLite vignette](https://github.com/cancerbioinformatics/CosMx_Lite/tree/main/scripts) proposes using "SCTransform", reporting a better clustering performance when using this method in comparison to the classic log-normalization. This method creates a different assay for the normalize/transformed data, leaving the original assay intact in case its needed. Additionally, "SCTransform" also calculates highly variable genes and scales data, which the other two methods do not include and has to be done afterwards.  
+
+For simplicity, this pipeline will execute normalization according to CosMxLite, using the "SCTransform" method, however, the code is parameterized so that the user can select which option to follow, between Total counts ("RC"), Total counts + Log1p transformation ("LogNormalize") or SCTransform ("SCT").  
+
+```{r Norm}
+# Select normalization method between "RC", "LogNormalize" or "SCT"
+norm_method <- "SCT"
+
+# Apply normalization
+seu <- normalize_CosMx(seu, method = norm_method)
+
+## normalize_CosMx() is a self created function that performs either RC, 
+## LogNormalize or SCT in a Seurat object of CosMx data using Seurat built-in
+## functions. Available code is in "code/aux_functions.R"
+```
+
+```{r VizVar, fig.width = 3, fig.height = 5}
+# Calculate top10 genes
+top10 <- head(VariableFeatures(seu), 10)
+
+# Plot variable genes
+p1 <- VariableFeaturePlot(seu)
+p2 <- LabelPoints(plot = p1, points = top10, repel = TRUE) + NoLegend()
+
+p2
+```
+  
+- **Top 10 variable genes:** `r top10`.   
+
+Note that, by default, the functions "FindVariableFeatures" or "SCTransform" return the 2000 and 3000 most variable genes, respectively. However, in this case, as the panel covers only 1K genes, all the genes are reported as variable genes, but ranked from most to less variable.  
+
+This parameter could be changed to a lower number, if desired, but for such a small panel, all genes will be used for the dimensional reduction.  
+
+## Save the Seurat objects
+
+```{r SavingSeuObjs}
+# Chop name for LogNormalize
+if (norm_method == "LogNormalize") {
+  norm_method <- "Log"
+}
+
+# Create specific folder
+dir.create(here("output","processed_data",norm_method))
+
+# Save the Seurat object
+seu_name <- paste0("seu_",norm_method,".RDS")
+saveRDS(seu, here("output","processed_data",norm_method,seu_name))
+```
+
+<!-- Note I save them in a specific folder, depending on the normalization method. This way, the user can execute different methods and the following scripts can be standardize to use with any of these just by indicating the folder, and their resulting objects are more tidy -->
+
+# Performance and Session Info
+
+<details>
+  <summary>**Performance Report**</summary>
+```{r PerformanceReport, echo = FALSE}
+# Report dataframe
+report_data <- data.table(
+  Chunk = names(all_times),
+  Time_sec = round(unlist(all_times), 2),
+  Memory_Mb = round(unlist(all_mem), 2)
+)
+
+# Add total row
+total_time <- round(sum(unlist(all_times)), 2)
+total_mem <- round(sum(unlist(all_mem)), 2)
+
+new_row <- list("Total", total_time, total_mem)
+report_data <- rbindlist(list(report_data, new_row))
+
+# Save as CSV
+if(!dir.exists(here("output","performance_reports"))){
+  dir.create(here("output","performance_reports"))
+}
+
+write.csv(report_data, here("output","performance_reports","2.0_normalization_PR.csv"), row.names = FALSE)
+
+# Show table
+knitr::kable(report_data, row.names = FALSE, format = "html") %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
+```
+</details>

@@ -1,0 +1,412 @@
+---
+title: "CosMx Data Loading and Seurat Object Creation"
+author: 
+  - name: "Lidia Getino Álvarez"
+    affiliation: "M0.207 TFM - MU Bioinformática y Bioestadística (UOC)"
+date: "`r format(Sys.Date(), '%d %B %Y')`"
+site: workflowr::wflow_site
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: inline
+---
+
+<!-- This pipeline has been developed using Seurat v4.4, as Seurat v5 presents several changes to the object structure that affected the working methods. Additionally, the AtoMx exported Seurat objects come in the Seurat v4 structure. Therefore, working in this version can be more compatible with exported data too. -->
+
+```{r setup, include = FALSE}
+# Read utils and self-created functions
+source(
+  here::here("code", "utils.R"), 
+  local = knitr::knit_global())
+
+source(
+  here::here("code", "aux_functions.R"), 
+  local = knitr::knit_global())
+
+# Setup chunk options
+# By reading *utils.R*, the *chunk hook* function "monitor" can be included
+knitr::opts_chunk$set(
+  message = FALSE,
+  warning = FALSE,
+  monitor = TRUE, # Self created chunk hook to monitor time and memory usage
+  error = TRUE
+)
+```
+
+# Dependencies
+
+```{r Libraries, message = FALSE}
+library(data.table) # Efficient data management
+library(Matrix) # Sparse matrices
+library(here) # Enhanced file referencing in project-oriented workflows
+library(vecsets) # Enhanced version of the Set Operations from "base"
+library(dplyr) # For the use of pipes %>%
+library(kableExtra) # For table formatting
+library(Seurat) # Seurat object
+```
+
+# Load the data
+
+First of all, flat files directory needs to be located in the folder structure of our project.  
+
+```{r LocateFiles}
+## Code adapted from Scratch Space vignette
+
+# Locate flat files
+flatFiles_dir <- here("data", "flatFiles")
+slideNames <- dir(flatFiles_dir)
+```
+  
+- **Total number of slides in experiment:** `r length(slideNames)`.  
+- **Slide Names:** `r slideNames`.  
+
+In this case, there is only one slide, this will simplify early pipeline construction. Future improvements could include: adapt the code to work with multiple slides and perform integration.  
+
+```{r LoadSlide_1}
+## Code adapted from Scratch Space vignette
+
+# Locate slide files
+slide <- slideNames[1]
+slide_dir <- here(flatFiles_dir, slide)
+slide_files <- dir(slide_dir, full.names = TRUE)
+
+# Load slide files
+
+### Fov_positions
+fov_positions <- fread(slide_files[grep("fov_positions_file.csv", slide_files)], header = TRUE)
+
+## fread() is an efficient version of read.csv, that is able to read gzip files
+## and creates a data.table object for efficient management
+
+### Metadata
+metadata <- fread(slide_files[grep("metadata_file.csv", slide_files)], header = TRUE)
+
+### Counts matrix (efficient loading)
+exprMat_dir <- slide_files[grep("exprMat_file.csv", slide_files)]
+exprMat <- loadExprMat(exprMat_dir, slide_number = 1)
+
+## loadExprMat() is a self created function that reads the expression matrix
+## in chunks and converts it to sparse (adapted from Scratch Space vignette)
+## available code is in "code/aux_functions.R"
+```
+
+# Explore the data
+
+## FOV-positions
+
+```{r ExploringFOVpositions}
+# Show head FOV positions
+head(fov_positions)
+```
+  
+- **Dimensions:** `r dim(fov_positions)[1]` FOVs and `r dim(fov_positions)[2]` columns.  
+- **FOVs:** `r unique(fov_positions$fov)`.  
+- **Columns:** `r colnames(fov_positions)`.  
+
+At first sight, there are no signs of previous pre-processing or missing FOVs.  
+
+## Metadata
+
+```{r ExploringMetadata}
+# Show head metadata
+metadata[1:6,1:6]
+```
+  
+- **Dimensions:** `r dim(metadata)[1]` cells and `r dim(metadata)[2]` attributes.  
+- **FOVs:** `r unique(metadata$fov)`.  
+- **Columns:** `r colnames(metadata)`.  
+
+In sight of the file columns, there are no signs of previous pre-processing or missing FOVs.    
+
+## Expression Matrix
+
+```{r ExploringExprMat}
+# Check presence of rows with cell_id of 0
+cells_0 <- grep("_0$", rownames(exprMat), value = TRUE) 
+
+# Check presence of Negative and SystemControl probes columns
+negPrb_col <- grep("^Neg", colnames(exprMat), value = TRUE) # Neg columns
+sysCon_col <- grep("^SystemControl", colnames(exprMat), value = TRUE) # SystemControl columns
+
+# Show head expression matrix
+as.matrix(exprMat[1:6, 1:10])
+```
+
+- **Dimensions:** `r dim(exprMat)[1]` cells and `r dim(exprMat)[2]` features.  
+- **Cells of unassigned transcripts**: `r sum(table(cells_0))` --> `r cells_0`.  
+- **Negative probes:** `r sum(table(negPrb_col))` --> `r negPrb_col`.   
+- **System Control probes:** `r sum(table(sysCon_col))`.   
+
+<!-- Note that, during the expression matrix loading with function "loadExprMat()", columns "fov" and "cell_ID", originally present in the raw file, have been removed and, instead, rows have been named with the combination: Slide_FOV_Cell number.   -->
+
+Although the number of rows/cells in the metadata and the expression matrix should coincide, the expression matrix presents `r dim(exprMat)[1] - dim(metadata)[1]` extra rows. This difference is due to the presence of cells of id "0", which, in CosMx SMI data, are used to store the transcripts counts that can not be assigned to any cell (see an example [ReadMe SMI Data File)](https://nanostring-biostats.github.io/CosMx-Analysis-Scratch-Space/assets/Pancreas-CosMx-ReadMe.html()). Therefore, those extra rows represent the sum of unassigned transcripts from the correspondent FOV and can be used to evaluate segmentation.  
+
+Apart from that, some manipulation of the data is suspected, since the negative probes, which are named "Negative" on the raw AtoMx output, are found as "NegPrb", and the System Control codes columns are not present, suggesting its previous removal.  
+
+# Format the data
+
+Before creating the Seurat object, some further formatting of the data might be helpful:  
+
+## Expression Matrix formatting
+
+For further analysis, the expression matrix must only have the interest features in columns and real cells in rows, with no additional information.  
+
+As previously stated, rows with a "cell_ID" of 0 do not represent actual cells, and false positive controls (Negative probes and System Control codes) do not represent features of interest, therefore, they must be removed from the expression matrix. However, they posses interesting information that should be kept in the metadata for future exploration.  
+
+<!-- When exporting a Seurat object directly from AtoMx, the main expression matrix is kept as the "RNA" assay, while Negative probes and System Control codes represent two alternative assays, called "negprobes" and "falsecode", respectively. This pipeline will not create those assays, but will calculate their respective nCount and save them in the metadata. -->
+
+```{r PreparingExprMat}
+# Calculate number of transcripts not assigned to any cell (by FOV)
+cells_0 <- grep("_0$", rownames(exprMat)) # Rows with cell_id 0
+negPrb_col <- grep("^NegPrb", colnames(exprMat)) # NegPrb columns
+
+unassigned <- data.table(cell_id = character(0), # Data.table to save the info
+                         fov = numeric(0),
+                         unassigned_tx = numeric(0))
+
+for (i in cells_0) {
+  cell_id <- rownames(exprMat)[i]
+  fov <- as.numeric(strsplit(cell_id, "_")[[1]][3])
+  unassigned_tx <- as.numeric(rowSums(exprMat[i, -negPrb_col, drop = FALSE])) # Only real Tx
+  
+  new_row <- list(cell_id, fov, unassigned_tx)
+  unassigned <- rbindlist(list(unassigned, new_row))
+}
+
+# Remove rows of unassigned transcripts from exprMat
+exprMat <- exprMat[-cells_0,]
+
+# Calculate nCount of Negative and System Control probes
+sysCon_col <- grep("^SystemControl", colnames(exprMat)) # SystemControl columns
+
+falsePrb <- data.table(cell_id = character(0), # Data.table to save the info
+                       nCount_negprobes = numeric(0),
+                       nCount_falsecode = numeric(0))
+
+nCount_negprobes <- rowSums(exprMat[, negPrb_col])
+nCount_falsecode <- rowSums(exprMat[, sysCon_col])
+
+if (identical(names(nCount_falsecode), names(nCount_negprobes))){
+  cell_id <- names(nCount_negprobes)
+  new_row <- list(cell_id, nCount_negprobes, nCount_falsecode)
+  falsePrb <- rbindlist(list(falsePrb, new_row))
+} else {
+  stop("nCount_negprobes and nCount_falsecode don't share cell ids!")
+}
+
+# Save Negative probes as a separate matrix (for future Insitutype)
+negMat <- exprMat[, negPrb_col]
+
+# Remove Negative and SystemControl probes from exprMat
+exprMat <- exprMat[, -c(negPrb_col, sysCon_col)]
+```
+  
+- **Expression Matrix dimensions after formatting:** `r dim(exprMat)[1]` cells and `r dim(exprMat)[2]` features.  
+
+After removing the cells with id "0", the number of rows/cells match that of the metadata. Also, the number of columns/features has been diminish after removing the negative probes.  
+
+## FOV positions formating
+
+Depending on the AtoMx version from which the data was exported, this file might contain the FOV coordinates in px (older versions) or in mm (newer versions) (see [CosMxLite](https://github.com/cancerbioinformatics/CosMx_Lite?tab=readme-ov-file#fov_position_filecsv)).  
+
+The following code will check if the px coordinates are present or not, and calculate them if needed.  
+
+<!-- Conversion from mm to px has been obtained from CosMxLite vignette. However, this conversion might be different depending on resolution. -->
+
+```{r PreparingFOVpositions}
+## Code adapted from CosMxLite vignette
+
+# Check and/or calculate px coordinates
+if (all(c("x_global_px", "y_global_px") %in% colnames(fov_positions))) {
+  result <- "FOV coordinates in pixels are already present."
+} else {
+  fov_positions$x_global_px <- fov_positions$x_global_mm*1000/0.1202809 # converting mm to px 
+  fov_positions$y_global_px <- fov_positions$y_global_mm*1000/0.1202809 # converting mm to px 
+  result <- "FOV coordinates in pixels have been calculated."
+}
+```
+  
+`r result`
+
+## Metadata formating
+
+In some cases, the exported metadata file from AtoMx might contain some extra information on analysis performed in said software. This information increases the file size and might not be used when performing the analysis from the beginning. Therefore, it can me removed by selecting only the basic columns, or those of interest for your analysis.  
+
+The following code adapted from [CosMxLite](https://github.com/cancerbioinformatics/CosMx_Lite/tree/main/scripts) will subset the metadata by selecting the basic columns only. Additionally, several new columns will be created to facilitate further subsetting and visualizations:  
+
+<!-- The following columns have been selected from experience, observing other datasets, as wells as the information observed when exporting data directly from AtoMx, which are not present in this dataset, but could be present in data from newer AtoMx versions. I have chosen the same names I have seen in said examples for clarity. -->
+
+* **x_FOV_px:** including the X coordinates in pixels of the FOV the cell resides in.  
+* **y_FOV_px:** including the Y coordinates in pixels of the FOV the cell resides in.  
+* **cell_id:** including the slide_fov_cell number as a cell unique identifier. This column will also be use to name the rows, as previously done in the expression matrix.  
+* **slide_ID_numeric:** including the slide number.  
+* **unassignedTranscripts:** including the number of unassigned transcripts of the FOV the cell resides in. This will be re-calculated to fraction after creating the Seurat object.
+* **nCount_negprobes:** including total Negative probes counts per cell.  
+* **nCount_falsecodes:** including total System Control probes counts per cell.  
+
+Note, the "cell_ID" original column won't be kept as it only provides FOV-specific identification of the cells and might be misleading.   
+
+```{r PreparingMetadata}
+## Code inspired by CosMxLite vignette
+
+# Add new columns: slide_ID and cell_id
+metadata[, slide_ID_numeric := 1]
+
+slide_fov_cell <- paste0("c_", metadata$slide_ID_numeric, "_", metadata$fov, "_", metadata$cell_ID)
+metadata[, cell_id := slide_fov_cell]
+
+# Merge X and Y FOV coordinates by "fov"
+metadata[fov_positions, on = "fov", `:=` (x_FOV_px = i.x_global_px,
+                                          y_FOV_px = i.y_global_px)]
+
+# Merge unassigned_tx by "fov"
+metadata[unassigned, on = "fov", `:=` (unassignedTranscripts = i.unassigned_tx)]
+
+# Merge nCount_negprobes and nCount_falsecodes by "cell_id"
+metadata[falsePrb, on = "cell_id", `:=` (nCount_negprobes = i.nCount_negprobes,
+                                         nCount_falsecode = i.nCount_falsecode)]
+
+# Aisle basic columns (from CosMxLite) + recently added columns 
+columns_to_keep <- c("slide_ID_numeric", "fov", "cell_id", "Area", "AspectRatio",
+                     "x_FOV_px", "y_FOV_px", "Width", "Height", "CenterX_local_px",
+                     "CenterY_local_px", "CenterX_global_px", "CenterY_global_px",
+                     colnames(metadata)[grep("Mean|Max", colnames(metadata))], 
+                     "unassignedTranscripts", "nCount_negprobes", "nCount_falsecode")
+metadata <- metadata[, ..columns_to_keep]
+
+# Re-name rows as the slide_fov_cell
+rownames(metadata) <- metadata$cell_id
+
+# Ensure that cell content and order in the ExprMat and metadata matches
+if (!vsetequal(rownames(metadata), rownames(exprMat))) {
+  stop("Rows do not match between metadata and exprMat.")
+} else if (!identical(rownames(metadata), rownames(exprMat))) {
+  exprMat <- exprMat[match(rownames(metadata), rownames(exprMat)), ]
+}
+```
+  
+- **Metadata columns after formatting:** `r colnames(metadata)`. 
+
+## Save intermediate data
+
+```{r SavingData}
+## Code adapted from Scratch Space vignette
+if(!dir.exists(here("output","processed_data"))){
+  dir.create(here("output","processed_data"))
+}
+
+saveRDS(exprMat, here("output","processed_data","exprMat_unfiltered.RDS"))
+saveRDS(metadata, here("output","processed_data","metadata_unfiltered.RDS"))
+saveRDS(fov_positions, here("output","processed_data","fov_positions_unfiltered.RDS"))
+saveRDS(negMat, here("output","processed_data","negMat_unfiltered.RDS"))
+```
+
+# Create a Seurat object
+
+The Seurat package has two built-in functions to read the flat files from CosMx:  
+
+* **ReadNanostring:** this function reads the available flat files and produces a list with the expression matrix, the metadata, the centroids, etc.  
+* **LoadNanostring:** this function reads the available flat files and produces a Seurat object. However, for this function to work, all the files (including tx_file and polygons) must be available.  
+
+In this pipeline, the Seurat object will be created with the "CreateSeuratObject" function, as seen in the [CosMxLite vignette](https://github.com/cancerbioinformatics/CosMx_Lite/tree/main/scripts), using the data previously loaded and processed.  
+
+```{r CreateSeuObj}
+## Code adapted from CosMxLite vignette
+
+# Create a basic Seurat object from the processed exprMat and metadata
+seu <- CreateSeuratObject(counts = t(exprMat), project = "CosMx",
+                          meta.data = metadata, min.cells = 3, min.features = 1)
+```
+
+<!-- Note I have filtered by min.cells and min.features as seen in CosMxLite -->
+
+## Calculate fraction of unassigned transcripts per FOV
+
+When creating a Seurat object, "nCount" and "nFeature" columns are automatically calculated and added to the meta.data slot. Now, the "unassignedTranscripts" column can be recalculated to represent the fraction of total transcripts.  
+
+```{r UnassignedTxFrac}
+# Calculate total transcripts per FOV and add to meta.data
+nCount_FOV <- seu@meta.data %>%
+  group_by(fov) %>%
+  summarise(nCount_FOV = sum(nCount_RNA))
+
+seu@meta.data <- seu@meta.data %>%
+  left_join(nCount_FOV, by = "fov")
+
+# Re-assign rownames to metadata, lost by dplyr functions
+rownames(seu@meta.data) <- seu$cell_id
+
+# Re-calculate unassignedTranscripts to fraction through dividing by
+# total detected transcripts: nCount_FOV + unassignedTranscripts
+seu$unassignedTranscripts <- seu$unassignedTranscripts / (seu$nCount_FOV + seu$unassignedTranscripts)
+```
+
+## Add Spatial coordinates
+
+Finally, it is important to include cell coordinates for visualizations. In the [CosMxLite vignette](https://github.com/cancerbioinformatics/CosMx_Lite/tree/main/scripts) two alternatives on adding the spatial coordinates are shown:  
+
+* **Add as "global FOV":** this method utilizes the "images" slot of the Seurat object and the "CreateCentroids" and "CreateFOV" functions, just as it is done in the Seurat function "LoadNanostring". By using this method, the resulting structure is the same as in the AtoMx exported Seurat object.  
+* **Add as a "dimensional reduction":** this method utilizes the "reductions" slot of the Seurat object and the "CreateDimReducObject" function. By using this method, more visualization options are available.  
+
+In this pipeline, the "global FOV" methods will be used to maintain interoperability with the AtoMx Seurat output.
+
+```{r Coords}
+## Code adapted from CosMxLite vignette: in this vignette two alternatives
+## on adding the spatial coordinates are shown.
+
+# Add cell coordinates as a "global FOV"
+
+# Note: x and y coordinates need to be swapped to orient the tissue correctly
+cell_centroids <- data.frame(y = seu$CenterX_global_px, 
+                             x = seu$CenterY_global_px, 
+                             cell = colnames(seu))
+cents <- list("centroids" = CreateCentroids(cell_centroids))
+coords <- CreateFOV(coords = cents, type = c("centroids"), assay = "RNA")
+seu[["globalFOV"]] <- coords
+
+# Add cell coordinates as a "reduction" (left as an example)
+# coordinates <- as.matrix(data.frame(CosMx_1 = seu$CenterX_global_px, 
+#                                     CosMx_2 = seu$CenterY_global_px))
+# seu[['Centroids']] <- CreateDimReducObject(embeddings = coordinates, key = "CosMx_", 
+#                                            global = TRUE, assay = "RNA")
+```
+
+<!-- If transcripts coordinates from tx_file want to be included for future analysis, the appropriate slot to include them in would be: seu@images[["globalFOV"]]@molecules -->
+
+## Save the Seurat object
+
+```{r SavingSeuObj}
+# Save the Seurat object
+saveRDS(seu, here("output","processed_data","seu_semifiltered.RDS"))
+```
+
+# Performance and Session Info
+
+<details>
+  <summary>**Performance Report**</summary>
+```{r PerformanceReport, echo = FALSE}
+# Report dataframe
+report_data <- data.table(
+  Chunk = names(all_times),
+  Time_sec = round(unlist(all_times), 2),
+  Memory_Mb = round(unlist(all_mem), 2)
+)
+
+# Add total row
+total_time <- round(sum(unlist(all_times)), 2)
+total_mem <- round(sum(unlist(all_mem)), 2)
+
+new_row <- list("Total", total_time, total_mem)
+report_data <- rbindlist(list(report_data, new_row))
+
+# Save as CSV
+if(!dir.exists(here("output","performance_reports"))){
+  dir.create(here("output","performance_reports"))
+}
+
+write.csv(report_data, here("output","performance_reports","0.0_data_loading_PR.csv"), row.names = FALSE)
+
+# Show table
+knitr::kable(report_data, row.names = FALSE, format = "html") %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
+```
+</details>
