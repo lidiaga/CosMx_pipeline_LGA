@@ -21,8 +21,6 @@ navbar:
       href: 3.0_dimensional_reduction.html
     - text: Cell typing
       href: 4.0_insitutype_cell_typing.html
-    - text: Cell typing alternatives
-      href: clus_examples.html
   - text: Cell typing
     href: clus_examples.html
   - text: Normalization
