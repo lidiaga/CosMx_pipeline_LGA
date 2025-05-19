@@ -18,9 +18,9 @@ Finally, special mention to the *Scratch Space Vignette: Basics of CosMx Analysi
 
 # Pipeline
 
-The proposed pipeline consists of five main phases: data loading, QC and filtering, normalization, dimensional reduction and cell typing.
+The proposed pipeline consists of five main phases: data loading, QC and filtering, normalization, dimensional reduction and cell typing:
 
-**INCLUIR IMAGEN**
+![**Pipeline flowchart.** Created using Lucidchart software. **Blue:** potential input files to the pipeline; **Dark gray:** main processes; **Light gray:** subprocesses; **Orange:** output files, with those involved in later stages of the workflow highlighted in dark; **Solid lines:** gray, general pipeline flow, and blue, file input flow; **Dashed lines:** alternative or optional flows. Red represents processes that were not developed in this work due to time constraints, but could be included in future versions or pipeline improvements, such as the multi-sample integration phase or the semi-supervised clustering alternative.](images/Pipeline_eng.svg){width="463"}
 
 With the goal of creating a flexible pipeline, the documents have been parameterized, as far as possible, to allow for a variety of options without affecting their proper functioning. However, the Cell typing phase is subdivided into three independent scripts, given the complexity of executing the different alternatives that the pipeline contemplates:
 
@@ -67,7 +67,7 @@ knitr::kable(totals, row.names = FALSE, format = "html") %>%
   kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
 ```
 
-In terms of time and memory usage, the example analysis shown in the pipeline vignettes takes...
+In terms of time and memory usage, the example analysis shown in the pipeline vignettes (using SCTransform as normalization method and InSituType Supervised classification for cell typing) takes 23 minutes and 52 seconds to execute, and 62,9 Gb of memory consumption.
 
 ------------------------------------------------------------------------
 
