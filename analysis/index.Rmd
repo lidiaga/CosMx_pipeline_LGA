@@ -8,4 +8,28 @@ editor_options:
   chunk_output_type: console
 ---
 
-Welcome to my research website.
+## **Welcome to my Master's thesis webpage!** 😀
+
+My name is **Lidia Getino Álvarez** and this webpage summarizes the final project of my Master's in Bioinformatics and Biostatistics at Universitat Oberta de Catalunya: ***"Implementation of a bioinformatics pipeline for the analysis of spatial transcriptomics data"***.
+
+**University:** Universitat Oberta de Catalunya
+
+**Tutor:** Mireia Ferrer Almirall
+
+**Developed at:** Statistics and Bioinformatics Unit (Vall d'Hebron Research Institute - VHIR)
+
+**Date:** 04-06-2025
+
+------------------------------------------------------------------------
+
+The main goal of my project was to construct a well documented and reproducible pipeline for the analysis of spatial transcriptomic data, specifically from the CosMx™ SMI technology by Nanostring® Technologies.
+
+This website, and its corresponding GitHub repository, serves the purpose of transparently sharing all the code and results of my work. Here you will find:
+
+1.  [CosMx™ SMI Data Analysis Pipeline](pipeline.html)
+
+2.  [Examples of different cell typing methods](clus_examples.html)
+
+3.  [Examples of different normalization methods](norm_examples.html)
+
+Hopefully, soon my thesis document will be available too, as reference for a more profound insight on my work. For now, I hope what you find here is useful and interesting!

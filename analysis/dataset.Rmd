@@ -1,0 +1,15 @@
+---
+title: "CosMx SMI Dataset"
+site: workflowr::wflow_site
+output:
+  workflowr::wflow_html:
+    toc: false
+editor_options:
+  chunk_output_type: console
+---
+
+# Dataset
+
+The dataset used for the pipeline construction and generation of example vignettes corresponds to the *Coronal Hemisphere* sample from the [*CosMx SMI Mouse Brain FFPE Dataset*](https://nanostring.com/products/cosmx-spatial-molecular-imager/ffpe-dataset/cosmx-smi-mouse-brain-ffpe-dataset/). This dataset is publicly available for download from the NanoString® website and consists of samples from various sections of FFPE mouse brain tissue, analyzed using the CosMx™ SMI technology and the CosMx™ Mouse Neuroscience Panel, specifically designed to detect up to 1,000 genes in neuronal tissues.
+
+The raw data has not been included in the GitHub repository, as it does not originate from this project and may be subject to third-party usage restrictions. For replication purposes, the original files can be accessed and download from the Nanostring® website using the following link: [*Coronal Hemisphere Basic Data Files*](https://nanostring.com/resources/coronal-hemisphere-basic-data-files/).

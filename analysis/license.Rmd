@@ -7,15 +7,22 @@ editor_options:
   chunk_output_type: console
 ---
 
-What license are you using for your code? See [choosealicense.com][choose] for
-help deciding. It's a convention to save a file `LICENSE` in the root of your
-Git repo that contains the license text.
+# License
 
-What license are you using for the written content on your site? It is
-traditional to choose a [Creative Commons][cc] license for this type of content.
+## Code license
 
-[choose]: https://choosealicense.com/
-[cc]: https://creativecommons.org/choose/
+All code in this repository is licensed under the **MIT License**.
 
-How should others cite your work? It's a convention to save a file `CITATION`
-in the root of your Git repo that contains the citation information.
+You can view the full license text by visiting [choosealicense.com/licenses/mit](https://choosealicense.com/licenses/mit/).
+
+## Content license
+
+All written content on this site is licensed under the **Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0)** license. For more details, see the [Creative Commons summary](https://creativecommons.org/licenses/by-nc-sa/4.0/) or read the full [legal code](https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode.en).
+
+------------------------------------------------------------------------
+
+# Citation
+
+If you use or reference this work in academic or technical materials, please cite it as follows:
+
+| Getino-Álvarez, L. *Implementación de un pipeline bioinformático para análisis de datos de Spatial Transcriptomics*. GitHub repository, [URL]. Accessed on [Date].

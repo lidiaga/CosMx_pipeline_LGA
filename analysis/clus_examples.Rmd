@@ -1,0 +1,147 @@
+---
+title: "Cell typing methods for CosMx™ SMI Data (examples)"
+site: workflowr::wflow_site
+output:
+  workflowr::wflow_html:
+    toc: false
+editor_options:
+  chunk_output_type: inline
+---
+
+# Introduction
+
+Cell typing is a fundamental step in gene expression analysis, as from this point onward, the results and subsequent analyses acquire biological meaning. In practice, this can be approached through unsupervised clustering, where cells are grouped based on the similarity of their gene expression profiles [1,2], followed by annotation of the resulting clusters based on their markers [3]. However, there are other approaches, such as supervised classification, which uses reference profiles to assign predefined cell types to cells based on their expression profiles; or semi-supervised methods, which classify cells based on a reference while also allowing the detection of new clusters or rare populations [3].
+
+While clustering in scRNA-seq relies solely on gene expression, the multimodal nature of spatial transcriptomics, which includes spatial location data and histological or immunofluorescence images, has led to the development of new clustering methods that integrate this information to improve clustering quality [3]. In this context, the InSituType algorithm, developed by Danaher et al. [4] as part of Nanostring® official tools, allows the incorporation of complementary information and supports all three mentioned approaches: unsupervised or semi-supervised clustering, and supervised classification. For this reason, it was considered a particularly suitable option for this pipeline.
+
+In this project, the proposed pipeline incorporates supervised and unsupervised InSituType, as well as an unsupervised clustering alternative, by executing the FindNeighbors and FindClusters functions from the Seurat package:
+
+-   **Supervised InSituType:** based on a probabilistic model, employing a Bayesian classifier in its supervised version [4].
+
+-   **Unsupervised InSituType:** based on a probabilistic model, employing an Expectation Maximization (EM) algorithm for the unsupervised and semi-supervised methods [4].
+
+-   **Seurat's unsupervised clustering, using the Louvain algorithm:** Seurat clustering functions allow for the application of different graph-based clustering methods, such as the Louvain algorithm. Despite using only gene expression for clustering, this algorithm has been reported to have a strong performance with spatial transcriptomics data, comparable to methods that also incorporate spatial information [3].
+
+For simplicity, in the [main pipeline example](pipeline.html) only one approach has been shown — Supervised InSituType. However, in this section, all three alternatives can be explored.
+
+```{r Libraries, include = FALSE}
+library(data.table) # Efficient data management
+library(here) # Enhanced file referencing in project-oriented workflows
+library(dplyr) # For the use of pipes %>%
+library(kableExtra) # For table formatting
+library(Seurat) # Seurat object
+library(ggplot2) # Graphics
+library(patchwork) # Layout graphics
+
+source(
+  here::here("code", "aux_functions.R"), 
+  local = knitr::knit_global())
+```
+
+```{r LoadData, include = FALSE}
+# Load Supervised Insitutype Seu object
+seu_ISTSup <- readRDS(here("output","processed_data","SCT","seu_SCT_ISTSup.RDS"))
+
+# Load Unsupervised Insitutype Seu object
+seu_ISTUnsup <- readRDS(here("output","processed_data","SCT","seu_SCT_ISTclus.RDS"))
+
+# Load Seurat-Louvain Seu object
+seu_SL <- readRDS(here("output","processed_data","SCT","seu_SCT_SLclus.RDS"))
+
+# Load the number of PCs used for dimensional reduction
+npcs <- readRDS(here("output","processed_data","SCT","npcs_SCT.RDS"))
+
+# Load performance reports
+pr_ISTSup <- fread(here("output","performance_reports","4.0_insitutype_cell_typing_PR.csv"))
+pr_ISTUnsup <- fread(here("output","performance_reports","4.1_insitutype_unsup_clustering_PR.csv"))
+pr_SL <- fread(here("output","performance_reports","4.2_seurat_unsup_clustering_PR.csv"))
+```
+```{r UMAPs, echo = FALSE}
+# Create custom color palettes
+n_ISTSup <- length(unique(Idents(seu_ISTSup)))
+cols_ISTSup <- gg_color_hue(n_ISTSup)
+
+n_ISTUnsup <- length(unique(Idents(seu_ISTUnsup)))
+cols_ISTUnsup <- gg_color_hue(n_ISTUnsup)
+
+n_SL <- length(unique(Idents(seu_SL)))
+cols_SL <- gg_color_hue(n_SL)
+
+# DimPlots of each clustering method
+p1 <- DimPlot(seu_ISTSup, reduction = "umap", label = TRUE, cols = cols_ISTSup, 
+              raster = FALSE) +
+  ggtitle("Supervised InSituType")
+
+p2 <- DimPlot(seu_IST, reduction = "umap", label = TRUE, cols = cols_ISTUnsup,
+              raster = FALSE) +
+  ggtitle("Unsupervised InSituType + ScType")
+
+p3 <- DimPlot(seu_SL, reduction = "umap", label = TRUE, cols = cols_SL,
+              raster = FALSE) +
+  ggtitle("Unsupervised Seurat-Louvain  + ScType")
+```
+
+# Examples
+
+1.  [**Supervised InSituType**](4.0_insitutype_cell_typing.html)
+
+To run the InSituType supervised algorithm, three inputs are needed: 1) the raw, unnormalized expression matrix; 2) a vector with the mean negative probe expression per cell; and 3) a reference profile.
+
+Nanostring® provides various public profiles, both from [scRNA-seq](https://github.com/Nanostring-Biostats/cellprofilelibrary) and [CosMx™ SMI](https://github.com/Nanostring-Biostats/CosMx-Cell-Profiles) data. However, the function can also take other sources-profiles as long as they have the [appropriate formatting](https://nanostring-biostats.github.io/CosMx-Analysis-Scratch-Space/posts/hybrid-reference-profiles/).
+
+With this information, the function will assigned pre-defined cell types from the reference to the cells according to their expression profiles.
+
+```{r Sup, echo = FALSE, fig.width = 7, fig.height = 7}
+p1
+```
+
+2.  [**Unsupervised InSituType**](4.1_insitutype_unsup_clustering.html)
+
+To run the InSituType unsupervised clustering method, the needed inputs are: 1) the raw, unnormalized expression matrix; 2) a vector with the mean negative probe expression per cell; and 3) a number or range of clusters to be evaluated.
+
+If a range is provided, the algorithm executes the clustering with all the different numbers of clusters and returns the one that provides the best fit.
+
+Afterwards, in the proposed pipeline, annotation has been performed using the ScType package, a computational method for automated annotation based on marker genes [5].
+
+```{r Unsup, echo = FALSE, fig.width = 7, fig.height = 7}
+p2
+```
+
+3.  [**Seurat's unsupervised clustering, using the Louvain algorithm**](4.2_seurat_unsup_clustering.html)
+
+In this case, the Seurat method can be run directly onto the Seurat object, providing the reduction and number of components to work with.
+
+This algorithm, unlike InSituType, does not require a specific number of clusters to be evaluated, instead, it calculates the appropriate number of clusters for the desired resolution. Afterwards, in the proposed pipeline, annotation has been performed using the ScType package [5], as previously.
+
+```{r Unsup, echo = FALSE, fig.width = 7, fig.height = 7}
+p3
+```
+
+## Performance
+
+```{r Perf, echo = FALSE}
+# Compare time and memory use of each method
+comp <- rbind(pr_ISTSup[Chunk == "Sup", ],
+              pr_ISTUnsup[Chunk == "Unsup", ],
+              pr_SL[Chunk == "SNNClust", ])
+
+# Show the result
+knitr::kable(comp, row.names = FALSE, format = "html") %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
+```
+
+In terms of time and memory usage, methods...
+
+------------------------------------------------------------------------
+
+# Bibligraphy
+
+1.  Qi R, Ma A, Ma Q, Zou Q. Clustering and classification methods for single-cell RNA-sequencing data. Briefings in Bioinformatics [Internet]. 2020 Jul 15 [cited 2025 May 7];21(4):1196–208. Available from: <https://doi.org/10.1093/bib/bbz062>
+
+2.  Zhang S, Li X, Lin J, Lin Q, Wong KC. Review of single-cell RNA-seq data clustering for cell-type identification and characterization. RNA [Internet]. 2023 May [cited 2025 May 7];29(5):517–30. Available from: <https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10158997/>
+
+3.  Cheng A, Hu G, Li WV. Benchmarking cell-type clustering methods for spatially resolved transcriptomics data. Briefings in Bioinformatics [Internet]. 2023 Jan 1 [cited 2025 May 7];24(1):bbac475. Available from: <https://doi.org/10.1093/bib/bbac475>
+
+4.  Danaher P, Zhao E, Yang Z, Ross D, Gregory M, Reitz Z, et al. Insitutype: likelihood-based cell typing for single cell spatial transcriptomics [Internet]. Bioinformatics; 2022 [cited 2025 May 7]. Available from: <http://biorxiv.org/lookup/doi/10.1101/2022.10.19.512902>
+
+5.  Ianevski A, Giri AK, Aittokallio T. Fully-automated and ultra-fast cell-type identification using specific marker combinations from single-cell transcriptomic data. Nat Commun [Internet]. 2022 Mar 10 [cited 2025 Apr 16];13(1):1246. Available from: <https://www.nature.com/articles/s41467-022-28803-w>

@@ -7,4 +7,8 @@ editor_options:
   chunk_output_type: console
 ---
 
-Describe your project.
+My name is **Lidia Getino Álvarez**, a biotechnologist with a professional career in the pharmaceutical industry and a growing interest for data science and bioinformatics.
+
+I created this website to complement and summarize the final project of my Master's in Bioinformatics and Biostatistics of Universitat Oberta de Catalunya: ***"Implementation of a bioinformatics pipeline for the analysis of spatial transcriptomics data"*****.**
+
+For more information, doubts or suggestions, you can view the source code and materials on the GitHub repo linked above, or contact me through my LinkedIn page [here](https://www.linkedin.com/in/lidiagetalv/).

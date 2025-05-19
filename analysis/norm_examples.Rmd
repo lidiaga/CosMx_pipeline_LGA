@@ -1,0 +1,146 @@
+---
+title: "Normalization methods for CosMx™ SMI Data (examples)"
+site: workflowr::wflow_site
+output:
+  workflowr::wflow_html:
+    toc: false
+editor_options:
+  chunk_output_type: inline
+---
+
+# Introduction
+
+The main objective of this normalization is to eliminate the variability introduced by technical effects while preserving biological variability [1]. According to Nanostring recommendations [2], CosMx™ SMI data should be normalize using total counts, which means dividing the counts by the total counts per cell and multiplying by a scaling factor. However, further transformations, such as *log1p*, square root or "Pearson residuals", may be recommended for applying certain dimensional reduction and visualization methods, like UMAP, or for applying distance-based clustering methods [2].
+
+In the [CosMx Scratch Space vignette](https://github.com/Nanostring-Biostats/CosMx-Analysis-Scratch-Space/tree/Main/_code/vignette) [3], for example, normalization is made by total counts. Afterwards, square root transformation is implemented to create a UMAP plot. Finally, downstream analysis are performed: raw counts are used for cell typing (with UMAP visualization) and normalize (non-transformed) counts are used for neighborhood expression analysis.
+
+However, the [CosMxLite vignette](https://github.com/cancerbioinformatics/CosMx_Lite/tree/main/scripts) [4] proposes using "SCTransform", reporting a better clustering performance when using this method in comparison to the classic log-normalization. This method, fits a negative binomial regression model to estimate gene expression from total counts and normalizes the data by calculating Pearson residuals.
+
+Finally, in the literature, most studies apply logarithmic transformation, as it is one of the most common methods in single-cell RNA sequencing.
+
+In this project, the code of the [Normalization](2.0_normalization.html) phase of the pipeline is parameterized, allowing the selection of a any of these three options:
+
+-   **1.** **Total counts** normalization, using "NormalizeData" with method "RC", as recommended by Nanostring.
+-   **2.** Total counts normalization + ***log1p*** **transformation**, using "NormalizeData" with method "LogNormalize".
+-   **3.** CosMxLite recommendation, using the **"SCTransform"** method, which creates a different assay for the normalize/transformed data, leaving the original assay intact in case its needed.
+
+For simplicity, in the [main pipeline example](pipeline.html) only one method is shown — "SCTransform". However, in this section, dimensional reduction and UMAP results from the different normalization methods can be explored to see how different the outcome is.
+
+# Examples
+
+## Total counts normalization
+
+1.  [Normalization with RC](5.0_RC_normalization.html)
+2.  [Dimensional reduction with RC](5.1_RC_dimensional_reduction.html)
+
+## Total counts normalization + *log1p* transformation
+
+1.  [Normalization with LogNormalize](6.0_Log_normalization.html)
+2.  [Dimensional reduction with LogNormalize](6.1_Log_dimensional_reduction.html)
+
+## SCTransform
+
+1.  [Normalization with SCT](2.0_normalization.html)
+2.  [Dimensional reduction with SCT](3.0_dimensional_reduction.html)
+
+```{r Libraries, include = FALSE}
+library(data.table) # Efficient data management
+library(here) # Enhanced file referencing in project-oriented workflows
+library(dplyr) # For the use of pipes %>%
+library(kableExtra) # For table formatting
+library(Seurat) # Seurat object
+library(ggplot2) # Graphics
+library(patchwork) # Layout graphics
+library(viridis) # Viridis color scale
+
+source(
+  here::here("code", "aux_functions.R"), 
+  local = knitr::knit_global())
+```
+
+```{r LoadData, include = FALSE}
+# Load Seu objects
+seu_RC <- readRDS(here("output","processed_data","RC","seu_RC_um.RDS"))
+seu_Log <- readRDS(here("output","processed_data","Log","seu_Log_um.RDS"))
+seu_SCT <- readRDS(here("output","processed_data","SCT","seu_SCT_um.RDS"))
+
+# Load performance reports
+pr_RC <- fread(here("output","performance_reports","5.0_RC_normalization_PR.csv"))
+pr_Log <- fread(here("output","performance_reports","6.0_Log_normalization_PR.csv"))
+pr_SCT <- fread(here("output","performance_reports","2.0_normalization_PR.csv"))
+```
+
+## Resulting UMAP plots
+
+UMAP plotting can be useful, not only to visualize clustering results, but also to observe how are cells distributed based on different variables, such as tissues, slide, total counts, etc. This type is visualizations would help to determine if any technical factor is influencing the data and if any additional procedure is needed before continuing the analysis: increase filtering thresholds, try another normalization method, test a different number of PCs, etc.
+
+```{r UMAPs, echo = FALSE, message = FALSE, fig.width = 11, fig.height = 15}
+# RC UMAPs
+random <- sample(Cells(seu_RC))
+
+p1 <- DimPlot(seu_RC, reduction = "umap", cols = "stepped", raster = FALSE) + 
+  NoLegend() + 
+  ggtitle("RC UMAP")
+
+p2 <- FeaturePlot(seu_RC, reduction = "umap", cells = random, 
+                  features = "log_nCount_RNA") +
+  scale_color_viridis_c(option = "B") + 
+  ggtitle("RC UMAP by Total Counts")
+
+# Log UMAPs
+random <- sample(Cells(seu_Log))
+
+p3 <- DimPlot(seu_Log, reduction = "umap", cols = "stepped", raster = FALSE) + 
+  NoLegend() + 
+  ggtitle("LogNormalize UMAP")
+
+p4 <- FeaturePlot(seu_Log, reduction = "umap", cells = random, 
+                  features = "log_nCount_RNA") +
+  scale_color_viridis_c(option = "B") + 
+  ggtitle("LogNormalize UMAP by Total Counts")
+
+# SCT UMAPs
+random <- sample(Cells(seu_SCT))
+
+p5 <- DimPlot(seu_SCT, reduction = "umap", cols = "stepped", raster = FALSE) + 
+  NoLegend() + 
+  ggtitle("SCT UMAP")
+
+p6 <- FeaturePlot(seu_SCT, reduction = "umap", cells = random, 
+                  features = "log_nCount_RNA") +
+  scale_color_viridis_c(option = "B") + 
+  ggtitle("SCT UMAP by Total Counts")
+
+(p1 + p2) / (p3 + p4) / (p5 + p6)
+```
+
+In this example, the UMAP plots in the right are by the total number of transcripts, and it can be observed that both "RC" and "SCTransform" seem to have corrected the technical effect of size coverage, while in the "LogNormalize" method, cells with low counts cluster in the center, suggesting a structure influenced by this characteristic rather than by actual biological variability.
+
+## Performance
+
+```{r Perf, echo = FALSE}
+# Compare time and memory use of each method
+comp <- rbind(pr_RC[Chunk == "Norm", ],
+              pr_Log[Chunk == "Norm", ],
+              pr_SCT[Chunk == "Norm", ])
+
+comp <- cbind(c("RC","Log","SCT"),comp)
+
+# Show the result
+knitr::kable(comp, row.names = FALSE, format = "html") %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
+```
+
+In terms of time and memory usage, methods "RC" and "LogNormalize" (including "FindVariableFeatures" and "ScaleData") are both less memory and time consuming, while "SCTransform" requires higher computing resources.
+
+------------------------------------------------------------------------
+
+# Bibliography
+
+1.  Hafemeister C, Satija R. Normalization and variance stabilization of single-cell RNA-seq data using regularized negative binomial regression. Genome Biology [Internet]. 2019 Dec 23 [cited 2025 May 5];20(1):296. Available from: <https://doi.org/10.1186/s13059-019-1874-1>
+
+2.  Danaher P. QC and normalization of RNA data [Internet]. CosMx® Analysis Scratch Space. 2024. Available from: <https://nanostring-biostats.github.io/CosMx-Analysis-Scratch-Space/posts/normalization/>
+
+3.  Danaher P. Vignette: Basics of CosMx Analysis in R – Blog [Internet]. CosMx® Analysis Scratch Space. 2024 [cited 2025 Mar 27]. <https://nanostring-biostats.github.io/CosMx-Analysis-Scratch-Space/posts/vignette-basic-analysis/>
+
+4.  O Hora B, Laddach R, Nuamah R, Chiappini C, Grigoriadis A, Quist J. GitHub - cancerbioinformatics/CosMx_Lite [Internet]. CosMxLite. 2024 [cited 2025 Mar 27]. Available from: <https://github.com/cancerbioinformatics/CosMx_Lite>
