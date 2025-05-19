@@ -43,10 +43,10 @@ source(
 seu_ISTSup <- readRDS(here("output","processed_data","SCT","seu_SCT_ISTSup.RDS"))
 
 # Load Unsupervised Insitutype Seu object
-seu_ISTUnsup <- readRDS(here("output","processed_data","SCT","seu_SCT_ISTclus.RDS"))
+seu_ISTUnsup <- readRDS(here("output","processed_data","SCT","seu_SCT_ISTUnsup.RDS"))
 
 # Load Seurat-Louvain Seu object
-seu_SL <- readRDS(here("output","processed_data","SCT","seu_SCT_SLclus.RDS"))
+seu_SL <- readRDS(here("output","processed_data","SCT","seu_SCT_SL.RDS"))
 
 # Load the number of PCs used for dimensional reduction
 npcs <- readRDS(here("output","processed_data","SCT","npcs_SCT.RDS"))
@@ -68,22 +68,24 @@ n_SL <- length(unique(Idents(seu_SL)))
 cols_SL <- gg_color_hue(n_SL)
 
 # DimPlots of each clustering method
-p1 <- DimPlot(seu_ISTSup, reduction = "umap", label = TRUE, cols = cols_ISTSup, 
+p1 <- DimPlot(seu_ISTSup, reduction = "umap", label = FALSE, cols = cols_ISTSup, 
               raster = FALSE) +
   ggtitle("Supervised InSituType")
 
-p2 <- DimPlot(seu_IST, reduction = "umap", label = TRUE, cols = cols_ISTUnsup,
+p2 <- DimPlot(seu_ISTUnsup, reduction = "umap", label = FALSE, cols = cols_ISTUnsup,
               raster = FALSE) +
   ggtitle("Unsupervised InSituType + ScType")
 
-p3 <- DimPlot(seu_SL, reduction = "umap", label = TRUE, cols = cols_SL,
+p3 <- DimPlot(seu_SL, reduction = "umap", label = FALSE, cols = cols_SL,
               raster = FALSE) +
   ggtitle("Unsupervised Seurat-Louvain  + ScType")
 ```
 
 # Examples
 
-1.  [**Supervised InSituType**](4.0_insitutype_cell_typing.html)
+## Supervised InSituType
+
+1.  [Cell typing with InSituType Supervised classification](4.0_insitutype_cell_typing.html)
 
 To run the InSituType supervised algorithm, three inputs are needed: 1) the raw, unnormalized expression matrix; 2) a vector with the mean negative probe expression per cell; and 3) a reference profile.
 
@@ -91,11 +93,13 @@ Nanostring® provides various public profiles, both from [scRNA-seq](https://git
 
 With this information, the function will assigned pre-defined cell types from the reference to the cells according to their expression profiles.
 
-```{r Sup, echo = FALSE, fig.width = 7, fig.height = 7}
+```{r Sup, echo = FALSE, fig.width = 8, fig.height = 5}
 p1
 ```
 
-2.  [**Unsupervised InSituType**](4.1_insitutype_unsup_clustering.html)
+## Unsupervised InSituType
+
+2.  [Unsupervised clustering with InSituType + ScType annotation based on markers](4.1_insitutype_unsup_clustering.html)
 
 To run the InSituType unsupervised clustering method, the needed inputs are: 1) the raw, unnormalized expression matrix; 2) a vector with the mean negative probe expression per cell; and 3) a number or range of clusters to be evaluated.
 
@@ -103,17 +107,17 @@ If a range is provided, the algorithm executes the clustering with all the diffe
 
 Afterwards, in the proposed pipeline, annotation has been performed using the ScType package, a computational method for automated annotation based on marker genes [5].
 
-```{r Unsup, echo = FALSE, fig.width = 7, fig.height = 7}
+```{r Unsup, echo = FALSE, fig.width = 8, fig.height = 5}
 p2
 ```
 
-3.  [**Seurat's unsupervised clustering, using the Louvain algorithm**](4.2_seurat_unsup_clustering.html)
+3.  [Unsupervised clustering with Seurat-Louvain + ScType annotation based on markers](4.2_seurat_unsup_clustering.html)
 
 In this case, the Seurat method can be run directly onto the Seurat object, providing the reduction and number of components to work with.
 
 This algorithm, unlike InSituType, does not require a specific number of clusters to be evaluated, instead, it calculates the appropriate number of clusters for the desired resolution. Afterwards, in the proposed pipeline, annotation has been performed using the ScType package [5], as previously.
 
-```{r Unsup, echo = FALSE, fig.width = 7, fig.height = 7}
+```{r SL, echo = FALSE, fig.width = 8, fig.height = 5}
 p3
 ```
 
@@ -130,7 +134,9 @@ knitr::kable(comp, row.names = FALSE, format = "html") %>%
   kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
 ```
 
-In terms of time and memory usage, methods...
+In terms of time, the Seurat approach is faster out of the three. followed by InSituType unsupervised. However, it has to be mentioned that, in the supervised InSitutype method, a single step provides a full annotation of the cells, while in the unsupervised clustering methods, subsequent steps are needed to annotate the obtained clusters.  
+
+On the other side, InSituType algorithm seems more memory efficient overall, showing very reduced memory consumption in the Unsupervised method and very comparable values between the supervised method and the unsupervised Seurat's approach.  
 
 ------------------------------------------------------------------------
 
