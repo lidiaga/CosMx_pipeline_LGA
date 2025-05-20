@@ -1,0 +1,1562 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>CosMx Data QC and filtering</title>
+
+<script src="site_libs/header-attrs-2.29/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/united.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="site_libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/main/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+
+
+<style type="text/css">
+  code {
+    white-space: pre;
+  }
+  .sourceCode {
+    overflow: visible;
+  }
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  background-color: #f8f8f8; }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ef2929; } /* Alert */
+code span.an { color: #8f5902; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #204a87; } /* Attribute */
+code span.bn { color: #0000cf; } /* BaseN */
+code span.cf { color: #204a87; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4e9a06; } /* Char */
+code span.cn { color: #8f5902; } /* Constant */
+code span.co { color: #8f5902; font-style: italic; } /* Comment */
+code span.cv { color: #8f5902; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #8f5902; font-weight: bold; font-style: italic; } /* Documentation */
+code span.dt { color: #204a87; } /* DataType */
+code span.dv { color: #0000cf; } /* DecVal */
+code span.er { color: #a40000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #0000cf; } /* Float */
+code span.fu { color: #204a87; font-weight: bold; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #8f5902; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #204a87; font-weight: bold; } /* Keyword */
+code span.op { color: #ce5c00; font-weight: bold; } /* Operator */
+code span.ot { color: #8f5902; } /* Other */
+code span.pp { color: #8f5902; font-style: italic; } /* Preprocessor */
+code span.sc { color: #ce5c00; font-weight: bold; } /* SpecialChar */
+code span.ss { color: #4e9a06; } /* SpecialString */
+code span.st { color: #4e9a06; } /* String */
+code span.va { color: #000000; } /* Variable */
+code span.vs { color: #4e9a06; } /* VerbatimString */
+code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">CosMx™ SMI Data Analysis - TFM UOC</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="dataset.html">Dataset</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Pipeline
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="pipeline.html">Introduction</a>
+    </li>
+    <li>
+      <a href="0.0_data_loading.html">Data Loading</a>
+    </li>
+    <li>
+      <a href="1.0_qc_and_filtering.html">QC and filtering</a>
+    </li>
+    <li>
+      <a href="2.0_normalization.html">Normalization</a>
+    </li>
+    <li>
+      <a href="3.0_dimensional_reduction.html">Dimensional reduction</a>
+    </li>
+    <li>
+      <a href="4.0_insitutype_cell_typing.html">Cell typing</a>
+    </li>
+  </ul>
+</li>
+<li>
+  <a href="clus_examples.html">Cell typing</a>
+</li>
+<li>
+  <a href="norm_examples.html">Normalization</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="license.html">License</a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">CosMx Data QC and filtering</h1>
+<h4 class="author">Lidia Getino Álvarez</h4>
+<address class="author_afil">
+M0.207 TFM - MU Bioinformática y Bioestadística
+(UOC)<br><h4 class="date">20 mayo 2025</h4>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span>
+workflowr <span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2025-05-20
+</p>
+<p>
+<strong>Checks:</strong> <span
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> 0
+</p>
+<p>
+<strong>Knit directory:</strong> <code>CosMx_pipeline_LGA/</code> <span
+class="glyphicon glyphicon-question-sign" aria-hidden="true"
+title="This is the local directory in which the code in this file was executed.">
+</span>
+</p>
+<p>
+This reproducible <a href="https://rmarkdown.rstudio.com">R Markdown</a>
+analysis was created with <a
+  href="https://github.com/workflowr/workflowr">workflowr</a> (version
+1.7.1). The <em>Checks</em> tab describes the reproducibility checks
+that were applied when the results were created. The <em>Past
+versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date
+</a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguptodate"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great! Since the R Markdown file has been committed to the Git
+repository, you know the exact version of the code that produced these
+results.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the
+global environment can affect the analysis in your R Markdown file in
+unknown ways. For reproduciblity it’s best to always run the code in an
+empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20250517code">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Seed:</strong>
+<code>set.seed(20250517)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20250517code"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20250517)</code> was run prior to running
+the code in the R Markdown file. Setting a seed ensures that any results
+that rely on randomness, e.g. subsampling or permutations, are
+reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Session information:</strong>
+recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package
+versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be
+confident that you successfully produced the results during this
+run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr
+project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrong2b284f3">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Repository version:</strong> 2b284f3
+</a>
+</p>
+</div>
+<div id="strongRepositoryversionstrong2b284f3"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development
+and connecting the code version to the results is critical for
+reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version 2b284f3.
+See the <em>Past versions</em> tab to see a history of the changes made
+to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for
+the analysis have been committed to Git prior to generating the results
+(you can use <code>wflow_publish</code> or
+<code>wflow_git_commit</code>). workflowr only checks the R Markdown
+file, but you know if there are other scripts or data files that it
+depends on. Below is the status of the Git repository when the results
+were generated:
+</p>
+<pre><code>
+Ignored files:
+    Ignored:    .Rproj.user/
+    Ignored:    NBClust-Plots/
+    Ignored:    analysis/figure/
+    Ignored:    data/flatFiles/CoronalHemisphere/Run1000_S1_Half_exprMat_file.csv
+    Ignored:    data/flatFiles/CoronalHemisphere/Run1000_S1_Half_fov_positions_file.csv
+    Ignored:    data/flatFiles/CoronalHemisphere/Run1000_S1_Half_metadata_file.csv
+    Ignored:    output/processed_data/Log/
+    Ignored:    output/processed_data/RC/
+    Ignored:    output/processed_data/SCT/
+    Ignored:    output/processed_data/exprMat_unfiltered.RDS
+    Ignored:    output/processed_data/fov_positions_unfiltered.RDS
+    Ignored:    output/processed_data/metadata_unfiltered.RDS
+    Ignored:    output/processed_data/negMat_unfiltered.RDS
+    Ignored:    output/processed_data/seu_filtered.RDS
+    Ignored:    output/processed_data/seu_semifiltered.RDS
+
+Untracked files:
+    Untracked:  analysis/images/
+
+Unstaged changes:
+    Modified:   output/performance_reports/0.0_data_loading_PR.csv
+    Modified:   output/performance_reports/1.0_qc_and_filtering_PR.csv
+    Modified:   output/performance_reports/2.0_normalization_PR.csv
+    Modified:   output/performance_reports/3.0_dimensional_reduction_PR.csv
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not
+included in this status report because it is ok for generated content to
+have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+<p>
+These are the previous versions of the repository in which changes were
+made to the R Markdown (<code>analysis/1.0_qc_and_filtering.Rmd</code>)
+and HTML (<code>docs/1.0_qc_and_filtering.html</code>) files. If you’ve
+configured a remote Git repository (see <code>?wflow_git_remote</code>),
+click on the hyperlinks in the table below to view the files as they
+were in that past version.
+</p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+8410a10
+</td>
+<td>
+lidiaga
+</td>
+<td>
+2025-05-17
+</td>
+<td>
+Add Rmds files in analysis
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<!-- This pipeline has been developed using Seurat v4.4, as Seurat v5 presents several changes to the object structure that affected the working methods. Aditionally, the AtoMx exported Seurat objects come in the Seurat v4 structure. Therefore, working in this version can be more compatible with exported data too. -->
+<div id="dependencies" class="section level1">
+<h1>Dependencies</h1>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(data.table) <span class="co"># Efficient data management</span></span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">library</span>(Matrix) <span class="co"># Sparse matrices</span></span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="fu">library</span>(here) <span class="co"># Enhanced file referencing in project-oriented workflows</span></span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a><span class="fu">library</span>(dplyr) <span class="co"># For the use of pipes %&gt;%</span></span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a><span class="fu">library</span>(kableExtra) <span class="co"># For table formatting</span></span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a><span class="fu">library</span>(Seurat) <span class="co"># Seurat object</span></span>
+<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a><span class="fu">library</span>(ggplot2) <span class="co"># Graphics</span></span>
+<span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a><span class="fu">library</span>(patchwork) <span class="co"># Layout graphics</span></span></code></pre></div>
+</div>
+<div id="load-the-data" class="section level1">
+<h1>Load the data</h1>
+<p>First of all, data needs to be loaded into the session. For this
+script, only the created Seurat object is needed. However, the pipeline
+can also be started here if the Seurat object from AtoMx is
+available.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="co"># Load Seurat object (from previous script or from AtoMx, select in YAML)</span></span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>option <span class="ot">&lt;-</span> <span class="st">&quot;previous&quot;</span> <span class="co"># Select &quot;previous&quot; or &quot;AtoMx&quot;</span></span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="cf">if</span> (option <span class="sc">==</span> <span class="st">&quot;previous&quot;</span>) {</span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>  seu <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="fu">here</span>(<span class="st">&quot;output&quot;</span>,<span class="st">&quot;processed_data&quot;</span>,<span class="st">&quot;seu_semifiltered.RDS&quot;</span>))</span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a>} <span class="cf">else</span> <span class="cf">if</span> (option <span class="sc">==</span> <span class="st">&quot;AtoMx&quot;</span>) {</span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a>  seuAtoMx_dir <span class="ot">&lt;-</span> <span class="fu">here</span>(<span class="st">&quot;data&quot;</span>, <span class="st">&quot;seuAtoMx&quot;</span>)</span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a>  seuAtoMx_name <span class="ot">&lt;-</span> <span class="fu">dir</span>(seuAtoMx_dir)</span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a>  seu <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="fu">here</span>(seuAtoMx_dir,seuAtoMx_name))</span>
+<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a>} <span class="cf">else</span> {</span>
+<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a>  <span class="fu">stop</span>(<span class="st">&quot;The selected method is invalid, choose: &#39;previous&#39; or &#39;AtoMx&#39;&quot;</span>)</span>
+<span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a>}</span></code></pre></div>
+</div>
+<div id="visualizations" class="section level1">
+<h1>Visualizations</h1>
+<div id="fov-arrangement" class="section level2">
+<h2>FOV arrangement</h2>
+<p>In CosMx SMI, slides might contain more than one sample/tissue per
+slide. If this was the case, this information can be added based on the
+FOVs of each sample. In this sense, visualizing the FOV arrangement and
+assign each FOV to its corresponding tissue could be interesting.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="do">## Code adapted from CosMxLite vignette</span></span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="co"># FOV arrangement in Slide</span></span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a><span class="fu">ggplot</span>(seu<span class="sc">@</span>meta.data, </span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x =</span> seu<span class="sc">$</span>x_FOV_px, <span class="at">y =</span> seu<span class="sc">$</span>y_FOV_px, <span class="at">label =</span> seu<span class="sc">$</span>fov)) <span class="sc">+</span></span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">5</span>, <span class="at">colour =</span> <span class="st">&quot;lightblue&quot;</span>, <span class="at">shape =</span> <span class="dv">15</span>) <span class="sc">+</span></span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a>  <span class="fu">theme_classic</span>() <span class="sc">+</span></span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;FOV Arrangement&quot;</span>,</span>
+<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">&quot;Global X Position (px)&quot;</span>,</span>
+<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Global Y Position (px)&quot;</span>) <span class="sc">+</span></span>
+<span id="cb3-12"><a href="#cb3-12" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>, <span class="at">face =</span> <span class="st">&quot;bold&quot;</span>, <span class="at">margin =</span> <span class="fu">margin</span>(<span class="at">b =</span> <span class="dv">15</span>)),</span>
+<span id="cb3-13"><a href="#cb3-13" tabindex="-1"></a>        <span class="at">axis.title.x =</span> <span class="fu">element_text</span>(<span class="at">margin =</span> <span class="fu">margin</span>(<span class="at">t =</span> <span class="dv">15</span>)),</span>
+<span id="cb3-14"><a href="#cb3-14" tabindex="-1"></a>        <span class="at">axis.title.y =</span> <span class="fu">element_text</span>(<span class="at">margin =</span> <span class="fu">margin</span>(<span class="at">r =</span> <span class="dv">15</span>)),</span>
+<span id="cb3-15"><a href="#cb3-15" tabindex="-1"></a>        <span class="at">panel.grid.major =</span> <span class="fu">element_line</span>(<span class="at">colour =</span> <span class="st">&quot;grey92&quot;</span>, <span class="at">linetype =</span> <span class="st">&quot;solid&quot;</span>))</span></code></pre></div>
+<p><img src="figure/1.0_qc_and_filtering.Rmd/VizFOV-1.png" width="384" style="display: block; margin: auto;" /></p>
+<p>In this dataset, there is no information of multiple samples being
+scanned on the same slide, so it has been assumed that all FOVs belong
+to the same sample/tissue. Another possibility, for single-sample slides
+like this one, would be to differentiate areas within the tissue, in
+case you want to explore them separately (see <a
+href="https://github.com/cancerbioinformatics/CosMx_Lite/tree/main/scripts">CosMxLite
+vignette</a> for more information).</p>
+</div>
+<div id="cells" class="section level2">
+<h2>Cells</h2>
+<p>Another interesting preliminary visualization would be to observe how
+are cells distributed based on different attributes, such as its area or
+the intensity of a particular stain.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="do">## Code adapted from CosMxLite vignette</span></span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="co"># Cell arrangement by size</span></span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(seu<span class="sc">@</span>meta.data,</span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a>             <span class="fu">aes</span>(<span class="at">x =</span> seu<span class="sc">$</span>CenterX_global_px, <span class="at">y =</span> seu<span class="sc">$</span>CenterY_global_px, <span class="at">colour =</span> <span class="fu">log2</span>(seu<span class="sc">$</span>Area))) <span class="sc">+</span></span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="fl">0.01</span>) <span class="sc">+</span> </span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a>  <span class="fu">theme_classic</span>() <span class="sc">+</span> </span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a>  <span class="fu">scale_colour_gradientn</span>(<span class="at">colours =</span> <span class="fu">c</span>(<span class="st">&quot;grey50&quot;</span>, <span class="st">&quot;blue&quot;</span>, <span class="st">&quot;yellow&quot;</span>, <span class="st">&quot;red&quot;</span>)) <span class="sc">+</span> </span>
+<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Area (log2)&quot;</span>,</span>
+<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">&quot;Global X Position (px)&quot;</span>,</span>
+<span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Global Y Position (px)&quot;</span>) <span class="sc">+</span></span>
+<span id="cb4-12"><a href="#cb4-12" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>, <span class="at">face =</span> <span class="st">&quot;bold&quot;</span>, <span class="at">margin =</span> <span class="fu">margin</span>(<span class="at">b =</span> <span class="dv">15</span>)),</span>
+<span id="cb4-13"><a href="#cb4-13" tabindex="-1"></a>        <span class="at">axis.title.x =</span> <span class="fu">element_text</span>(<span class="at">margin =</span> <span class="fu">margin</span>(<span class="at">t =</span> <span class="dv">15</span>)),</span>
+<span id="cb4-14"><a href="#cb4-14" tabindex="-1"></a>        <span class="at">axis.title.y =</span> <span class="fu">element_text</span>(<span class="at">margin =</span> <span class="fu">margin</span>(<span class="at">r =</span> <span class="dv">15</span>)),</span>
+<span id="cb4-15"><a href="#cb4-15" tabindex="-1"></a>        <span class="at">panel.grid.major =</span> <span class="fu">element_line</span>(<span class="at">colour =</span> <span class="st">&quot;grey92&quot;</span>, <span class="at">linetype =</span> <span class="st">&quot;solid&quot;</span>),</span>
+<span id="cb4-16"><a href="#cb4-16" tabindex="-1"></a>        <span class="at">legend.position =</span> <span class="st">&quot;right&quot;</span>)</span>
+<span id="cb4-17"><a href="#cb4-17" tabindex="-1"></a></span>
+<span id="cb4-18"><a href="#cb4-18" tabindex="-1"></a><span class="co"># Cell arrangement by DAPI stainning</span></span>
+<span id="cb4-19"><a href="#cb4-19" tabindex="-1"></a>p2 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(seu<span class="sc">@</span>meta.data,</span>
+<span id="cb4-20"><a href="#cb4-20" tabindex="-1"></a>             <span class="fu">aes</span>(<span class="at">x =</span> seu<span class="sc">$</span>CenterX_global_px, <span class="at">y =</span> seu<span class="sc">$</span>CenterY_global_px, <span class="at">colour =</span> <span class="fu">log2</span>(seu<span class="sc">$</span>Mean.DAPI))) <span class="sc">+</span> </span>
+<span id="cb4-21"><a href="#cb4-21" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="fl">0.01</span>) <span class="sc">+</span> </span>
+<span id="cb4-22"><a href="#cb4-22" tabindex="-1"></a>  <span class="fu">theme_classic</span>() <span class="sc">+</span> </span>
+<span id="cb4-23"><a href="#cb4-23" tabindex="-1"></a>  <span class="fu">scale_colour_gradientn</span>(<span class="at">colours =</span> <span class="fu">c</span>(<span class="st">&quot;grey50&quot;</span>, <span class="st">&quot;yellow&quot;</span>, <span class="st">&quot;purple&quot;</span>)) <span class="sc">+</span> </span>
+<span id="cb4-24"><a href="#cb4-24" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;DAPI stainning (log2)&quot;</span>,</span>
+<span id="cb4-25"><a href="#cb4-25" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">&quot;Global X Position (px)&quot;</span>,</span>
+<span id="cb4-26"><a href="#cb4-26" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Global Y Position (px)&quot;</span>) <span class="sc">+</span></span>
+<span id="cb4-27"><a href="#cb4-27" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>, <span class="at">face =</span> <span class="st">&quot;bold&quot;</span>, <span class="at">margin =</span> <span class="fu">margin</span>(<span class="at">b =</span> <span class="dv">15</span>)),</span>
+<span id="cb4-28"><a href="#cb4-28" tabindex="-1"></a>        <span class="at">axis.title.x =</span> <span class="fu">element_text</span>(<span class="at">margin =</span> <span class="fu">margin</span>(<span class="at">t =</span> <span class="dv">15</span>)),</span>
+<span id="cb4-29"><a href="#cb4-29" tabindex="-1"></a>        <span class="at">axis.title.y =</span> <span class="fu">element_text</span>(<span class="at">margin =</span> <span class="fu">margin</span>(<span class="at">r =</span> <span class="dv">15</span>)),</span>
+<span id="cb4-30"><a href="#cb4-30" tabindex="-1"></a>        <span class="at">panel.grid.major =</span> <span class="fu">element_line</span>(<span class="at">colour =</span> <span class="st">&quot;grey92&quot;</span>, <span class="at">linetype =</span> <span class="st">&quot;solid&quot;</span>),</span>
+<span id="cb4-31"><a href="#cb4-31" tabindex="-1"></a>        <span class="at">legend.position =</span> <span class="st">&quot;right&quot;</span>)</span>
+<span id="cb4-32"><a href="#cb4-32" tabindex="-1"></a></span>
+<span id="cb4-33"><a href="#cb4-33" tabindex="-1"></a><span class="co"># Arrange plots</span></span>
+<span id="cb4-34"><a href="#cb4-34" tabindex="-1"></a>p1 <span class="sc">+</span> p2</span></code></pre></div>
+<p><img src="figure/1.0_qc_and_filtering.Rmd/VizCells-1.png" width="960" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+<div id="quality-control" class="section level1">
+<h1>Quality control</h1>
+<p>Nanostring recommendations on how to filter CosMx data can be found
+in several posts from their <a
+href="https://nanostring-biostats.github.io/CosMx-Analysis-Scratch-Space/#category=quality%20control">CosMx
+Scratch Space blog</a>. In general, basic QC can be made through
+filtering bad quality FOVs and/or cells.</p>
+<div id="unassigned-transcripts" class="section level2">
+<h2>Unassigned transcripts</h2>
+<p>Although no especial recommendations have been found on QC based on
+unassigned transcripts, visualizing the fraction of unassigned
+transcripts per FOV might be helpful to understand if any of them have
+an excessively high amount or if they are all more or less in the same
+values.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="co"># Summarize Unassigned Transcripts per FOV</span></span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>un_tx_summary <span class="ot">&lt;-</span> seu<span class="sc">@</span>meta.data <span class="sc">%&gt;%</span></span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>  <span class="fu">select</span>(fov, unassignedTranscripts) <span class="sc">%&gt;%</span></span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a>  <span class="fu">distinct</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a>  <span class="fu">arrange</span>(fov)</span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a></span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a><span class="co"># Plot</span></span>
+<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a><span class="fu">ggplot</span>(un_tx_summary, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">as.factor</span>(fov), <span class="at">y =</span> unassignedTranscripts)) <span class="sc">+</span></span>
+<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">fill =</span> <span class="st">&quot;lightblue&quot;</span>, <span class="at">width =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>),</span>
+<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a>                     <span class="at">breaks =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="at">by =</span> <span class="fl">0.1</span>),</span>
+<span id="cb5-12"><a href="#cb5-12" tabindex="-1"></a>                     <span class="at">expand =</span> <span class="fu">expansion</span>(<span class="at">mult =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.05</span>))) <span class="sc">+</span></span>
+<span id="cb5-13"><a href="#cb5-13" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb5-14"><a href="#cb5-14" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Fraction of Unassigned Transcripts per FOV&quot;</span>,</span>
+<span id="cb5-15"><a href="#cb5-15" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">&quot;Field of View (FOV)&quot;</span>,</span>
+<span id="cb5-16"><a href="#cb5-16" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Fraction of Unassigned Transcripts&quot;</span>) <span class="sc">+</span></span>
+<span id="cb5-17"><a href="#cb5-17" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">&quot;bold&quot;</span>, <span class="at">size =</span> <span class="dv">16</span>),</span>
+<span id="cb5-18"><a href="#cb5-18" tabindex="-1"></a>        <span class="at">axis.title.x =</span> <span class="fu">element_text</span>(<span class="at">margin =</span> <span class="fu">margin</span>(<span class="at">t =</span> <span class="dv">15</span>)),</span>
+<span id="cb5-19"><a href="#cb5-19" tabindex="-1"></a>        <span class="at">axis.title.y =</span> <span class="fu">element_text</span>(<span class="at">margin =</span> <span class="fu">margin</span>(<span class="at">r =</span> <span class="dv">15</span>)),</span>
+<span id="cb5-20"><a href="#cb5-20" tabindex="-1"></a>        <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">90</span>, <span class="at">vjust =</span> <span class="fl">0.5</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span></code></pre></div>
+<p><img src="figure/1.0_qc_and_filtering.Rmd/VizUnTx-1.png" width="960" style="display: block; margin: auto;" />
+In this case, all FOVs are more or less within the same range, and none
+of them present extreme values.</p>
+</div>
+<div id="fov-qc" class="section level2">
+<h2>FOV QC</h2>
+<p>Following Nanostring CosMx Scratch Space blog post of <a
+href="https://nanostring-biostats.github.io/CosMx-Analysis-Scratch-Space/posts/fov-qc/">FOV
+QC</a> and the Nanostring’s <a
+href="https://github.com/Nanostring-Biostats/CosMx-Analysis-Scratch-Space/tree/Main/_code/vignette">CosMx
+Scratch Space vignette</a>, quality control of bad quality FOVs can be
+made based on the following indicators of artifacts: diminished total
+counts and/or distorted expression profiles. In practice, this
+means:</p>
+<ul>
+<li>Filter FOVs where total expression is suppressed, typically more
+than a 60% signal loss.<br />
+</li>
+<li>Filter FOVs where at multiple reporter probes are
+underexpressed.</li>
+</ul>
+<p>Special functions from NanoString to perform FOV QC can be found <a
+href="https://github.com/Nanostring-Biostats/CosMx-Analysis-Scratch-Space/tree/Main/_code/FOV%20QC">here</a>.</p>
+<!-- 
+Function info of runFOVQC:
+* max_prop_loss: Maximum loss of efficiency allowed for any bit. E.g., a value of "0.3" means all FOVs with bias <log2(1 - 0.3) will be flagged.
+* max_totalcounts_loss: Maximum loss of total expression allowed for any FOV. E.g., a value of "0.5" means all FOVs with total counts <50% of comparable spatial regions will be flagged.
+-->
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="do">## Code adapted from Scratch Space vignette</span></span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a><span class="co"># Load tools for FOV QC from Nanostring CosMx Scratch Space github</span></span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a><span class="fu">source</span>(<span class="st">&quot;https://raw.githubusercontent.com/Nanostring-Biostats/CosMx-Analysis-Scratch-Space/Main/_code/FOV%20QC/FOV%20QC%20utils.R&quot;</span>)</span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a></span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a>CosMx_barcodes <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="fu">url</span>(<span class="st">&quot;https://github.com/Nanostring-Biostats/CosMx-Analysis-Scratch-Space/raw/Main/_code/FOV%20QC/barcodes_by_panel.RDS&quot;</span>))</span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a></span>
+<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a>panel_barcode <span class="ot">&lt;-</span> CosMx_barcodes<span class="sc">$</span>Mm_Neuro <span class="co"># Select the appropriate panel here</span></span>
+<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a></span>
+<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a><span class="co"># Prepare the necessary data to run the FOV QC method</span></span>
+<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a>counts <span class="ot">&lt;-</span> <span class="fu">t</span>(<span class="fu">GetAssayData</span>(seu, <span class="at">assay =</span> <span class="st">&quot;RNA&quot;</span>, <span class="at">slot =</span> <span class="st">&quot;counts&quot;</span>)) <span class="co"># Cells x genes</span></span>
+<span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a>xy <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(<span class="fu">data.table</span>(<span class="at">X_px =</span> seu<span class="sc">$</span>CenterX_global_px, </span>
+<span id="cb6-13"><a href="#cb6-13" tabindex="-1"></a>                           <span class="at">Y_px =</span> seu<span class="sc">$</span>CenterY_global_px))</span>
+<span id="cb6-14"><a href="#cb6-14" tabindex="-1"></a><span class="fu">rownames</span>(xy) <span class="ot">&lt;-</span> <span class="fu">rownames</span>(seu<span class="sc">@</span>meta.data)</span>
+<span id="cb6-15"><a href="#cb6-15" tabindex="-1"></a></span>
+<span id="cb6-16"><a href="#cb6-16" tabindex="-1"></a><span class="co"># Run the FOV QC method</span></span>
+<span id="cb6-17"><a href="#cb6-17" tabindex="-1"></a>fovqc <span class="ot">&lt;-</span> <span class="fu">runFOVQC</span>(<span class="at">counts =</span> counts, <span class="at">xy =</span> xy, <span class="at">fov =</span> seu<span class="sc">$</span>fov, <span class="at">barcodemap =</span> panel_barcode,</span>
+<span id="cb6-18"><a href="#cb6-18" tabindex="-1"></a>                  <span class="at">max_prop_loss =</span> <span class="fl">0.6</span>, <span class="at">max_totalcounts_loss =</span> <span class="fl">0.6</span>) <span class="co"># default</span></span>
+<span id="cb6-19"><a href="#cb6-19" tabindex="-1"></a></span>
+<span id="cb6-20"><a href="#cb6-20" tabindex="-1"></a>fovqc50 <span class="ot">&lt;-</span> <span class="fu">runFOVQC</span>(<span class="at">counts =</span> counts, <span class="at">xy =</span> xy, <span class="at">fov =</span> seu<span class="sc">$</span>fov, <span class="at">barcodemap =</span> panel_barcode,</span>
+<span id="cb6-21"><a href="#cb6-21" tabindex="-1"></a>                  <span class="at">max_prop_loss =</span> <span class="fl">0.6</span>, <span class="at">max_totalcounts_loss =</span> <span class="fl">0.5</span>) <span class="co"># trial</span></span>
+<span id="cb6-22"><a href="#cb6-22" tabindex="-1"></a></span>
+<span id="cb6-23"><a href="#cb6-23" tabindex="-1"></a><span class="co"># Results</span></span>
+<span id="cb6-24"><a href="#cb6-24" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">length</span>(fovqc<span class="sc">$</span>flaggedfovs) <span class="sc">==</span> <span class="dv">0</span>) {</span>
+<span id="cb6-25"><a href="#cb6-25" tabindex="-1"></a>  flaggedFOVs <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb6-26"><a href="#cb6-26" tabindex="-1"></a>  flaggedFOVs_signal <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb6-27"><a href="#cb6-27" tabindex="-1"></a>  flaggedFOVs_bias <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb6-28"><a href="#cb6-28" tabindex="-1"></a>  flaggedFOVsCells <span class="ot">&lt;-</span> <span class="fu">character</span>(<span class="dv">0</span>)</span>
+<span id="cb6-29"><a href="#cb6-29" tabindex="-1"></a>} <span class="cf">else</span> {</span>
+<span id="cb6-30"><a href="#cb6-30" tabindex="-1"></a>  flaggedFOVs <span class="ot">&lt;-</span> fovqc<span class="sc">$</span>flaggedfovs</span>
+<span id="cb6-31"><a href="#cb6-31" tabindex="-1"></a>  flaggedFOVs_signal <span class="ot">&lt;-</span> fovqc<span class="sc">$</span>flaggedfovs_fortotalcounts</span>
+<span id="cb6-32"><a href="#cb6-32" tabindex="-1"></a>  flaggedFOVs_bias <span class="ot">&lt;-</span> fovqc<span class="sc">$</span>flaggedfovs_forbias</span>
+<span id="cb6-33"><a href="#cb6-33" tabindex="-1"></a>  flaggedFOVsCells <span class="ot">&lt;-</span> <span class="fu">rownames</span>(seu<span class="sc">@</span>meta.data[(seu<span class="sc">@</span>meta.data<span class="sc">$</span>fov <span class="sc">%in%</span> flaggedFOVs), ])</span>
+<span id="cb6-34"><a href="#cb6-34" tabindex="-1"></a>}</span></code></pre></div>
+<ul>
+<li><strong>FOVs with &gt; 60% of signal loss:</strong> 69, 95.<br />
+</li>
+<li><strong>FOVs with reporter bias:</strong> .<br />
+</li>
+<li><strong>Flagged FOVs:</strong> 69, 95.<br />
+</li>
+<li><strong>Flagged FOVs’ Cells:</strong> 481 -&gt; c_1_69_1, c_1_69_2,
+c_1_69_3, c_1_69_4, c_1_69_5, c_1_69_6…</li>
+</ul>
+<p>In this case, two bad quality FOVs have been found, reported signal
+loss. The following visualization will provide some more depth into the
+results:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="do">## Code adapted from Scratch Space vignette</span></span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a><span class="co"># Plot results from signal loss</span></span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>),</span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a>    <span class="at">oma =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">4</span>, <span class="dv">0</span>))</span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a></span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a><span class="fu">FOVSignalLossSpatialPlot</span>(fovqc)</span>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a><span class="fu">mapFlaggedFOVs</span>(fovqc)</span>
+<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a></span>
+<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a><span class="fu">mtext</span>(<span class="st">&quot;Signal loss threshold: &gt; 60%&quot;</span>, <span class="at">outer =</span> <span class="cn">TRUE</span>, <span class="at">line =</span> <span class="dv">1</span>, <span class="at">at =</span> <span class="fl">0.5</span>, <span class="at">cex =</span> <span class="fl">1.5</span>, <span class="at">font =</span> <span class="dv">2</span>)</span></code></pre></div>
+<p><img src="figure/1.0_qc_and_filtering.Rmd/VizFOVQC1-1.png" width="1440" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>))</span></code></pre></div>
+<p>As it can be observed, signal strength varies across FOVs relatively
+smoothly. However, two FOVs appear to have an overall lower signal.</p>
+<p>In terms of reporter bias, no reporter probes have been detected to
+be underexpressed and, therefore, no FOVs have been flagged based on
+bias reporters:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="do">## Code adapted from Scratch Space vignette</span></span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a><span class="co"># Plot results from reporter bias</span></span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a><span class="fu">FOVEffectsHeatmap</span>(fovqc50) </span></code></pre></div>
+<p><img src="figure/1.0_qc_and_filtering.Rmd/VizFOVQC2-1.png" width="960" style="display: block; margin: auto;" /></p>
+</div>
+<div id="cell-qc" class="section level2">
+<h2>Cell QC</h2>
+<p>As recommended by Nanostring in their <a
+href="https://nanostring-biostats.github.io/CosMx-Analysis-Scratch-Space/posts/normalization/">CosMx
+Scratch Space blog</a>, cell QC can be made by:</p>
+<ul>
+<li>Filtering cells with very low counts, to avoid undersampled cells:
+&lt;= 20 for the 1000-plex panel and &lt;= 50 for the 6000-plex
+panel.<br />
+</li>
+<li>Filtering cells with high outlier areas, to avoid multiplets:
+evaluate appropriate area cutoff with an outliers test or an
+histogram.</li>
+</ul>
+<p>Another common filtering methods seen in CosMx related literature and
+also supported by the <a
+href="https://github.com/cancerbioinformatics/CosMx_Lite/tree/main/scripts">CosMxLite
+vignette</a> are:</p>
+<ul>
+<li>Filter cells with &lt;= 10 features, to avoid cells with very low
+number of detected genes that would be difficult to annotate.<br />
+</li>
+<li>Filter cells with &gt;= 5% of negative probes, as these account for
+hybridization to non existing genes and suggest bad quality.</li>
+</ul>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="co"># Calculate percentage of negative and System Control probes</span></span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a>seu[[<span class="st">&quot;percent.NegPrb&quot;</span>]] <span class="ot">&lt;-</span> seu<span class="sc">$</span>nCount_negprobes <span class="sc">/</span> (seu<span class="sc">$</span>nCount_RNA <span class="sc">+</span> seu<span class="sc">$</span>nCount_negprobes) <span class="sc">*</span> <span class="dv">100</span></span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a>seu[[<span class="st">&quot;percent.SysCon&quot;</span>]] <span class="ot">&lt;-</span> seu<span class="sc">$</span>nCount_falsecode <span class="sc">/</span> (seu<span class="sc">$</span>nCount_RNA <span class="sc">+</span> seu<span class="sc">$</span>nCount_falsecode) <span class="sc">*</span> <span class="dv">100</span></span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="do">## Code adapted from CosMxLite vignette</span></span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a><span class="do">## Points are removed as CosMx datasets can contain over 1 million cells and may hide the violin plot</span></span>
+<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a></span>
+<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a><span class="co"># Violin plot</span></span>
+<span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> <span class="fu">VlnPlot</span>(seu, <span class="at">features =</span> <span class="fu">c</span>(<span class="st">&quot;nFeature_RNA&quot;</span>, <span class="st">&quot;nCount_RNA&quot;</span>, <span class="st">&quot;percent.NegPrb&quot;</span>, <span class="st">&quot;Area&quot;</span>), <span class="at">ncol =</span> <span class="dv">4</span>, <span class="at">pt.size =</span> <span class="dv">0</span>)</span>
+<span id="cb11-6"><a href="#cb11-6" tabindex="-1"></a></span>
+<span id="cb11-7"><a href="#cb11-7" tabindex="-1"></a><span class="co"># Feature Scatter plots</span></span>
+<span id="cb11-8"><a href="#cb11-8" tabindex="-1"></a>p2 <span class="ot">&lt;-</span> <span class="fu">FeatureScatter</span>(seu, <span class="at">feature1 =</span> <span class="st">&quot;nCount_RNA&quot;</span>, <span class="at">feature2 =</span> <span class="st">&quot;percent.NegPrb&quot;</span>) <span class="sc">+</span> <span class="fu">NoLegend</span>()</span>
+<span id="cb11-9"><a href="#cb11-9" tabindex="-1"></a>p3 <span class="ot">&lt;-</span> <span class="fu">FeatureScatter</span>(seu, <span class="at">feature1 =</span> <span class="st">&quot;nCount_RNA&quot;</span>, <span class="at">feature2 =</span> <span class="st">&quot;nFeature_RNA&quot;</span>) <span class="sc">+</span> <span class="fu">NoLegend</span>()</span>
+<span id="cb11-10"><a href="#cb11-10" tabindex="-1"></a>p4 <span class="ot">&lt;-</span> <span class="fu">FeatureScatter</span>(seu, <span class="at">feature1 =</span> <span class="st">&quot;Area&quot;</span>, <span class="at">feature2 =</span> <span class="st">&quot;nCount_RNA&quot;</span>) <span class="sc">+</span> <span class="fu">NoLegend</span>()</span>
+<span id="cb11-11"><a href="#cb11-11" tabindex="-1"></a></span>
+<span id="cb11-12"><a href="#cb11-12" tabindex="-1"></a><span class="co"># Arrange plots</span></span>
+<span id="cb11-13"><a href="#cb11-13" tabindex="-1"></a>p1 <span class="sc">/</span> (p2 <span class="sc">+</span> p3 <span class="sc">+</span> p4)</span></code></pre></div>
+<p><img src="figure/1.0_qc_and_filtering.Rmd/VizCellQC1-1.png" width="960" style="display: block; margin: auto;" />
+In sight of the violin plots, this dataset presents a low percentage of
+Negative probes, with some outliers that match those cells with the
+lower transcript counts and lower unique features. Therefore, the
+suggested filter cutoffs seem appropriate for this case.</p>
+<p>Some additional cutoff could be set in &gt;= 9000 total transcript
+counts and &gt;= 60000 of area, approximately, to remove some potential
+outliers or multiplets.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="do">## Code inspired by CosMxLite vignette</span></span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a></span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a><span class="co"># Select filter thresholds</span></span>
+<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a>min_counts <span class="ot">&lt;-</span> <span class="dv">20</span></span>
+<span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a>max_counts <span class="ot">&lt;-</span> <span class="dv">9000</span></span>
+<span id="cb12-6"><a href="#cb12-6" tabindex="-1"></a>min_features <span class="ot">&lt;-</span> <span class="dv">10</span></span>
+<span id="cb12-7"><a href="#cb12-7" tabindex="-1"></a>max_neg_perc <span class="ot">&lt;-</span> <span class="dv">5</span></span>
+<span id="cb12-8"><a href="#cb12-8" tabindex="-1"></a>max_area <span class="ot">&lt;-</span> <span class="dv">60000</span></span>
+<span id="cb12-9"><a href="#cb12-9" tabindex="-1"></a></span>
+<span id="cb12-10"><a href="#cb12-10" tabindex="-1"></a><span class="co"># Counts</span></span>
+<span id="cb12-11"><a href="#cb12-11" tabindex="-1"></a>flag1 <span class="ot">&lt;-</span> <span class="fu">sum</span>(seu<span class="sc">$</span>nCount_RNA <span class="sc">&lt;=</span> min_counts)</span>
+<span id="cb12-12"><a href="#cb12-12" tabindex="-1"></a>flag2 <span class="ot">&lt;-</span> <span class="fu">sum</span>(seu<span class="sc">$</span>nCount_RNA <span class="sc">&gt;=</span> max_counts)</span>
+<span id="cb12-13"><a href="#cb12-13" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(seu<span class="sc">@</span>meta.data, <span class="fu">aes</span>(<span class="at">x =</span> seu<span class="sc">$</span>nCount_RNA)) <span class="sc">+</span></span>
+<span id="cb12-14"><a href="#cb12-14" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">bins =</span> <span class="dv">100</span>, <span class="at">fill =</span> <span class="st">&quot;lightblue&quot;</span>, <span class="at">colour =</span> <span class="st">&quot;black&quot;</span>) <span class="sc">+</span></span>
+<span id="cb12-15"><a href="#cb12-15" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> min_counts, <span class="at">colour =</span> <span class="st">&quot;red&quot;</span>, <span class="at">lwd =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb12-16"><a href="#cb12-16" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> max_counts, <span class="at">colour =</span> <span class="st">&quot;red&quot;</span>, <span class="at">lwd =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb12-17"><a href="#cb12-17" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="fu">paste</span>(<span class="st">&quot;Nº cells with nCount_RNA &lt;=&quot;</span>, min_counts, <span class="st">&quot;:&quot;</span>, flag1,</span>
+<span id="cb12-18"><a href="#cb12-18" tabindex="-1"></a>                <span class="st">&quot;</span><span class="sc">\n</span><span class="st">Nº cells with nCount_RNA &gt;=&quot;</span>, max_counts, <span class="st">&quot;:&quot;</span>, flag2)) <span class="sc">+</span> </span>
+<span id="cb12-19"><a href="#cb12-19" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span>
+<span id="cb12-20"><a href="#cb12-20" tabindex="-1"></a></span>
+<span id="cb12-21"><a href="#cb12-21" tabindex="-1"></a><span class="co"># Feature</span></span>
+<span id="cb12-22"><a href="#cb12-22" tabindex="-1"></a>flag <span class="ot">&lt;-</span> <span class="fu">sum</span>(seu<span class="sc">$</span>nFeature_RNA <span class="sc">&lt;=</span> min_features)</span>
+<span id="cb12-23"><a href="#cb12-23" tabindex="-1"></a>p2 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(seu<span class="sc">@</span>meta.data, <span class="fu">aes</span>(<span class="at">x =</span> seu<span class="sc">$</span>nFeature_RNA)) <span class="sc">+</span></span>
+<span id="cb12-24"><a href="#cb12-24" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">bins =</span> <span class="dv">100</span>, <span class="at">fill =</span> <span class="st">&quot;lightblue&quot;</span>, <span class="at">colour =</span> <span class="st">&quot;black&quot;</span>) <span class="sc">+</span></span>
+<span id="cb12-25"><a href="#cb12-25" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> min_features, <span class="at">colour =</span> <span class="st">&quot;red&quot;</span>, <span class="at">lwd =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb12-26"><a href="#cb12-26" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="fu">paste</span>(<span class="st">&quot;Nº cells with nFeature_RNA &lt;=&quot;</span>, min_features, <span class="st">&quot;:&quot;</span>, flag)) <span class="sc">+</span> </span>
+<span id="cb12-27"><a href="#cb12-27" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span>
+<span id="cb12-28"><a href="#cb12-28" tabindex="-1"></a></span>
+<span id="cb12-29"><a href="#cb12-29" tabindex="-1"></a><span class="co"># NegPrb percentage</span></span>
+<span id="cb12-30"><a href="#cb12-30" tabindex="-1"></a>flag <span class="ot">&lt;-</span> <span class="fu">sum</span>(seu<span class="sc">$</span>percent.NegPrb <span class="sc">&gt;=</span> max_neg_perc)</span>
+<span id="cb12-31"><a href="#cb12-31" tabindex="-1"></a>p3 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(seu<span class="sc">@</span>meta.data, <span class="fu">aes</span>(<span class="at">x =</span> seu<span class="sc">$</span>percent.NegPrb)) <span class="sc">+</span></span>
+<span id="cb12-32"><a href="#cb12-32" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">bins =</span> <span class="dv">100</span>, <span class="at">fill =</span> <span class="st">&quot;lightblue&quot;</span>, <span class="at">colour =</span> <span class="st">&quot;black&quot;</span>) <span class="sc">+</span></span>
+<span id="cb12-33"><a href="#cb12-33" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> max_neg_perc, <span class="at">colour =</span> <span class="st">&quot;red&quot;</span>, <span class="at">lwd =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb12-34"><a href="#cb12-34" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="fu">paste</span>(<span class="st">&quot;Nº cells with percent.NegPrb &gt;=&quot;</span>, max_neg_perc, <span class="st">&quot;:&quot;</span>, flag)) <span class="sc">+</span> </span>
+<span id="cb12-35"><a href="#cb12-35" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span>
+<span id="cb12-36"><a href="#cb12-36" tabindex="-1"></a></span>
+<span id="cb12-37"><a href="#cb12-37" tabindex="-1"></a><span class="co"># Area</span></span>
+<span id="cb12-38"><a href="#cb12-38" tabindex="-1"></a>flag <span class="ot">&lt;-</span> <span class="fu">sum</span>(seu<span class="sc">$</span>Area <span class="sc">&gt;=</span> max_area)</span>
+<span id="cb12-39"><a href="#cb12-39" tabindex="-1"></a>p4 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(seu<span class="sc">@</span>meta.data, <span class="fu">aes</span>(<span class="at">x =</span> seu<span class="sc">$</span>Area)) <span class="sc">+</span></span>
+<span id="cb12-40"><a href="#cb12-40" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">bins =</span> <span class="dv">100</span>, <span class="at">fill =</span> <span class="st">&quot;lightblue&quot;</span>, <span class="at">colour =</span> <span class="st">&quot;black&quot;</span>) <span class="sc">+</span></span>
+<span id="cb12-41"><a href="#cb12-41" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> max_area, <span class="at">colour =</span> <span class="st">&quot;red&quot;</span>, <span class="at">lwd =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb12-42"><a href="#cb12-42" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="fu">paste</span>(<span class="st">&quot;Nº cells with Area &gt;=&quot;</span>, max_area, <span class="st">&quot;:&quot;</span>, flag)) <span class="sc">+</span> </span>
+<span id="cb12-43"><a href="#cb12-43" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span>
+<span id="cb12-44"><a href="#cb12-44" tabindex="-1"></a></span>
+<span id="cb12-45"><a href="#cb12-45" tabindex="-1"></a><span class="co"># Arrange plots</span></span>
+<span id="cb12-46"><a href="#cb12-46" tabindex="-1"></a>(p1 <span class="sc">+</span> p2) <span class="sc">/</span> (p3 <span class="sc">+</span> p4)</span></code></pre></div>
+<p><img src="figure/1.0_qc_and_filtering.Rmd/VizCellQC2-1.png" width="960" style="display: block; margin: auto;" /></p>
+<p>As it can be observed, there are not many cells affected by the
+suggested cutoffs, therefore, the majority of the cells present good
+enough quality to go ahead with downstream analysis.</p>
+</div>
+</div>
+<div id="filtering" class="section level1">
+<h1>Filtering</h1>
+<div id="filter-bad-quality-fovs" class="section level2">
+<h2>Filter bad quality FOVs</h2>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a><span class="co"># Filtering FOVs</span></span>
+<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a>pre <span class="ot">&lt;-</span> <span class="fu">dim</span>(seu)[<span class="dv">2</span>] <span class="co"># Cells pre filtering</span></span>
+<span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a></span>
+<span id="cb13-4"><a href="#cb13-4" tabindex="-1"></a>keep_cells <span class="ot">&lt;-</span> <span class="fu">setdiff</span>(<span class="fu">Cells</span>(seu), flaggedFOVsCells) <span class="co"># Keep cells from unflagged FOVs</span></span>
+<span id="cb13-5"><a href="#cb13-5" tabindex="-1"></a>seu <span class="ot">&lt;-</span> <span class="fu">subset</span>(seu, <span class="at">cells =</span> keep_cells)</span>
+<span id="cb13-6"><a href="#cb13-6" tabindex="-1"></a></span>
+<span id="cb13-7"><a href="#cb13-7" tabindex="-1"></a>post <span class="ot">&lt;-</span> <span class="fu">dim</span>(seu)[<span class="dv">2</span>] <span class="co"># Cells post filtering</span></span></code></pre></div>
+<p>After filtering all the cells from bad quality FOVs the dataset has
+been reduced from 48549 cells to 48068, a 1% of cells have been
+removed.</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="do">## Code adapted from CosMxLite vignette</span></span>
+<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a></span>
+<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a><span class="co"># FOV arrangement in Slide</span></span>
+<span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a><span class="fu">ggplot</span>(seu<span class="sc">@</span>meta.data, </span>
+<span id="cb14-5"><a href="#cb14-5" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x =</span> seu<span class="sc">$</span>x_FOV_px, <span class="at">y =</span> seu<span class="sc">$</span>y_FOV_px, <span class="at">label =</span> seu<span class="sc">$</span>fov)) <span class="sc">+</span></span>
+<span id="cb14-6"><a href="#cb14-6" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">5</span>, <span class="at">colour =</span> <span class="st">&quot;lightblue&quot;</span>, <span class="at">shape =</span> <span class="dv">15</span>) <span class="sc">+</span></span>
+<span id="cb14-7"><a href="#cb14-7" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb14-8"><a href="#cb14-8" tabindex="-1"></a>  <span class="fu">theme_classic</span>() <span class="sc">+</span></span>
+<span id="cb14-9"><a href="#cb14-9" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;FOV Arrangement&quot;</span>,</span>
+<span id="cb14-10"><a href="#cb14-10" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">&quot;Global X Position (px)&quot;</span>,</span>
+<span id="cb14-11"><a href="#cb14-11" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Global Y Position (px)&quot;</span>) <span class="sc">+</span></span>
+<span id="cb14-12"><a href="#cb14-12" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>, <span class="at">face =</span> <span class="st">&quot;bold&quot;</span>, <span class="at">margin =</span> <span class="fu">margin</span>(<span class="at">b =</span> <span class="dv">15</span>)),</span>
+<span id="cb14-13"><a href="#cb14-13" tabindex="-1"></a>        <span class="at">axis.title.x =</span> <span class="fu">element_text</span>(<span class="at">margin =</span> <span class="fu">margin</span>(<span class="at">t =</span> <span class="dv">15</span>)),</span>
+<span id="cb14-14"><a href="#cb14-14" tabindex="-1"></a>        <span class="at">axis.title.y =</span> <span class="fu">element_text</span>(<span class="at">margin =</span> <span class="fu">margin</span>(<span class="at">r =</span> <span class="dv">15</span>)),</span>
+<span id="cb14-15"><a href="#cb14-15" tabindex="-1"></a>        <span class="at">panel.grid.major =</span> <span class="fu">element_line</span>(<span class="at">colour =</span> <span class="st">&quot;grey92&quot;</span>, <span class="at">linetype =</span> <span class="st">&quot;solid&quot;</span>))</span></code></pre></div>
+<p><img src="figure/1.0_qc_and_filtering.Rmd/VizFOVPostFilt-1.png" width="384" style="display: block; margin: auto;" />
+As it can be observed, FOVs 69, 95 are now not present in the
+dataset.</p>
+</div>
+<div id="filter-bad-quality-cells" class="section level2">
+<h2>Filter bad quality Cells</h2>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a><span class="do">## Code adapted from CosMxLite vignette</span></span>
+<span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a></span>
+<span id="cb15-3"><a href="#cb15-3" tabindex="-1"></a><span class="co"># Filtering cells</span></span>
+<span id="cb15-4"><a href="#cb15-4" tabindex="-1"></a>pre <span class="ot">&lt;-</span> <span class="fu">dim</span>(seu)[<span class="dv">2</span>] <span class="co"># Cells pre filtering</span></span>
+<span id="cb15-5"><a href="#cb15-5" tabindex="-1"></a></span>
+<span id="cb15-6"><a href="#cb15-6" tabindex="-1"></a>seu <span class="ot">&lt;-</span> <span class="fu">subset</span>(seu, </span>
+<span id="cb15-7"><a href="#cb15-7" tabindex="-1"></a>              <span class="at">subset =</span> nCount_RNA <span class="sc">&gt;</span> min_counts <span class="sc">&amp;</span> </span>
+<span id="cb15-8"><a href="#cb15-8" tabindex="-1"></a>                nCount_RNA <span class="sc">&lt;</span> max_counts <span class="sc">&amp;</span> </span>
+<span id="cb15-9"><a href="#cb15-9" tabindex="-1"></a>                nFeature_RNA <span class="sc">&gt;</span> min_features <span class="sc">&amp;</span> </span>
+<span id="cb15-10"><a href="#cb15-10" tabindex="-1"></a>                percent.NegPrb <span class="sc">&lt;</span> max_neg_perc <span class="sc">&amp;</span></span>
+<span id="cb15-11"><a href="#cb15-11" tabindex="-1"></a>                Area <span class="sc">&lt;</span> max_area)</span>
+<span id="cb15-12"><a href="#cb15-12" tabindex="-1"></a></span>
+<span id="cb15-13"><a href="#cb15-13" tabindex="-1"></a>post <span class="ot">&lt;-</span> <span class="fu">dim</span>(seu)[<span class="dv">2</span>] <span class="co"># Cells post filtering</span></span></code></pre></div>
+<p>After filtering the dataset has been reduced from 48068 cells to
+47918. Therefore, an additional 0.3% of cells have been filtered
+out.</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a><span class="do">## Code adapted from CosMxLite vignette</span></span>
+<span id="cb16-2"><a href="#cb16-2" tabindex="-1"></a><span class="do">## Points are removed from violin plots as CosMx datasets can contain over 1 million cells and may hide the violin plot</span></span>
+<span id="cb16-3"><a href="#cb16-3" tabindex="-1"></a></span>
+<span id="cb16-4"><a href="#cb16-4" tabindex="-1"></a><span class="co"># Violin plot</span></span>
+<span id="cb16-5"><a href="#cb16-5" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> <span class="fu">VlnPlot</span>(seu, <span class="at">features =</span> <span class="fu">c</span>(<span class="st">&quot;nFeature_RNA&quot;</span>, <span class="st">&quot;nCount_RNA&quot;</span>, <span class="st">&quot;percent.NegPrb&quot;</span>, <span class="st">&quot;Area&quot;</span>), <span class="at">ncol =</span> <span class="dv">4</span>, <span class="at">pt.size =</span> <span class="dv">0</span>)</span>
+<span id="cb16-6"><a href="#cb16-6" tabindex="-1"></a></span>
+<span id="cb16-7"><a href="#cb16-7" tabindex="-1"></a><span class="co"># Feature Scatter plots</span></span>
+<span id="cb16-8"><a href="#cb16-8" tabindex="-1"></a>p2 <span class="ot">&lt;-</span> <span class="fu">FeatureScatter</span>(seu, <span class="at">feature1 =</span> <span class="st">&quot;nCount_RNA&quot;</span>, <span class="at">feature2 =</span> <span class="st">&quot;percent.NegPrb&quot;</span>) <span class="sc">+</span> <span class="fu">NoLegend</span>()</span>
+<span id="cb16-9"><a href="#cb16-9" tabindex="-1"></a>p3 <span class="ot">&lt;-</span> <span class="fu">FeatureScatter</span>(seu, <span class="at">feature1 =</span> <span class="st">&quot;nCount_RNA&quot;</span>, <span class="at">feature2 =</span> <span class="st">&quot;nFeature_RNA&quot;</span>) <span class="sc">+</span> <span class="fu">NoLegend</span>()</span>
+<span id="cb16-10"><a href="#cb16-10" tabindex="-1"></a>p4 <span class="ot">&lt;-</span> <span class="fu">FeatureScatter</span>(seu, <span class="at">feature1 =</span> <span class="st">&quot;Area&quot;</span>, <span class="at">feature2 =</span> <span class="st">&quot;nCount_RNA&quot;</span>) <span class="sc">+</span> <span class="fu">NoLegend</span>()</span>
+<span id="cb16-11"><a href="#cb16-11" tabindex="-1"></a></span>
+<span id="cb16-12"><a href="#cb16-12" tabindex="-1"></a><span class="co"># Arrange plots</span></span>
+<span id="cb16-13"><a href="#cb16-13" tabindex="-1"></a>p1 <span class="sc">/</span> (p2 <span class="sc">+</span> p3 <span class="sc">+</span> p4)</span></code></pre></div>
+<p><img src="figure/1.0_qc_and_filtering.Rmd/VizPostFilt-1.png" width="960" style="display: block; margin: auto;" /></p>
+</div>
+<div id="save-the-seurat-object" class="section level2">
+<h2>Save the Seurat object</h2>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" tabindex="-1"></a><span class="co"># Save the Seurat object</span></span>
+<span id="cb17-2"><a href="#cb17-2" tabindex="-1"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">dir.exists</span>(<span class="fu">here</span>(<span class="st">&quot;output&quot;</span>,<span class="st">&quot;processed_data&quot;</span>))){</span>
+<span id="cb17-3"><a href="#cb17-3" tabindex="-1"></a>  <span class="fu">dir.create</span>(<span class="fu">here</span>(<span class="st">&quot;output&quot;</span>,<span class="st">&quot;processed_data&quot;</span>))</span>
+<span id="cb17-4"><a href="#cb17-4" tabindex="-1"></a>}</span>
+<span id="cb17-5"><a href="#cb17-5" tabindex="-1"></a></span>
+<span id="cb17-6"><a href="#cb17-6" tabindex="-1"></a><span class="fu">saveRDS</span>(seu, <span class="fu">here</span>(<span class="st">&quot;output&quot;</span>,<span class="st">&quot;processed_data&quot;</span>, <span class="st">&quot;seu_filtered.RDS&quot;</span>))</span></code></pre></div>
+</div>
+</div>
+<div id="performance-and-session-info" class="section level1">
+<h1>Performance and Session Info</h1>
+<details>
+<summary>
+<strong>Performance Report</strong>
+</summary>
+<table class="table table-striped table-hover table-condensed" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Chunk
+</th>
+<th style="text-align:right;">
+Time_sec
+</th>
+<th style="text-align:right;">
+Memory_Mb
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Libraries
+</td>
+<td style="text-align:right;">
+2.12
+</td>
+<td style="text-align:right;">
+146.9
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+LoadData
+</td>
+<td style="text-align:right;">
+1.94
+</td>
+<td style="text-align:right;">
+427.0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+VizFOV
+</td>
+<td style="text-align:right;">
+2.11
+</td>
+<td style="text-align:right;">
+23.6
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+VizCells
+</td>
+<td style="text-align:right;">
+3.40
+</td>
+<td style="text-align:right;">
+13.7
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+VizUnTx
+</td>
+<td style="text-align:right;">
+0.44
+</td>
+<td style="text-align:right;">
+4.2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+FOVQc
+</td>
+<td style="text-align:right;">
+6.47
+</td>
+<td style="text-align:right;">
+215.0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+VizFOVQC1
+</td>
+<td style="text-align:right;">
+1.50
+</td>
+<td style="text-align:right;">
+5.3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+VizFOVQC2
+</td>
+<td style="text-align:right;">
+0.44
+</td>
+<td style="text-align:right;">
+2.4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+FalseProbesPerc
+</td>
+<td style="text-align:right;">
+0.28
+</td>
+<td style="text-align:right;">
+1.6
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+VizCellQC1
+</td>
+<td style="text-align:right;">
+10.25
+</td>
+<td style="text-align:right;">
+27.7
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+VizCellQC2
+</td>
+<td style="text-align:right;">
+2.34
+</td>
+<td style="text-align:right;">
+-5.0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+FOVFiltering
+</td>
+<td style="text-align:right;">
+1.92
+</td>
+<td style="text-align:right;">
+8.2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+VizFOVPostFilt
+</td>
+<td style="text-align:right;">
+3.11
+</td>
+<td style="text-align:right;">
+13.0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CellFiltering
+</td>
+<td style="text-align:right;">
+1.33
+</td>
+<td style="text-align:right;">
+8.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+VizPostFilt
+</td>
+<td style="text-align:right;">
+9.24
+</td>
+<td style="text-align:right;">
+6.8
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+SavingSeuObj
+</td>
+<td style="text-align:right;">
+17.68
+</td>
+<td style="text-align:right;">
+0.0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Total
+</td>
+<td style="text-align:right;">
+64.57
+</td>
+<td style="text-align:right;">
+898.9
+</td>
+</tr>
+</tbody>
+</table>
+</details>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
+Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span></code></pre></div>
+<pre><code>R version 4.4.3 (2025-02-28 ucrt)
+Platform: x86_64-w64-mingw32/x64
+Running under: Windows 11 x64 (build 22000)
+
+Matrix products: default
+
+
+locale:
+[1] LC_COLLATE=Spanish_Spain.utf8  LC_CTYPE=Spanish_Spain.utf8   
+[3] LC_MONETARY=Spanish_Spain.utf8 LC_NUMERIC=C                  
+[5] LC_TIME=Spanish_Spain.utf8    
+
+time zone: Europe/Madrid
+tzcode source: internal
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+ [1] patchwork_1.3.0    ggplot2_3.5.1      SeuratObject_4.1.4 Seurat_4.4.0      
+ [5] kableExtra_1.4.0   dplyr_1.1.4        here_1.0.1         Matrix_1.7-2      
+ [9] data.table_1.17.0  workflowr_1.7.1   
+
+loaded via a namespace (and not attached):
+  [1] RColorBrewer_1.1-3     rstudioapi_0.17.1      jsonlite_1.9.1        
+  [4] magrittr_2.0.3         ggbeeswarm_0.7.2       spatstat.utils_3.1-2  
+  [7] farver_2.1.2           rmarkdown_2.29         fs_1.6.5              
+ [10] vctrs_0.6.5            ROCR_1.0-11            spatstat.explore_3.3-4
+ [13] htmltools_0.5.8.1      sass_0.4.9             sctransform_0.4.1     
+ [16] parallelly_1.43.0      KernSmooth_2.23-26     bslib_0.9.0           
+ [19] htmlwidgets_1.6.4      ica_1.0-3              plyr_1.8.9            
+ [22] plotly_4.10.4          zoo_1.8-13             cachem_1.1.0          
+ [25] whisker_0.4.1          igraph_2.1.4           mime_0.12             
+ [28] lifecycle_1.0.4        pkgconfig_2.0.3        R6_2.6.1              
+ [31] fastmap_1.2.0          fitdistrplus_1.2-2     future_1.34.0         
+ [34] shiny_1.10.0           digest_0.6.37          colorspace_2.1-1      
+ [37] ps_1.9.0               rprojroot_2.0.4        tensor_1.5            
+ [40] irlba_2.3.5.1          labeling_0.4.3         progressr_0.15.1      
+ [43] spatstat.sparse_3.1-0  httr_1.4.7             polyclip_1.10-7       
+ [46] abind_1.4-8            compiler_4.4.3         withr_3.0.2           
+ [49] MASS_7.3-65            tools_4.4.3            vipor_0.4.7           
+ [52] lmtest_0.9-40          beeswarm_0.4.0         httpuv_1.6.15         
+ [55] future.apply_1.11.3    goftest_1.2-3          glue_1.8.0            
+ [58] callr_3.7.6            nlme_3.1-167           promises_1.3.2        
+ [61] grid_4.4.3             Rtsne_0.17             getPass_0.2-4         
+ [64] cluster_2.1.8          reshape2_1.4.4         generics_0.1.3        
+ [67] gtable_0.3.6           spatstat.data_3.1-6    tidyr_1.3.1           
+ [70] sp_2.2-0               xml2_1.3.7             spatstat.geom_3.3-5   
+ [73] RcppAnnoy_0.0.22       ggrepel_0.9.6          RANN_2.6.2            
+ [76] pillar_1.10.1          stringr_1.5.1          later_1.4.1           
+ [79] splines_4.4.3          lattice_0.22-6         survival_3.8-3        
+ [82] FNN_1.1.4.1            deldir_2.0-4           tidyselect_1.2.1      
+ [85] miniUI_0.1.1.1         pbapply_1.7-2          knitr_1.50            
+ [88] git2r_0.35.0           gridExtra_2.3          svglite_2.1.3         
+ [91] scattermore_1.2        xfun_0.51              matrixStats_1.5.0     
+ [94] pheatmap_1.0.12        stringi_1.8.4          lazyeval_0.2.2        
+ [97] yaml_2.3.10            evaluate_1.0.3         codetools_0.2-20      
+[100] tibble_3.2.1           cli_3.6.4              uwot_0.2.3            
+[103] xtable_1.8-4           reticulate_1.41.0.1    systemfonts_1.2.1     
+[106] munsell_0.5.1          processx_3.8.6         jquerylib_0.1.4       
+[109] Rcpp_1.0.14            globals_0.16.3         spatstat.random_3.3-2 
+[112] png_0.1-8              ggrastr_1.0.2          spatstat.univar_3.1-2 
+[115] parallel_4.4.3         listenv_0.9.1          viridisLite_0.4.2     
+[118] scales_1.3.0           ggridges_0.5.6         leiden_0.4.3.1        
+[121] purrr_1.0.4            rlang_1.1.6            cowplot_1.1.3         </code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+https://docs.mathjax.org/en/latest/web/configuration.html. This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,1692 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>CosMx Data Insitutype Supervised Cell typing</title>
+
+<script src="site_libs/header-attrs-2.29/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/united.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="site_libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/main/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+
+
+<style type="text/css">
+  code {
+    white-space: pre;
+  }
+  .sourceCode {
+    overflow: visible;
+  }
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  background-color: #f8f8f8; }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ef2929; } /* Alert */
+code span.an { color: #8f5902; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #204a87; } /* Attribute */
+code span.bn { color: #0000cf; } /* BaseN */
+code span.cf { color: #204a87; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4e9a06; } /* Char */
+code span.cn { color: #8f5902; } /* Constant */
+code span.co { color: #8f5902; font-style: italic; } /* Comment */
+code span.cv { color: #8f5902; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #8f5902; font-weight: bold; font-style: italic; } /* Documentation */
+code span.dt { color: #204a87; } /* DataType */
+code span.dv { color: #0000cf; } /* DecVal */
+code span.er { color: #a40000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #0000cf; } /* Float */
+code span.fu { color: #204a87; font-weight: bold; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #8f5902; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #204a87; font-weight: bold; } /* Keyword */
+code span.op { color: #ce5c00; font-weight: bold; } /* Operator */
+code span.ot { color: #8f5902; } /* Other */
+code span.pp { color: #8f5902; font-style: italic; } /* Preprocessor */
+code span.sc { color: #ce5c00; font-weight: bold; } /* SpecialChar */
+code span.ss { color: #4e9a06; } /* SpecialString */
+code span.st { color: #4e9a06; } /* String */
+code span.va { color: #000000; } /* Variable */
+code span.vs { color: #4e9a06; } /* VerbatimString */
+code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">CosMx™ SMI Data Analysis - TFM UOC</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="dataset.html">Dataset</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Pipeline
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="pipeline.html">Introduction</a>
+    </li>
+    <li>
+      <a href="0.0_data_loading.html">Data Loading</a>
+    </li>
+    <li>
+      <a href="1.0_qc_and_filtering.html">QC and filtering</a>
+    </li>
+    <li>
+      <a href="2.0_normalization.html">Normalization</a>
+    </li>
+    <li>
+      <a href="3.0_dimensional_reduction.html">Dimensional reduction</a>
+    </li>
+    <li>
+      <a href="4.0_insitutype_cell_typing.html">Cell typing</a>
+    </li>
+  </ul>
+</li>
+<li>
+  <a href="clus_examples.html">Cell typing</a>
+</li>
+<li>
+  <a href="norm_examples.html">Normalization</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="license.html">License</a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">CosMx Data Insitutype Supervised Cell
+typing</h1>
+<h4 class="author">Lidia Getino Álvarez</h4>
+<address class="author_afil">
+M0.207 TFM - MU Bioinformática y Bioestadística
+(UOC)<br><h4 class="date">20 mayo 2025</h4>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span>
+workflowr <span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2025-05-20
+</p>
+<p>
+<strong>Checks:</strong> <span
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> 0
+</p>
+<p>
+<strong>Knit directory:</strong> <code>CosMx_pipeline_LGA/</code> <span
+class="glyphicon glyphicon-question-sign" aria-hidden="true"
+title="This is the local directory in which the code in this file was executed.">
+</span>
+</p>
+<p>
+This reproducible <a href="https://rmarkdown.rstudio.com">R Markdown</a>
+analysis was created with <a
+  href="https://github.com/workflowr/workflowr">workflowr</a> (version
+1.7.1). The <em>Checks</em> tab describes the reproducibility checks
+that were applied when the results were created. The <em>Past
+versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date
+</a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguptodate"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great! Since the R Markdown file has been committed to the Git
+repository, you know the exact version of the code that produced these
+results.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the
+global environment can affect the analysis in your R Markdown file in
+unknown ways. For reproduciblity it’s best to always run the code in an
+empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20250517code">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Seed:</strong>
+<code>set.seed(20250517)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20250517code"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20250517)</code> was run prior to running
+the code in the R Markdown file. Setting a seed ensures that any results
+that rely on randomness, e.g. subsampling or permutations, are
+reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Session information:</strong>
+recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package
+versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be
+confident that you successfully produced the results during this
+run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr
+project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrong2b284f3">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Repository version:</strong> 2b284f3
+</a>
+</p>
+</div>
+<div id="strongRepositoryversionstrong2b284f3"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development
+and connecting the code version to the results is critical for
+reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version 2b284f3.
+See the <em>Past versions</em> tab to see a history of the changes made
+to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for
+the analysis have been committed to Git prior to generating the results
+(you can use <code>wflow_publish</code> or
+<code>wflow_git_commit</code>). workflowr only checks the R Markdown
+file, but you know if there are other scripts or data files that it
+depends on. Below is the status of the Git repository when the results
+were generated:
+</p>
+<pre><code>
+Ignored files:
+    Ignored:    .Rproj.user/
+    Ignored:    NBClust-Plots/
+    Ignored:    analysis/figure/
+    Ignored:    data/flatFiles/CoronalHemisphere/Run1000_S1_Half_exprMat_file.csv
+    Ignored:    data/flatFiles/CoronalHemisphere/Run1000_S1_Half_fov_positions_file.csv
+    Ignored:    data/flatFiles/CoronalHemisphere/Run1000_S1_Half_metadata_file.csv
+    Ignored:    output/processed_data/Log/
+    Ignored:    output/processed_data/RC/
+    Ignored:    output/processed_data/SCT/
+    Ignored:    output/processed_data/exprMat_unfiltered.RDS
+    Ignored:    output/processed_data/fov_positions_unfiltered.RDS
+    Ignored:    output/processed_data/metadata_unfiltered.RDS
+    Ignored:    output/processed_data/negMat_unfiltered.RDS
+    Ignored:    output/processed_data/seu_filtered.RDS
+    Ignored:    output/processed_data/seu_semifiltered.RDS
+
+Untracked files:
+    Untracked:  analysis/images/
+
+Unstaged changes:
+    Modified:   output/performance_reports/0.0_data_loading_PR.csv
+    Modified:   output/performance_reports/1.0_qc_and_filtering_PR.csv
+    Modified:   output/performance_reports/2.0_normalization_PR.csv
+    Modified:   output/performance_reports/3.0_dimensional_reduction_PR.csv
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not
+included in this status report because it is ok for generated content to
+have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+<p>
+These are the previous versions of the repository in which changes were
+made to the R Markdown
+(<code>analysis/4.0_insitutype_cell_typing.Rmd</code>) and HTML
+(<code>docs/4.0_insitutype_cell_typing.html</code>) files. If you’ve
+configured a remote Git repository (see <code>?wflow_git_remote</code>),
+click on the hyperlinks in the table below to view the files as they
+were in that past version.
+</p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+8410a10
+</td>
+<td>
+lidiaga
+</td>
+<td>
+2025-05-17
+</td>
+<td>
+Add Rmds files in analysis
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<!-- This pipeline has been developed using Seurat v4.4, as Seurat v5 presents several changes to the object structure that affected the working methods. Aditionally, the AtoMx exported Seurat objects come in the Seurat v4 structure. Therefore, working in this version can be more compatible with exported data too. -->
+<div id="dependencies" class="section level1">
+<h1>Dependencies</h1>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(data.table) <span class="co"># Efficient data management</span></span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">library</span>(Matrix) <span class="co"># Sparse matrices</span></span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="fu">library</span>(here) <span class="co"># Enhanced file referencing in project-oriented workflows</span></span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a><span class="fu">library</span>(dplyr) <span class="co"># For the use of pipes %&gt;%</span></span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a><span class="fu">library</span>(kableExtra) <span class="co"># For table formatting</span></span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a><span class="fu">library</span>(Seurat) <span class="co"># Seurat object</span></span>
+<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a><span class="fu">library</span>(ggplot2) <span class="co"># Graphics</span></span>
+<span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a><span class="fu">library</span>(patchwork) <span class="co"># Layout graphics</span></span>
+<span id="cb1-9"><a href="#cb1-9" tabindex="-1"></a><span class="fu">library</span>(pheatmap) <span class="co"># Heatmap plot</span></span>
+<span id="cb1-10"><a href="#cb1-10" tabindex="-1"></a></span>
+<span id="cb1-11"><a href="#cb1-11" tabindex="-1"></a><span class="co">#remotes::install_github(&quot;Nanostring-Biostats/InSituType&quot;)</span></span>
+<span id="cb1-12"><a href="#cb1-12" tabindex="-1"></a><span class="fu">library</span>(InSituType)</span></code></pre></div>
+</div>
+<div id="load-the-data" class="section level1">
+<h1>Load the data</h1>
+<p>First of all, data needs to be loaded into the session. For this
+script, two inputs will be needed:</p>
+<ul>
+<li>The Seurat object from the “Dimensional reduction” script.<br />
+</li>
+<li>The Negative probe matrix from the “Data loading” script.</li>
+</ul>
+<!-- Insitutype algorithm uses not normalized raw counts to cluster the cells. However, the UMAP reduction will be used for plot visualizations, and is therefore needed. For the main pipeline I will use the SCT Seurat object. -->
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="co"># Indicate the object folder</span></span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>folder <span class="ot">&lt;-</span> <span class="st">&quot;SCT&quot;</span> <span class="co"># Choose between &quot;RC&quot;, &quot;Log&quot; or &quot;SCT&quot;</span></span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span>folder <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&quot;RC&quot;</span>, <span class="st">&quot;Log&quot;</span>, <span class="st">&quot;SCT&quot;</span>)) {</span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>  <span class="fu">stop</span>(<span class="st">&quot;The selected folder is invalid, choose: &#39;RC&#39;, &#39;Log&#39; or &#39;SCT&#39;&quot;</span>)</span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a>}</span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a></span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a><span class="co"># Load Seurat object</span></span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a>name <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">&quot;seu_&quot;</span>, folder, <span class="st">&quot;_um.RDS&quot;</span>)</span>
+<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a>seu <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="fu">here</span>(<span class="st">&quot;output&quot;</span>,<span class="st">&quot;processed_data&quot;</span>,folder,name))</span>
+<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a></span>
+<span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a><span class="co"># Load negMat</span></span>
+<span id="cb2-13"><a href="#cb2-13" tabindex="-1"></a>negcounts <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="fu">here</span>(<span class="st">&quot;output&quot;</span>,<span class="st">&quot;processed_data&quot;</span>,<span class="st">&quot;negMat_unfiltered.RDS&quot;</span>))</span></code></pre></div>
+<p>In this pipeline, cell typing will be done using the reference-based
+supervised classification by <em>InSituType</em>. This method was
+developed by Nanostring, owner of the CosMx SMI technology, and is,
+therefore, optimized to work with this type of data specifically.</p>
+</div>
+<div id="prepare-the-data" class="section level1">
+<h1>Prepare the data</h1>
+<p>In order to apply the <a
+href="https://github.com/Nanostring-Biostats/InSituType">InSituType
+algorithm</a>, it is necessary to provide the function with the
+following information:</p>
+<ul>
+<li>Raw expression counts matrix (not normalized), with cells in columns
+and genes in rows.<br />
+</li>
+<li>A vector of the mean negative control value per cell.</li>
+</ul>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="co"># Extract raw counts from the Seurat object</span></span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>counts <span class="ot">&lt;-</span> <span class="fu">t</span>(seu<span class="sc">@</span>assays[[<span class="st">&quot;RNA&quot;</span>]]<span class="sc">@</span>counts) <span class="co"># RNA assay counts are not-normalized</span></span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a><span class="co"># Note the matrix is transposed to have cells in rows and genes in cols</span></span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a><span class="co"># Ensure negcounts has the same cells as counts</span></span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">identical</span>(<span class="fu">rownames</span>(counts), <span class="fu">rownames</span>(negcounts))) {</span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a>    negcounts <span class="ot">&lt;-</span> negcounts[<span class="fu">rownames</span>(counts),] <span class="co"># Filter and/or re-order negcounts</span></span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a>} </span>
+<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a></span>
+<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a><span class="co"># Calculate Negative control means per cell</span></span>
+<span id="cb3-12"><a href="#cb3-12" tabindex="-1"></a>negmean <span class="ot">&lt;-</span> <span class="fu">rowMeans</span>(negcounts)</span></code></pre></div>
+<p>Additionally, the function can take the following optional inputs, if
+available:</p>
+<ul>
+<li>A vector of background counts per gene in each cell –&gt;
+<em>Insitutype can automatically estimate this with the negative control
+counts</em>.<br />
+</li>
+<li>A reference profile matrix with genes in rows and cell types in
+columns –&gt; <em>This is only necessary for supervised or
+semi-supervised clustering</em>.<br />
+</li>
+<li>Additional information incorporated as “cohort”, such as spatial
+coordinates, inmunofluorescence stains or pre-computed spatial niches
+–&gt; <em>Including this option is low-risk, as it will not be taken
+into account if it is uninformative</em>.</li>
+</ul>
+<p>For this example, immunofluoresce data will be included as a
+cohort.</p>
+<!-- In case no cohort wants to be included, this chunk can be commented so that it is not executed -->
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="co"># Extract Immunoflurence data</span></span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>imm_fluor <span class="ot">&lt;-</span> seu<span class="sc">@</span>meta.data <span class="sc">%&gt;%</span></span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>  <span class="fu">select</span>(<span class="fu">contains</span>(<span class="fu">c</span>(<span class="st">&quot;Mean&quot;</span>,<span class="st">&quot;Max&quot;</span>))) <span class="sc">%&gt;%</span></span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span><span class="fu">contains</span>(<span class="st">&quot;DAPI&quot;</span>))</span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a></span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a><span class="co"># Set as cohort with InSituType function &quot;fastCohorting&quot;</span></span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a>cohort <span class="ot">&lt;-</span> <span class="fu">fastCohorting</span>(imm_fluor, <span class="at">gaussian_transform =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a></span>
+<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a><span class="co"># This function creates &quot;groups&quot; or similar cells based on their immunofluoresce,</span></span>
+<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a><span class="co"># as that is the input I have given it</span></span>
+<span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a></span>
+<span id="cb4-12"><a href="#cb4-12" tabindex="-1"></a><span class="fu">table</span>(cohort)</span></code></pre></div>
+<pre><code>cohort
+    1     2     3     4     5     6     7     8     9    10 
+ 5157 12430 10502  2766  4056  3063  2531  1598  3138  2677 </code></pre>
+<p>As it can be observed, the “fastCohorting” function has created
+“groups” of similar cells based on their immunofluoresce abundances.</p>
+</div>
+<div id="reference-profile" class="section level1">
+<h1>Reference profile</h1>
+<p>For the supervised version of <em>InSituType</em>, a reference
+profile is needed. For that, Nanostring provides several public
+reference profiles, either from <a
+href="https://github.com/Nanostring-Biostats/cellprofilelibrary">scRNA-seq</a>
+or <a
+href="https://github.com/Nanostring-Biostats/CosMx-Cell-Profiles">CosMx</a>
+data. However, the function can also take other sources-profiles as long
+as they have the <a
+href="https://nanostring-biostats.github.io/CosMx-Analysis-Scratch-Space/posts/hybrid-reference-profiles/">appropriate
+formatting</a>.</p>
+<p>For this case, the most adequate profile would be a <a
+href="https://github.com/Nanostring-Biostats/CosMx-Cell-Profiles/tree/main/Mouse/Brain">Mouse
+Brain CosMx reference profile</a>.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="do">## Code adapted from Scratch Space vignette</span></span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a><span class="co"># Load reference profile</span></span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a>url <span class="ot">&lt;-</span> <span class="st">&quot;https://raw.githubusercontent.com/Nanostring-Biostats/CosMx-Cell-Profiles/refs/heads/main/Mouse/Brain/MouseBrain.profiles.csv&quot;</span></span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a></span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a>refprofiles <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(url, <span class="at">row.names =</span> <span class="dv">1</span>, <span class="at">header =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a>refprofiles <span class="ot">&lt;-</span> refprofiles[<span class="fu">is.element</span>(<span class="fu">rownames</span>(refprofiles), <span class="fu">colnames</span>(counts)), ]</span>
+<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a></span>
+<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a><span class="co"># Note that only shared genes with our counts matrix have been kept as reference</span></span>
+<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a></span>
+<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a><span class="co"># Check for genes not present in the reference</span></span>
+<span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a>missing_genes <span class="ot">&lt;-</span> <span class="fu">setdiff</span>(<span class="fu">colnames</span>(counts), <span class="fu">rownames</span>(refprofiles))</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="co"># Explore reference</span></span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>refprofiles[<span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>,<span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>]</span></code></pre></div>
+<pre><code>              Astrocytes.Bergmann.glia Astrocytes.cortex.hippocampus
+6330403K07Rik              0.003680276                     0.3334367
+Abca2                      0.037032777                     0.5512775
+Abi1                       0.062909718                     0.8180032
+Abi2                       0.017481311                     0.4109733
+              Astrocytes.thalamus.hypothalamus Cajal.Retzius.cells
+6330403K07Rik                        0.7043284          0.01595745
+Abca2                                0.5628358          0.11170213
+Abi1                                 0.8959701          0.02659574
+Abi2                                 0.4073134          0.01595745</code></pre>
+<ul>
+<li><strong>Dimensions:</strong> 950 genes and 56 cell types.<br />
+</li>
+<li><strong>Cell types:</strong> Astrocytes.Bergmann.glia,
+Astrocytes.cortex.hippocampus, Astrocytes.thalamus.hypothalamus,
+Cajal.Retzius.cells, CCK.interneurons, Cholinergic.neurons.habenula,
+Choroid.plexus.epithelial.cells, Committed.oligodendrocytes,
+D1.medium.spiny.neurons, D2.medium.spiny.neurons, Dopaminergic.neurons,
+Ependymal.cells, Excitatory.neurons.amygdala,
+Excitatory.neurons.di.mesencephalon, Excitatory.neurons.hippocampal.CA1,
+Excitatory.neurons.hippocampal.CA2, Excitatory.neurons.hippocampal.CA3,
+Excitatory.neurons.layer.1.piriform, Excitatory.neurons.layer.2.3,
+Excitatory.neurons.layer.4, Excitatory.neurons.layer.5,
+Excitatory.neurons.layer.5.6, Excitatory.neurons.layer.6,
+Excitatory.neurons.telencephalon, Granule.neurons,
+Hindbrain.excitatory.neurons, Hindbrain.inhibitory.neurons, Hypendymal,
+Inhibitory.interneurons, Inhibitory.neurons.amygdala,
+Inhibitory.neurons.habenula.hypothalamus,
+Inhibitory.neurons.habenula.thalamus,
+Inhibitory.neurons.reticular.nucleus,
+Interneuron.selective.interneurons, Interneurons,
+Mature.oligodendrocytes, Microglia, Myelin.forming.oligodendrocytes,
+Neuroblasts, Neurogliaform.cells, Newly.formed.oligodendrocytes,
+Olfactory.bulb.inhibitory.neurons, Olfactory.ensheathing.cells,
+Oligodendrocyte.precursor.cells, Peptidergic.neurons, Pericytes,
+Perivascular.macrophages, Purkinje.cells, Radial.glia,
+Serotonergic.neurons, T.cell, Tanycytes,
+Telencephalon.inhibitory.neurons, Vascular.endothelial.cells,
+Vascular.leptomeningeal.cells, Vascular.smooth.muscle.cells.<br />
+</li>
+<li><strong>Missing genes:</strong> 0 –&gt; …</li>
+</ul>
+<p>This reference profile has the same genes as the expression
+matrix.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="do">## Code adapted from Scratch Space vignette</span></span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a><span class="co"># Heatmap of reference profile</span></span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a><span class="fu">pheatmap</span>(<span class="fu">sweep</span>(refprofiles, <span class="dv">1</span>, <span class="fu">pmax</span>(<span class="fu">apply</span>(refprofiles, <span class="dv">1</span>, max), <span class="fl">0.2</span>), <span class="st">&quot;/&quot;</span>), <span class="at">col =</span> <span class="fu">colorRampPalette</span>(<span class="fu">c</span>(<span class="st">&quot;white&quot;</span>, <span class="st">&quot;darkblue&quot;</span>))(<span class="dv">100</span>))</span></code></pre></div>
+<p><img src="figure/4.0_insitutype_cell_typing.Rmd/VizRef-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="supervised-insitutype-classification" class="section level1">
+<h1>Supervised InSituType classification</h1>
+<p>In this method, the user provides a reference profile and no number
+of clusters, this way the function will cluster the cells according to
+the cell types of the reference only. However, if desired, a number of
+clusters could be provided to perform semi-supervised clustering.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="do">## Code adapted from the InSituType vignette</span></span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a></span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a><span class="co"># Supervised Insitutye classification with immunofluoresce cohort</span></span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a>sup <span class="ot">&lt;-</span> <span class="fu">insitutype</span>(</span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a>  <span class="at">x =</span> counts,</span>
+<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a>  <span class="at">neg =</span> negmean,</span>
+<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a>  <span class="at">assay_type =</span> <span class="st">&quot;RNA&quot;</span>,</span>
+<span id="cb10-8"><a href="#cb10-8" tabindex="-1"></a>  <span class="at">cohort =</span> cohort,</span>
+<span id="cb10-9"><a href="#cb10-9" tabindex="-1"></a>  <span class="at">bg =</span> <span class="cn">NULL</span>, <span class="co"># The function will estimate it automatically</span></span>
+<span id="cb10-10"><a href="#cb10-10" tabindex="-1"></a>  <span class="at">reference_profiles =</span> refprofiles, </span>
+<span id="cb10-11"><a href="#cb10-11" tabindex="-1"></a>  <span class="at">n_clusts =</span> <span class="dv">0</span>, <span class="co"># Insert the nº of expected unknown cluster for semi-supervised</span></span>
+<span id="cb10-12"><a href="#cb10-12" tabindex="-1"></a>  <span class="at">n_phase1 =</span> <span class="dv">200</span>,</span>
+<span id="cb10-13"><a href="#cb10-13" tabindex="-1"></a>  <span class="at">n_phase2 =</span> <span class="dv">500</span>,</span>
+<span id="cb10-14"><a href="#cb10-14" tabindex="-1"></a>  <span class="at">n_phase3 =</span> <span class="dv">2000</span>,</span>
+<span id="cb10-15"><a href="#cb10-15" tabindex="-1"></a>  <span class="at">n_starts =</span> <span class="dv">1</span>,</span>
+<span id="cb10-16"><a href="#cb10-16" tabindex="-1"></a>  <span class="at">max_iters =</span> <span class="dv">5</span></span>
+<span id="cb10-17"><a href="#cb10-17" tabindex="-1"></a>)</span></code></pre></div>
+<p>As a result the function provides a list with:</p>
+<ul>
+<li>Vector of cluster assignments.<br />
+</li>
+<li>Vector of probabilities, or confidence, of each cell’s
+cluster.<br />
+</li>
+<li>Matrix of log-likelihoods with cells on rows and clusters in
+columns.<br />
+</li>
+<li>Matrix of cluster-specific expression profiles.</li>
+</ul>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="do">## Code adapted from the InSituType vignette</span></span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a></span>
+<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a><span class="co"># Classes</span></span>
+<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a>n_clus <span class="ot">&lt;-</span> <span class="fu">length</span>(<span class="fu">unique</span>(sup<span class="sc">$</span>clust))</span>
+<span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a></span>
+<span id="cb11-6"><a href="#cb11-6" tabindex="-1"></a><span class="co"># Example of probabilities</span></span>
+<span id="cb11-7"><a href="#cb11-7" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">head</span>(sup<span class="sc">$</span>prob), <span class="dv">2</span>)</span></code></pre></div>
+<pre><code>c_1_1_1 c_1_1_2 c_1_1_3 c_1_1_4 c_1_1_5 c_1_1_6 
+      1       1       1       1       1       1 </code></pre>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a><span class="fu">summary</span>(sup<span class="sc">$</span>prob)</span></code></pre></div>
+<pre><code>   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+ 0.2624  1.0000  1.0000  0.9888  1.0000  1.0000 </code></pre>
+<p>As it can be observed, the algorithm has detected 44 cell types from
+the reference profile in the example dataset, with the majority of cells
+presenting a high confidence of belonging to the selected cluster.</p>
+<p>Now, it might be interesting to explore the confidence ratios in
+order to select an appropriate threshold for low probability
+assignments, and/or see if the low probabilities are concentrated in any
+particular cluster.</p>
+<div id="exploration-of-cell-assignment-scores" class="section level2">
+<h2>Exploration of cell assignment scores</h2>
+<p>As per the <a
+href="https://github.com/Nanostring-Biostats/InSituType/blob/main/vignettes/NSCLC-clustering-vignette.Rmd">InSituType
+vignette</a>, clusters with an average probability of less than 75% are
+unreliable. Therefore, for the exploration a threshold of 75% will be
+selected.</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a><span class="co"># Determine initial low confidence cells</span></span>
+<span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a>thresh <span class="ot">&lt;-</span> <span class="fl">0.75</span> </span>
+<span id="cb15-3"><a href="#cb15-3" tabindex="-1"></a>low_conf_cells <span class="ot">&lt;-</span> <span class="fu">names</span>(sup<span class="sc">$</span>prob[sup<span class="sc">$</span>prob <span class="sc">&lt;</span> thresh])</span>
+<span id="cb15-4"><a href="#cb15-4" tabindex="-1"></a>n_low <span class="ot">&lt;-</span> <span class="fu">length</span>(low_conf_cells)</span>
+<span id="cb15-5"><a href="#cb15-5" tabindex="-1"></a>perc_low <span class="ot">&lt;-</span> <span class="fu">round</span>(n_low <span class="sc">/</span> <span class="fu">length</span>(sup<span class="sc">$</span>prob) <span class="sc">*</span> <span class="dv">100</span>, <span class="dv">1</span>)</span>
+<span id="cb15-6"><a href="#cb15-6" tabindex="-1"></a></span>
+<span id="cb15-7"><a href="#cb15-7" tabindex="-1"></a><span class="co"># Create dataframe for plotting</span></span>
+<span id="cb15-8"><a href="#cb15-8" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">clust =</span> sup<span class="sc">$</span>clust,</span>
+<span id="cb15-9"><a href="#cb15-9" tabindex="-1"></a>                 <span class="at">prob =</span> sup<span class="sc">$</span>prob)</span></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a><span class="co"># Histogram of confidence</span></span>
+<span id="cb16-2"><a href="#cb16-2" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">x =</span> prob)) <span class="sc">+</span></span>
+<span id="cb16-3"><a href="#cb16-3" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">bins =</span> <span class="dv">50</span>, <span class="at">fill =</span> <span class="st">&quot;lightblue&quot;</span>, <span class="at">colour =</span> <span class="st">&quot;black&quot;</span>) <span class="sc">+</span></span>
+<span id="cb16-4"><a href="#cb16-4" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> thresh, <span class="at">colour =</span> <span class="st">&quot;red&quot;</span>, <span class="at">lwd =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb16-5"><a href="#cb16-5" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="fu">paste</span>(<span class="st">&quot;Nº cells with prob &lt;&quot;</span>, thresh, <span class="st">&quot;:&quot;</span>, n_low)) <span class="sc">+</span></span>
+<span id="cb16-6"><a href="#cb16-6" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="fu">paste</span>(<span class="st">&quot;Nº cells with prob &lt;&quot;</span>, thresh, <span class="st">&quot;:&quot;</span>, n_low),</span>
+<span id="cb16-7"><a href="#cb16-7" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">&quot;Assignment Confidence (%)&quot;</span>,</span>
+<span id="cb16-8"><a href="#cb16-8" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Nº Cells&quot;</span>)</span>
+<span id="cb16-9"><a href="#cb16-9" tabindex="-1"></a></span>
+<span id="cb16-10"><a href="#cb16-10" tabindex="-1"></a><span class="co"># Boxplots of confidence by cluster</span></span>
+<span id="cb16-11"><a href="#cb16-11" tabindex="-1"></a>p2 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">x =</span> clust, <span class="at">y =</span> prob)) <span class="sc">+</span></span>
+<span id="cb16-12"><a href="#cb16-12" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
+<span id="cb16-13"><a href="#cb16-13" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> thresh, <span class="at">colour =</span> <span class="st">&quot;red&quot;</span>, <span class="at">lwd =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb16-14"><a href="#cb16-14" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Confidence per Cluster&quot;</span>,</span>
+<span id="cb16-15"><a href="#cb16-15" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">&quot;Cluster&quot;</span>, </span>
+<span id="cb16-16"><a href="#cb16-16" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Assignment Confidence (%)&quot;</span>) <span class="sc">+</span></span>
+<span id="cb16-17"><a href="#cb16-17" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">90</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span>
+<span id="cb16-18"><a href="#cb16-18" tabindex="-1"></a></span>
+<span id="cb16-19"><a href="#cb16-19" tabindex="-1"></a><span class="co"># Arrange plots</span></span>
+<span id="cb16-20"><a href="#cb16-20" tabindex="-1"></a>p1 <span class="sc">|</span> p2</span></code></pre></div>
+<p><img src="figure/4.0_insitutype_cell_typing.Rmd/VizSupProb-1.png" width="960" style="display: block; margin: auto;" /></p>
+<p>All clusters have an average probability of more than 75%, although
+many outliers are observed. Finally, there are 885 (1.8 %) cells with an
+assignment confidence of less than 75 %, showing that most of the cells
+have been assigned very confidently according to the reference
+profile.</p>
+</div>
+<div id="flightpath-exploration" class="section level2">
+<h2>Flightpath exploration</h2>
+<p>The InSituType package includes an interesting visualization tool
+called “flightpath_plot”, which represents cells according to their
+cluster probabilities. This will allow refining the clustering
+assignation.</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" tabindex="-1"></a><span class="do">## Code adapted from the InSituType vignette</span></span>
+<span id="cb17-2"><a href="#cb17-2" tabindex="-1"></a></span>
+<span id="cb17-3"><a href="#cb17-3" tabindex="-1"></a><span class="co"># Create custom color palette</span></span>
+<span id="cb17-4"><a href="#cb17-4" tabindex="-1"></a>cols <span class="ot">&lt;-</span> <span class="fu">gg_color_hue</span>(n_clus)</span>
+<span id="cb17-5"><a href="#cb17-5" tabindex="-1"></a><span class="fu">names</span>(cols) <span class="ot">&lt;-</span> <span class="fu">unique</span>(sup<span class="sc">$</span>clust)</span>
+<span id="cb17-6"><a href="#cb17-6" tabindex="-1"></a></span>
+<span id="cb17-7"><a href="#cb17-7" tabindex="-1"></a><span class="co"># Flightpath plot</span></span>
+<span id="cb17-8"><a href="#cb17-8" tabindex="-1"></a><span class="fu">flightpath_plot</span>(<span class="at">insitutype_result =</span> sup,</span>
+<span id="cb17-9"><a href="#cb17-9" tabindex="-1"></a>                <span class="at">col =</span> cols[sup<span class="sc">$</span>clust])</span></code></pre></div>
+<p><img src="figure/4.0_insitutype_cell_typing.Rmd/VizFPSup-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>As before, it can be seen that all clusters are very well defined,
+with average probabilities of nearly 100%.</p>
+</div>
+<div id="clustering-refining" class="section level2">
+<h2>Clustering refining</h2>
+<p>After exploration, using the function “refineClusters”, the user can
+determine whether some clusters/classes should be deleted, merged or
+subclustered.</p>
+<p>In this occasion, no refining would be necessary in terms of average
+probabilities of clusters. However, some clusters could be merged to
+reduce the detail of the annotation, for example.</p>
+<p>For this example, where there is not an intention of answering
+specific biological questions or find rare populations, 44 clusters
+might be too much detail. Therefore, several merges will be made, while
+maintaining biologically meaningful clusters.</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" tabindex="-1"></a><span class="co"># Self proposed merges based on biologically similar cells</span></span>
+<span id="cb18-2"><a href="#cb18-2" tabindex="-1"></a></span>
+<span id="cb18-3"><a href="#cb18-3" tabindex="-1"></a>merges <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb18-4"><a href="#cb18-4" tabindex="-1"></a>  <span class="co"># Astrocytes</span></span>
+<span id="cb18-5"><a href="#cb18-5" tabindex="-1"></a>  <span class="st">&quot;Astrocytes.cortex.hippocampus&quot;</span> <span class="ot">=</span> <span class="st">&quot;Astrocytes&quot;</span>,</span>
+<span id="cb18-6"><a href="#cb18-6" tabindex="-1"></a>  <span class="st">&quot;Astrocytes.thalamus.hypothalamus&quot;</span> <span class="ot">=</span> <span class="st">&quot;Astrocytes&quot;</span>,</span>
+<span id="cb18-7"><a href="#cb18-7" tabindex="-1"></a>  </span>
+<span id="cb18-8"><a href="#cb18-8" tabindex="-1"></a>  <span class="co"># Ependymal.cells</span></span>
+<span id="cb18-9"><a href="#cb18-9" tabindex="-1"></a>  <span class="st">&quot;Ependymal.cells&quot;</span> <span class="ot">=</span> <span class="st">&quot;Ependymal.cells&quot;</span>,</span>
+<span id="cb18-10"><a href="#cb18-10" tabindex="-1"></a>  <span class="st">&quot;Tanycytes&quot;</span> <span class="ot">=</span> <span class="st">&quot;Ependymal.cells&quot;</span>,</span>
+<span id="cb18-11"><a href="#cb18-11" tabindex="-1"></a>  </span>
+<span id="cb18-12"><a href="#cb18-12" tabindex="-1"></a>  <span class="co"># Excitatory.neurons</span></span>
+<span id="cb18-13"><a href="#cb18-13" tabindex="-1"></a>  <span class="st">&quot;Excitatory.neurons.amygdala&quot;</span> <span class="ot">=</span> <span class="st">&quot;Excitatory.neurons&quot;</span>,</span>
+<span id="cb18-14"><a href="#cb18-14" tabindex="-1"></a>  <span class="st">&quot;Excitatory.neurons.di.mesencephalon&quot;</span> <span class="ot">=</span> <span class="st">&quot;Excitatory.neurons&quot;</span>,</span>
+<span id="cb18-15"><a href="#cb18-15" tabindex="-1"></a>  <span class="st">&quot;Excitatory.neurons.hippocampal.CA1&quot;</span> <span class="ot">=</span> <span class="st">&quot;Excitatory.neurons&quot;</span>,</span>
+<span id="cb18-16"><a href="#cb18-16" tabindex="-1"></a>  <span class="st">&quot;Excitatory.neurons.hippocampal.CA2&quot;</span> <span class="ot">=</span> <span class="st">&quot;Excitatory.neurons&quot;</span>,</span>
+<span id="cb18-17"><a href="#cb18-17" tabindex="-1"></a>  <span class="st">&quot;Excitatory.neurons.hippocampal.CA3&quot;</span> <span class="ot">=</span> <span class="st">&quot;Excitatory.neurons&quot;</span>,</span>
+<span id="cb18-18"><a href="#cb18-18" tabindex="-1"></a>  <span class="st">&quot;Excitatory.neurons.layer.1.piriform&quot;</span> <span class="ot">=</span> <span class="st">&quot;Excitatory.neurons&quot;</span>,</span>
+<span id="cb18-19"><a href="#cb18-19" tabindex="-1"></a>  <span class="st">&quot;Excitatory.neurons.layer.2.3&quot;</span> <span class="ot">=</span> <span class="st">&quot;Excitatory.neurons&quot;</span>,</span>
+<span id="cb18-20"><a href="#cb18-20" tabindex="-1"></a>  <span class="st">&quot;Excitatory.neurons.layer.4&quot;</span> <span class="ot">=</span> <span class="st">&quot;Excitatory.neurons&quot;</span>,</span>
+<span id="cb18-21"><a href="#cb18-21" tabindex="-1"></a>  <span class="st">&quot;Excitatory.neurons.layer.5&quot;</span> <span class="ot">=</span> <span class="st">&quot;Excitatory.neurons&quot;</span>,</span>
+<span id="cb18-22"><a href="#cb18-22" tabindex="-1"></a>  <span class="st">&quot;Excitatory.neurons.layer.6&quot;</span> <span class="ot">=</span> <span class="st">&quot;Excitatory.neurons&quot;</span>,</span>
+<span id="cb18-23"><a href="#cb18-23" tabindex="-1"></a>  <span class="st">&quot;Excitatory.neurons.telencephalon&quot;</span> <span class="ot">=</span> <span class="st">&quot;Excitatory.neurons&quot;</span>,</span>
+<span id="cb18-24"><a href="#cb18-24" tabindex="-1"></a>  <span class="st">&quot;Granule.neurons&quot;</span> <span class="ot">=</span> <span class="st">&quot;Excitatory.neurons&quot;</span>,</span>
+<span id="cb18-25"><a href="#cb18-25" tabindex="-1"></a>  </span>
+<span id="cb18-26"><a href="#cb18-26" tabindex="-1"></a>  <span class="co"># Interneurons</span></span>
+<span id="cb18-27"><a href="#cb18-27" tabindex="-1"></a>  <span class="st">&quot;CCK.interneurons&quot;</span> <span class="ot">=</span> <span class="st">&quot;Interneurons&quot;</span>,</span>
+<span id="cb18-28"><a href="#cb18-28" tabindex="-1"></a>  <span class="st">&quot;Inhibitory.interneurons&quot;</span> <span class="ot">=</span> <span class="st">&quot;Interneurons&quot;</span>,</span>
+<span id="cb18-29"><a href="#cb18-29" tabindex="-1"></a>  <span class="st">&quot;Interneuron.selective.interneurons&quot;</span> <span class="ot">=</span> <span class="st">&quot;Interneurons&quot;</span>,</span>
+<span id="cb18-30"><a href="#cb18-30" tabindex="-1"></a>  <span class="st">&quot;Neurogliaform.cells&quot;</span> <span class="ot">=</span> <span class="st">&quot;Interneurons&quot;</span>,</span>
+<span id="cb18-31"><a href="#cb18-31" tabindex="-1"></a>  </span>
+<span id="cb18-32"><a href="#cb18-32" tabindex="-1"></a>  <span class="co"># Inhibitory.neurons</span></span>
+<span id="cb18-33"><a href="#cb18-33" tabindex="-1"></a>  <span class="st">&quot;Inhibitory.neurons.amygdala&quot;</span> <span class="ot">=</span> <span class="st">&quot;Inhibitory.neurons&quot;</span>,</span>
+<span id="cb18-34"><a href="#cb18-34" tabindex="-1"></a>  <span class="st">&quot;Inhibitory.neurons.habenula.hypothalamus&quot;</span> <span class="ot">=</span> <span class="st">&quot;Inhibitory.neurons&quot;</span>,</span>
+<span id="cb18-35"><a href="#cb18-35" tabindex="-1"></a>  <span class="st">&quot;Inhibitory.neurons.habenula.thalamus&quot;</span> <span class="ot">=</span> <span class="st">&quot;Inhibitory.neurons&quot;</span>,</span>
+<span id="cb18-36"><a href="#cb18-36" tabindex="-1"></a>  <span class="st">&quot;Inhibitory.neurons.reticular.nucleus&quot;</span> <span class="ot">=</span> <span class="st">&quot;Inhibitory.neurons&quot;</span>,</span>
+<span id="cb18-37"><a href="#cb18-37" tabindex="-1"></a>  <span class="st">&quot;Telencephalon.inhibitory.neurons&quot;</span> <span class="ot">=</span> <span class="st">&quot;Inhibitory.neurons&quot;</span>,</span>
+<span id="cb18-38"><a href="#cb18-38" tabindex="-1"></a>  </span>
+<span id="cb18-39"><a href="#cb18-39" tabindex="-1"></a>  <span class="co"># Medium.spiny.neurons</span></span>
+<span id="cb18-40"><a href="#cb18-40" tabindex="-1"></a>  <span class="st">&quot;D1.medium.spiny.neurons&quot;</span> <span class="ot">=</span> <span class="st">&quot;Medium.spiny.neurons&quot;</span>,</span>
+<span id="cb18-41"><a href="#cb18-41" tabindex="-1"></a>  <span class="st">&quot;D2.medium.spiny.neurons&quot;</span> <span class="ot">=</span> <span class="st">&quot;Medium.spiny.neurons&quot;</span>,</span>
+<span id="cb18-42"><a href="#cb18-42" tabindex="-1"></a>  </span>
+<span id="cb18-43"><a href="#cb18-43" tabindex="-1"></a>  <span class="co"># Oligodendrocytes</span></span>
+<span id="cb18-44"><a href="#cb18-44" tabindex="-1"></a>  <span class="st">&quot;Committed.oligodendrocytes&quot;</span> <span class="ot">=</span> <span class="st">&quot;Oligodendrocytes&quot;</span>,</span>
+<span id="cb18-45"><a href="#cb18-45" tabindex="-1"></a>  <span class="st">&quot;Mature.oligodendrocytes&quot;</span> <span class="ot">=</span> <span class="st">&quot;Oligodendrocytes&quot;</span>,</span>
+<span id="cb18-46"><a href="#cb18-46" tabindex="-1"></a>  <span class="st">&quot;Myelin.forming.oligodendrocytes&quot;</span> <span class="ot">=</span> <span class="st">&quot;Oligodendrocytes&quot;</span>,</span>
+<span id="cb18-47"><a href="#cb18-47" tabindex="-1"></a>  <span class="st">&quot;Newly.formed.oligodendrocytes&quot;</span> <span class="ot">=</span> <span class="st">&quot;Oligodendrocytes&quot;</span>,</span>
+<span id="cb18-48"><a href="#cb18-48" tabindex="-1"></a>  </span>
+<span id="cb18-49"><a href="#cb18-49" tabindex="-1"></a>  <span class="co"># Vascular</span></span>
+<span id="cb18-50"><a href="#cb18-50" tabindex="-1"></a>  <span class="st">&quot;Perivascular.macrophages&quot;</span> <span class="ot">=</span> <span class="st">&quot;Vascular&quot;</span>,</span>
+<span id="cb18-51"><a href="#cb18-51" tabindex="-1"></a>  <span class="st">&quot;Vascular.endothelial.cells&quot;</span> <span class="ot">=</span> <span class="st">&quot;Vascular&quot;</span>, </span>
+<span id="cb18-52"><a href="#cb18-52" tabindex="-1"></a>  <span class="st">&quot;Vascular.leptomeningeal.cells&quot;</span> <span class="ot">=</span> <span class="st">&quot;Vascular&quot;</span>, </span>
+<span id="cb18-53"><a href="#cb18-53" tabindex="-1"></a>  <span class="st">&quot;Vascular.smooth.muscle.cells&quot;</span> <span class="ot">=</span> <span class="st">&quot;Vascular&quot;</span></span>
+<span id="cb18-54"><a href="#cb18-54" tabindex="-1"></a>  )</span>
+<span id="cb18-55"><a href="#cb18-55" tabindex="-1"></a></span>
+<span id="cb18-56"><a href="#cb18-56" tabindex="-1"></a><span class="do">## Code adapted from the InSituType vignette</span></span>
+<span id="cb18-57"><a href="#cb18-57" tabindex="-1"></a></span>
+<span id="cb18-58"><a href="#cb18-58" tabindex="-1"></a><span class="co"># Clustering refining</span></span>
+<span id="cb18-59"><a href="#cb18-59" tabindex="-1"></a>newclusts <span class="ot">&lt;-</span> <span class="fu">refineClusters</span>(<span class="at">logliks =</span> sup<span class="sc">$</span>logliks,</span>
+<span id="cb18-60"><a href="#cb18-60" tabindex="-1"></a>                            <span class="at">assay_type =</span> <span class="st">&quot;RNA&quot;</span>,</span>
+<span id="cb18-61"><a href="#cb18-61" tabindex="-1"></a>                            <span class="at">merges =</span> merges,</span>
+<span id="cb18-62"><a href="#cb18-62" tabindex="-1"></a>                            <span class="at">to_delete =</span> <span class="cn">NULL</span>,</span>
+<span id="cb18-63"><a href="#cb18-63" tabindex="-1"></a>                            <span class="at">subcluster =</span> <span class="cn">NULL</span>,</span>
+<span id="cb18-64"><a href="#cb18-64" tabindex="-1"></a>                            <span class="at">counts =</span> counts,</span>
+<span id="cb18-65"><a href="#cb18-65" tabindex="-1"></a>                            <span class="at">neg =</span> negmean)</span></code></pre></div>
+</div>
+<div id="add-annotations-to-seurat-object" class="section level2">
+<h2>Add annotations to Seurat object</h2>
+<p>Now, annotation is ready to be included in the Seurat object for UMAP
+visualization.</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" tabindex="-1"></a><span class="co"># Add new metadata column to seurat object</span></span>
+<span id="cb19-2"><a href="#cb19-2" tabindex="-1"></a>seu<span class="sc">$</span>IST_sup_ann <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(sup<span class="sc">$</span>clust) <span class="co"># Original clusters</span></span>
+<span id="cb19-3"><a href="#cb19-3" tabindex="-1"></a>seu<span class="sc">$</span>IST_sup_ann_refined <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(newclusts<span class="sc">$</span>clust) <span class="co"># Refined clusters</span></span>
+<span id="cb19-4"><a href="#cb19-4" tabindex="-1"></a></span>
+<span id="cb19-5"><a href="#cb19-5" tabindex="-1"></a><span class="co"># Set the refined version as default idents</span></span>
+<span id="cb19-6"><a href="#cb19-6" tabindex="-1"></a><span class="fu">Idents</span>(seu) <span class="ot">&lt;-</span> seu<span class="sc">$</span>IST_sup_ann_refined</span></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" tabindex="-1"></a><span class="co"># Create custom color palettes</span></span>
+<span id="cb20-2"><a href="#cb20-2" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="fu">length</span>(<span class="fu">unique</span>(<span class="fu">Idents</span>(seu)))</span>
+<span id="cb20-3"><a href="#cb20-3" tabindex="-1"></a>cols <span class="ot">&lt;-</span> <span class="fu">gg_color_hue</span>(n)</span>
+<span id="cb20-4"><a href="#cb20-4" tabindex="-1"></a></span>
+<span id="cb20-5"><a href="#cb20-5" tabindex="-1"></a><span class="co"># DimPlot of selected resolution</span></span>
+<span id="cb20-6"><a href="#cb20-6" tabindex="-1"></a><span class="fu">DimPlot</span>(seu, <span class="at">reduction =</span> <span class="st">&quot;umap&quot;</span>, <span class="at">label =</span> <span class="cn">FALSE</span>, <span class="at">cols =</span> cols, <span class="at">raster =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<p><img src="figure/4.0_insitutype_cell_typing.Rmd/VizAnn1-1.png" width="960" style="display: block; margin: auto;" /></p>
+<p>Finally, the visualization of nFeature and nCount allows to identify
+clusters with better/lower representation by the CosMx panel.</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" tabindex="-1"></a><span class="do">## Code adapted from CosMxLite vignette</span></span>
+<span id="cb21-2"><a href="#cb21-2" tabindex="-1"></a><span class="do">## Points are removed as CosMx datasets can contain over 1 million cells and may hide the violin plot</span></span>
+<span id="cb21-3"><a href="#cb21-3" tabindex="-1"></a></span>
+<span id="cb21-4"><a href="#cb21-4" tabindex="-1"></a><span class="co"># Violin plot</span></span>
+<span id="cb21-5"><a href="#cb21-5" tabindex="-1"></a><span class="fu">VlnPlot</span>(seu, <span class="at">features =</span> <span class="fu">c</span>(<span class="st">&quot;nFeature_RNA&quot;</span>, <span class="st">&quot;nCount_RNA&quot;</span>), <span class="at">ncol =</span> <span class="dv">1</span>, <span class="at">pt.size =</span> <span class="dv">0</span>,</span>
+<span id="cb21-6"><a href="#cb21-6" tabindex="-1"></a>        <span class="at">group.by =</span> <span class="st">&quot;IST_sup_ann_refined&quot;</span>) <span class="sc">&amp;</span></span>
+<span id="cb21-7"><a href="#cb21-7" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">size =</span> <span class="dv">8</span>))</span></code></pre></div>
+<p><img src="figure/4.0_insitutype_cell_typing.Rmd/VizAnn2-1.png" width="960" style="display: block; margin: auto;" /></p>
+</div>
+<div id="save-the-seurat-object" class="section level2">
+<h2>Save the Seurat object</h2>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" tabindex="-1"></a><span class="co"># Save the annotated Seurat object</span></span>
+<span id="cb22-2"><a href="#cb22-2" tabindex="-1"></a>name <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">&quot;seu_&quot;</span>, folder, <span class="st">&quot;_ISTSup.RDS&quot;</span>)</span>
+<span id="cb22-3"><a href="#cb22-3" tabindex="-1"></a><span class="fu">saveRDS</span>(seu, <span class="fu">here</span>(<span class="st">&quot;output&quot;</span>,<span class="st">&quot;processed_data&quot;</span>,folder,name))</span></code></pre></div>
+</div>
+</div>
+<div id="final-spatial-visualizations" class="section level1">
+<h1>Final spatial visualizations</h1>
+<p>Now that cells have been annotated, visualizing them in their spatial
+context becomes more informative. For example, all cells can be
+visualized simultaneously in the sample or one cell type can be
+specifically highlighted:</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" tabindex="-1"></a><span class="do">## Code adapted from Seurat Spatial vignette</span></span>
+<span id="cb23-2"><a href="#cb23-2" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> <span class="fu">ImageDimPlot</span>(seu, <span class="at">fov =</span> <span class="st">&quot;globalFOV&quot;</span>, <span class="at">axes =</span> <span class="cn">TRUE</span>, <span class="at">cols =</span> cols) <span class="sc">+</span></span>
+<span id="cb23-3"><a href="#cb23-3" tabindex="-1"></a>  <span class="fu">theme_classic</span>()</span>
+<span id="cb23-4"><a href="#cb23-4" tabindex="-1"></a></span>
+<span id="cb23-5"><a href="#cb23-5" tabindex="-1"></a>p2 <span class="ot">&lt;-</span> <span class="fu">ImageDimPlot</span>(seu, <span class="at">fov =</span> <span class="st">&quot;globalFOV&quot;</span>, <span class="at">axes =</span> <span class="cn">TRUE</span>, <span class="at">cols =</span> cols[<span class="dv">13</span>],</span>
+<span id="cb23-6"><a href="#cb23-6" tabindex="-1"></a>                   <span class="at">cells =</span> <span class="fu">WhichCells</span>(seu, <span class="at">idents =</span> <span class="st">&quot;Oligodendrocytes&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb23-7"><a href="#cb23-7" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;Oligodendrocyte&quot;</span>) <span class="sc">+</span> </span>
+<span id="cb23-8"><a href="#cb23-8" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb23-9"><a href="#cb23-9" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">&quot;bold&quot;</span>, <span class="at">hjust =</span> <span class="fl">0.5</span>))</span>
+<span id="cb23-10"><a href="#cb23-10" tabindex="-1"></a></span>
+<span id="cb23-11"><a href="#cb23-11" tabindex="-1"></a><span class="co"># Arrange plots</span></span>
+<span id="cb23-12"><a href="#cb23-12" tabindex="-1"></a>p1 <span class="sc">+</span> p2</span></code></pre></div>
+<p><img src="figure/4.0_insitutype_cell_typing.Rmd/SpatialViz-1.png" width="3900" style="display: block; margin: auto;" /></p>
+<p>Another interesting visualization would be to plot gene expression
+markers in its spatial context. For example, one typical maker for
+Oligodendrocytes is <em>Olig1</em>:</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" tabindex="-1"></a><span class="do">## Code adapted from Seurat Spatial vignette</span></span>
+<span id="cb24-2"><a href="#cb24-2" tabindex="-1"></a><span class="do">## Points are removed from violin plots as CosMx datasets can contain over 1 million cells and may hide the violin plot</span></span>
+<span id="cb24-3"><a href="#cb24-3" tabindex="-1"></a></span>
+<span id="cb24-4"><a href="#cb24-4" tabindex="-1"></a><span class="fu">VlnPlot</span>(seu, <span class="at">features =</span> <span class="st">&quot;Olig1&quot;</span>,<span class="at">pt.size =</span> <span class="dv">0</span>, <span class="at">y.max =</span> <span class="dv">20</span>) <span class="sc">+</span> <span class="fu">NoLegend</span>()</span></code></pre></div>
+<p><img src="figure/4.0_insitutype_cell_typing.Rmd/MarkerViz1-1.png" width="672" style="display: block; margin: auto;" />
+As expected, it is highly expressed in Oligodendrocytes and
+Oligodendrocyte precursor cells, but it can also be observed in its
+spatial context:</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" tabindex="-1"></a><span class="do">## Code adapted from CosMxLite vignette</span></span>
+<span id="cb25-2"><a href="#cb25-2" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> <span class="fu">ImageFeaturePlot</span>(seu, <span class="at">fov =</span> <span class="st">&quot;globalFOV&quot;</span>, <span class="at">features =</span> <span class="st">&quot;Olig1&quot;</span>) <span class="sc">+</span></span>
+<span id="cb25-3"><a href="#cb25-3" tabindex="-1"></a>  <span class="fu">theme_classic</span>() <span class="sc">+</span></span>
+<span id="cb25-4"><a href="#cb25-4" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">&quot;bold&quot;</span>, <span class="at">hjust =</span> <span class="fl">0.5</span>))</span>
+<span id="cb25-5"><a href="#cb25-5" tabindex="-1"></a></span>
+<span id="cb25-6"><a href="#cb25-6" tabindex="-1"></a>p2 <span class="ot">&lt;-</span> <span class="fu">ImageDimPlot</span>(seu, <span class="at">fov =</span> <span class="st">&quot;globalFOV&quot;</span>, <span class="at">axes =</span> <span class="cn">TRUE</span>, </span>
+<span id="cb25-7"><a href="#cb25-7" tabindex="-1"></a>                   <span class="at">cols =</span> <span class="fu">c</span>(cols[<span class="dv">12</span>], cols[<span class="dv">13</span>]),</span>
+<span id="cb25-8"><a href="#cb25-8" tabindex="-1"></a>                   <span class="at">cells =</span> <span class="fu">WhichCells</span>(seu, </span>
+<span id="cb25-9"><a href="#cb25-9" tabindex="-1"></a>                                      <span class="at">idents =</span> <span class="fu">c</span>(<span class="st">&quot;Oligodendrocyte.precursor.cells&quot;</span>,</span>
+<span id="cb25-10"><a href="#cb25-10" tabindex="-1"></a>                                                 <span class="st">&quot;Oligodendrocytes&quot;</span>))) <span class="sc">+</span></span>
+<span id="cb25-11"><a href="#cb25-11" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;Oligodendrocyte and </span><span class="sc">\n</span><span class="st"> Oligodendrocyte precursor cells&quot;</span>) <span class="sc">+</span> </span>
+<span id="cb25-12"><a href="#cb25-12" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb25-13"><a href="#cb25-13" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">&quot;bold&quot;</span>, <span class="at">hjust =</span> <span class="fl">0.5</span>),</span>
+<span id="cb25-14"><a href="#cb25-14" tabindex="-1"></a>        <span class="at">legend.position =</span> <span class="st">&quot;bottom&quot;</span>)</span>
+<span id="cb25-15"><a href="#cb25-15" tabindex="-1"></a></span>
+<span id="cb25-16"><a href="#cb25-16" tabindex="-1"></a><span class="co"># Arrange plots</span></span>
+<span id="cb25-17"><a href="#cb25-17" tabindex="-1"></a>p1 <span class="sc">+</span> p2</span></code></pre></div>
+<p><img src="figure/4.0_insitutype_cell_typing.Rmd/SpatialViz2-1.png" width="3900" style="display: block; margin: auto;" /></p>
+</div>
+<div id="performance-and-session-info" class="section level1">
+<h1>Performance and Session Info</h1>
+<details>
+<summary>
+<strong>Performance Report</strong>
+</summary>
+<table class="table table-striped table-hover table-condensed" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Chunk
+</th>
+<th style="text-align:right;">
+Time_sec
+</th>
+<th style="text-align:right;">
+Memory_Mb
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Libraries
+</td>
+<td style="text-align:right;">
+7.31
+</td>
+<td style="text-align:right;">
+457.1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+LoadData
+</td>
+<td style="text-align:right;">
+6.60
+</td>
+<td style="text-align:right;">
+1215.1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+PrepData
+</td>
+<td style="text-align:right;">
+0.60
+</td>
+<td style="text-align:right;">
+205.4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+PrepCohort
+</td>
+<td style="text-align:right;">
+9.69
+</td>
+<td style="text-align:right;">
+2.6
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+LoadRef
+</td>
+<td style="text-align:right;">
+0.96
+</td>
+<td style="text-align:right;">
+0.9
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ExploringFOVpositions
+</td>
+<td style="text-align:right;">
+0.54
+</td>
+<td style="text-align:right;">
+0.1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+VizRef
+</td>
+<td style="text-align:right;">
+1.13
+</td>
+<td style="text-align:right;">
+6.1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Sup
+</td>
+<td style="text-align:right;">
+988.45
+</td>
+<td style="text-align:right;">
+63.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+SupProb
+</td>
+<td style="text-align:right;">
+0.76
+</td>
+<td style="text-align:right;">
+0.1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ExporingSupProb
+</td>
+<td style="text-align:right;">
+0.82
+</td>
+<td style="text-align:right;">
+0.0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+VizSupProb
+</td>
+<td style="text-align:right;">
+2.60
+</td>
+<td style="text-align:right;">
+13.6
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+VizFPSup
+</td>
+<td style="text-align:right;">
+6.54
+</td>
+<td style="text-align:right;">
+12.8
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+RefinedSup
+</td>
+<td style="text-align:right;">
+3.29
+</td>
+<td style="text-align:right;">
+8.3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+AddAnn
+</td>
+<td style="text-align:right;">
+0.58
+</td>
+<td style="text-align:right;">
+1.0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+VizAnn1
+</td>
+<td style="text-align:right;">
+2.09
+</td>
+<td style="text-align:right;">
+5.6
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+VizAnn2
+</td>
+<td style="text-align:right;">
+1.73
+</td>
+<td style="text-align:right;">
+5.0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+SavingSeuObj
+</td>
+<td style="text-align:right;">
+47.54
+</td>
+<td style="text-align:right;">
+0.0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+SpatialViz
+</td>
+<td style="text-align:right;">
+5.81
+</td>
+<td style="text-align:right;">
+13.0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+MarkerViz1
+</td>
+<td style="text-align:right;">
+1.15
+</td>
+<td style="text-align:right;">
+3.2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+SpatialViz2
+</td>
+<td style="text-align:right;">
+5.21
+</td>
+<td style="text-align:right;">
+8.7
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Total
+</td>
+<td style="text-align:right;">
+1093.40
+</td>
+<td style="text-align:right;">
+2022.1
+</td>
+</tr>
+</tbody>
+</table>
+</details>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
+Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span></code></pre></div>
+<pre><code>R version 4.4.3 (2025-02-28 ucrt)
+Platform: x86_64-w64-mingw32/x64
+Running under: Windows 11 x64 (build 22000)
+
+Matrix products: default
+
+
+locale:
+[1] LC_COLLATE=Spanish_Spain.utf8  LC_CTYPE=Spanish_Spain.utf8   
+[3] LC_MONETARY=Spanish_Spain.utf8 LC_NUMERIC=C                  
+[5] LC_TIME=Spanish_Spain.utf8    
+
+time zone: Europe/Madrid
+tzcode source: internal
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+ [1] InSituType_2.0     pheatmap_1.0.12    patchwork_1.3.0    ggplot2_3.5.1     
+ [5] SeuratObject_4.1.4 Seurat_4.4.0       kableExtra_1.4.0   dplyr_1.1.4       
+ [9] here_1.0.1         Matrix_1.7-2       data.table_1.17.0  workflowr_1.7.1   
+
+loaded via a namespace (and not attached):
+  [1] RcppAnnoy_0.0.22            splines_4.4.3              
+  [3] later_1.4.1                 tibble_3.2.1               
+  [5] polyclip_1.10-7             lifecycle_1.0.4            
+  [7] rprojroot_2.0.4             globals_0.16.3             
+  [9] processx_3.8.6              lattice_0.22-6             
+ [11] MASS_7.3-65                 SnowballC_0.7.1            
+ [13] magrittr_2.0.3              plotly_4.10.4              
+ [15] sass_0.4.9                  rmarkdown_2.29             
+ [17] jquerylib_0.1.4             yaml_2.3.10                
+ [19] httpuv_1.6.15               sctransform_0.4.1          
+ [21] askpass_1.2.1               sp_2.2-0                   
+ [23] spatstat.sparse_3.1-0       reticulate_1.41.0.1        
+ [25] cowplot_1.1.3               pbapply_1.7-2              
+ [27] RColorBrewer_1.1-3          abind_1.4-8                
+ [29] zlibbioc_1.52.0             Rtsne_0.17                 
+ [31] GenomicRanges_1.58.0        purrr_1.0.4                
+ [33] BiocGenerics_0.52.0         git2r_0.35.0               
+ [35] GenomeInfoDbData_1.2.13     IRanges_2.40.1             
+ [37] S4Vectors_0.44.0            ggrepel_0.9.6              
+ [39] irlba_2.3.5.1               listenv_0.9.1              
+ [41] spatstat.utils_3.1-2        umap_0.2.10.0              
+ [43] goftest_1.2-3               RSpectra_0.16-2            
+ [45] bigmemory_4.6.4             spatstat.random_3.3-2      
+ [47] fitdistrplus_1.2-2          parallelly_1.43.0          
+ [49] svglite_2.1.3               leiden_0.4.3.1             
+ [51] codetools_0.2-20            DelayedArray_0.32.0        
+ [53] xml2_1.3.7                  tidyselect_1.2.1           
+ [55] UCSC.utils_1.2.0            farver_2.1.2               
+ [57] matrixStats_1.5.0           stats4_4.4.3               
+ [59] spatstat.explore_3.3-4      jsonlite_1.9.1             
+ [61] progressr_0.15.1            ggridges_0.5.6             
+ [63] survival_3.8-3              systemfonts_1.2.1          
+ [65] tools_4.4.3                 ragg_1.4.0                 
+ [67] ica_1.0-3                   Rcpp_1.0.14                
+ [69] glue_1.8.0                  gridExtra_2.3              
+ [71] SparseArray_1.6.2           xfun_0.51                  
+ [73] MatrixGenerics_1.18.1       GenomeInfoDb_1.42.3        
+ [75] withr_3.0.2                 fastmap_1.2.0              
+ [77] openssl_2.3.2               callr_3.7.6                
+ [79] digest_0.6.37               R6_2.6.1                   
+ [81] mime_0.12                   textshaping_1.0.0          
+ [83] colorspace_2.1-1            scattermore_1.2            
+ [85] tensor_1.5                  spatstat.data_3.1-6        
+ [87] tidyr_1.3.1                 generics_0.1.3             
+ [89] httr_1.4.7                  htmlwidgets_1.6.4          
+ [91] S4Arrays_1.6.0              whisker_0.4.1              
+ [93] uwot_0.2.3                  pkgconfig_2.0.3            
+ [95] gtable_0.3.6                fastglm_0.0.3              
+ [97] lmtest_0.9-40               SingleCellExperiment_1.28.1
+ [99] XVector_0.46.0              htmltools_0.5.8.1          
+[101] scales_1.3.0                Biobase_2.66.0             
+[103] png_0.1-8                   spatstat.univar_3.1-2      
+[105] bigmemory.sri_0.1.8         knitr_1.50                 
+[107] rstudioapi_0.17.1           reshape2_1.4.4             
+[109] uuid_1.2-1                  nlme_3.1-167               
+[111] cachem_1.1.0                zoo_1.8-13                 
+[113] stringr_1.5.1               KernSmooth_2.23-26         
+[115] vipor_0.4.7                 parallel_4.4.3             
+[117] miniUI_0.1.1.1              ggrastr_1.0.2              
+[119] pillar_1.10.1               grid_4.4.3                 
+[121] vctrs_0.6.5                 RANN_2.6.2                 
+[123] lsa_0.73.3                  promises_1.3.2             
+[125] xtable_1.8-4                cluster_2.1.8              
+[127] beeswarm_0.4.0              evaluate_1.0.3             
+[129] cli_3.6.4                   compiler_4.4.3             
+[131] rlang_1.1.6                 crayon_1.5.3               
+[133] future.apply_1.11.3         labeling_0.4.3             
+[135] mclust_6.1.1                ps_1.9.0                   
+[137] ggbeeswarm_0.7.2            getPass_0.2-4              
+[139] plyr_1.8.9                  fs_1.6.5                   
+[141] stringi_1.8.4               viridisLite_0.4.2          
+[143] deldir_2.0-4                munsell_0.5.1              
+[145] lazyeval_0.2.2              spatstat.geom_3.3-5        
+[147] sparseMatrixStats_1.18.0    future_1.34.0              
+[149] shiny_1.10.0                SummarizedExperiment_1.36.0
+[151] ROCR_1.0-11                 igraph_2.1.4               
+[153] bslib_0.9.0                </code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+https://docs.mathjax.org/en/latest/web/configuration.html. This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

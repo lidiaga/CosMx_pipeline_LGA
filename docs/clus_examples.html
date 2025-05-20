@@ -1,0 +1,1065 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Cell typing methods for CosMx™ SMI Data (examples)</title>
+
+<script src="site_libs/header-attrs-2.29/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/united.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="site_libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/main/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+
+
+<style type="text/css">
+  code {
+    white-space: pre;
+  }
+  .sourceCode {
+    overflow: visible;
+  }
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  background-color: #f8f8f8; }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ef2929; } /* Alert */
+code span.an { color: #8f5902; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #204a87; } /* Attribute */
+code span.bn { color: #0000cf; } /* BaseN */
+code span.cf { color: #204a87; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4e9a06; } /* Char */
+code span.cn { color: #8f5902; } /* Constant */
+code span.co { color: #8f5902; font-style: italic; } /* Comment */
+code span.cv { color: #8f5902; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #8f5902; font-weight: bold; font-style: italic; } /* Documentation */
+code span.dt { color: #204a87; } /* DataType */
+code span.dv { color: #0000cf; } /* DecVal */
+code span.er { color: #a40000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #0000cf; } /* Float */
+code span.fu { color: #204a87; font-weight: bold; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #8f5902; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #204a87; font-weight: bold; } /* Keyword */
+code span.op { color: #ce5c00; font-weight: bold; } /* Operator */
+code span.ot { color: #8f5902; } /* Other */
+code span.pp { color: #8f5902; font-style: italic; } /* Preprocessor */
+code span.sc { color: #ce5c00; font-weight: bold; } /* SpecialChar */
+code span.ss { color: #4e9a06; } /* SpecialString */
+code span.st { color: #4e9a06; } /* String */
+code span.va { color: #000000; } /* Variable */
+code span.vs { color: #4e9a06; } /* VerbatimString */
+code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">CosMx™ SMI Data Analysis - TFM UOC</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="dataset.html">Dataset</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Pipeline
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="pipeline.html">Introduction</a>
+    </li>
+    <li>
+      <a href="0.0_data_loading.html">Data Loading</a>
+    </li>
+    <li>
+      <a href="1.0_qc_and_filtering.html">QC and filtering</a>
+    </li>
+    <li>
+      <a href="2.0_normalization.html">Normalization</a>
+    </li>
+    <li>
+      <a href="3.0_dimensional_reduction.html">Dimensional reduction</a>
+    </li>
+    <li>
+      <a href="4.0_insitutype_cell_typing.html">Cell typing</a>
+    </li>
+  </ul>
+</li>
+<li>
+  <a href="clus_examples.html">Cell typing</a>
+</li>
+<li>
+  <a href="norm_examples.html">Normalization</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="license.html">License</a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Cell typing methods for CosMx™ SMI Data
+(examples)</h1>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span>
+workflowr <span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2025-05-20
+</p>
+<p>
+<strong>Checks:</strong> <span
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> 0
+</p>
+<p>
+<strong>Knit directory:</strong> <code>CosMx_pipeline_LGA/</code> <span
+class="glyphicon glyphicon-question-sign" aria-hidden="true"
+title="This is the local directory in which the code in this file was executed.">
+</span>
+</p>
+<p>
+This reproducible <a href="https://rmarkdown.rstudio.com">R Markdown</a>
+analysis was created with <a
+  href="https://github.com/workflowr/workflowr">workflowr</a> (version
+1.7.1). The <em>Checks</em> tab describes the reproducibility checks
+that were applied when the results were created. The <em>Past
+versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date
+</a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguptodate"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great! Since the R Markdown file has been committed to the Git
+repository, you know the exact version of the code that produced these
+results.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the
+global environment can affect the analysis in your R Markdown file in
+unknown ways. For reproduciblity it’s best to always run the code in an
+empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20250517code">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Seed:</strong>
+<code>set.seed(20250517)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20250517code"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20250517)</code> was run prior to running
+the code in the R Markdown file. Setting a seed ensures that any results
+that rely on randomness, e.g. subsampling or permutations, are
+reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Session information:</strong>
+recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package
+versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be
+confident that you successfully produced the results during this
+run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr
+project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrong2b284f3">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Repository version:</strong> 2b284f3
+</a>
+</p>
+</div>
+<div id="strongRepositoryversionstrong2b284f3"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development
+and connecting the code version to the results is critical for
+reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version 2b284f3.
+See the <em>Past versions</em> tab to see a history of the changes made
+to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for
+the analysis have been committed to Git prior to generating the results
+(you can use <code>wflow_publish</code> or
+<code>wflow_git_commit</code>). workflowr only checks the R Markdown
+file, but you know if there are other scripts or data files that it
+depends on. Below is the status of the Git repository when the results
+were generated:
+</p>
+<pre><code>
+Ignored files:
+    Ignored:    .Rproj.user/
+    Ignored:    NBClust-Plots/
+    Ignored:    analysis/figure/
+    Ignored:    data/flatFiles/CoronalHemisphere/Run1000_S1_Half_exprMat_file.csv
+    Ignored:    data/flatFiles/CoronalHemisphere/Run1000_S1_Half_fov_positions_file.csv
+    Ignored:    data/flatFiles/CoronalHemisphere/Run1000_S1_Half_metadata_file.csv
+    Ignored:    output/processed_data/Log/
+    Ignored:    output/processed_data/RC/
+    Ignored:    output/processed_data/SCT/
+    Ignored:    output/processed_data/exprMat_unfiltered.RDS
+    Ignored:    output/processed_data/fov_positions_unfiltered.RDS
+    Ignored:    output/processed_data/metadata_unfiltered.RDS
+    Ignored:    output/processed_data/negMat_unfiltered.RDS
+    Ignored:    output/processed_data/seu_filtered.RDS
+    Ignored:    output/processed_data/seu_semifiltered.RDS
+
+Untracked files:
+    Untracked:  analysis/images/
+
+Unstaged changes:
+    Modified:   output/performance_reports/0.0_data_loading_PR.csv
+    Modified:   output/performance_reports/1.0_qc_and_filtering_PR.csv
+    Modified:   output/performance_reports/2.0_normalization_PR.csv
+    Modified:   output/performance_reports/3.0_dimensional_reduction_PR.csv
+    Modified:   output/performance_reports/4.0_insitutype_cell_typing_PR.csv
+    Modified:   output/performance_reports/4.1_insitutype_unsup_clustering_PR.csv
+    Modified:   output/performance_reports/4.2_seurat_unsup_clustering_PR.csv
+    Modified:   output/performance_reports/5.0_RC_normalization_PR.csv
+    Modified:   output/performance_reports/5.1_RC_dimensional_reduction_PR.csv
+    Modified:   output/performance_reports/6.0_Log_normalization_PR.csv
+    Modified:   output/performance_reports/6.1_Log_dimensional_reduction_PR.csv
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not
+included in this status report because it is ok for generated content to
+have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+<p>
+These are the previous versions of the repository in which changes were
+made to the R Markdown (<code>analysis/clus_examples.Rmd</code>) and
+HTML (<code>docs/clus_examples.html</code>) files. If you’ve configured
+a remote Git repository (see <code>?wflow_git_remote</code>), click on
+the hyperlinks in the table below to view the files as they were in that
+past version.
+</p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+2b284f3
+</td>
+<td>
+lidiaga
+</td>
+<td>
+2025-05-20
+</td>
+<td>
+Publish all for the first time
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+815e2a7
+</td>
+<td>
+lidiaga
+</td>
+<td>
+2025-05-19
+</td>
+<td>
+Fix plot sizes in clus_examples.Rmd
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+cf77662
+</td>
+<td>
+lidiaga
+</td>
+<td>
+2025-05-19
+</td>
+<td>
+Edit website files
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<div id="introduction" class="section level1">
+<h1>Introduction</h1>
+<p>Cell typing is a fundamental step in gene expression analysis, as
+from this point onward, the results and subsequent analyses acquire
+biological meaning. In practice, this can be approached through
+unsupervised clustering, where cells are grouped based on the similarity
+of their gene expression profiles [1,2], followed by annotation of the
+resulting clusters based on their markers [3]. However, there are other
+approaches, such as supervised classification, which uses reference
+profiles to assign predefined cell types to cells based on their
+expression profiles; or semi-supervised methods, which classify cells
+based on a reference while also allowing the detection of new clusters
+or rare populations [3].</p>
+<p>While clustering in scRNA-seq relies solely on gene expression, the
+multimodal nature of spatial transcriptomics, which includes spatial
+location data and histological or immunofluorescence images, has led to
+the development of new clustering methods that integrate this
+information to improve clustering quality [3]. In this context, the
+InSituType algorithm, developed by Danaher et al. [4] as part of
+Nanostring® official tools, allows the incorporation of complementary
+information and supports all three mentioned approaches: unsupervised or
+semi-supervised clustering, and supervised classification. For this
+reason, it was considered a particularly suitable option for this
+pipeline.</p>
+<p>In this project, the proposed pipeline incorporates supervised and
+unsupervised InSituType, as well as an unsupervised clustering
+alternative, by executing the FindNeighbors and FindClusters functions
+from the Seurat package:</p>
+<ul>
+<li><p><strong>Supervised InSituType:</strong> based on a probabilistic
+model, employing a Bayesian classifier in its supervised version
+[4].</p></li>
+<li><p><strong>Unsupervised InSituType:</strong> based on a
+probabilistic model, employing an Expectation Maximization (EM)
+algorithm for the unsupervised and semi-supervised methods [4].</p></li>
+<li><p><strong>Seurat’s unsupervised clustering, using the Louvain
+algorithm:</strong> Seurat clustering functions allow for the
+application of different graph-based clustering methods, such as the
+Louvain algorithm. Despite using only gene expression for clustering,
+this algorithm has been reported to have a strong performance with
+spatial transcriptomics data, comparable to methods that also
+incorporate spatial information [3].</p></li>
+</ul>
+<p>For simplicity, in the <a href="pipeline.html">main pipeline
+example</a> only one approach has been shown — Supervised InSituType.
+However, in this section, all three alternatives can be explored.</p>
+</div>
+<div id="examples" class="section level1">
+<h1>Examples</h1>
+<div id="supervised-insitutype" class="section level2">
+<h2>Supervised InSituType</h2>
+<ol style="list-style-type: decimal">
+<li><a href="4.0_insitutype_cell_typing.html">Cell typing with
+InSituType Supervised classification</a></li>
+</ol>
+<p>To run the InSituType supervised algorithm, three inputs are needed:
+1) the raw, unnormalized expression matrix; 2) a vector with the mean
+negative probe expression per cell; and 3) a reference profile.</p>
+<p>Nanostring® provides various public profiles, both from <a
+href="https://github.com/Nanostring-Biostats/cellprofilelibrary">scRNA-seq</a>
+and <a
+href="https://github.com/Nanostring-Biostats/CosMx-Cell-Profiles">CosMx™
+SMI</a> data. However, the function can also take other sources-profiles
+as long as they have the <a
+href="https://nanostring-biostats.github.io/CosMx-Analysis-Scratch-Space/posts/hybrid-reference-profiles/">appropriate
+formatting</a>.</p>
+<p>With this information, the function will assigned pre-defined cell
+types from the reference to the cells according to their expression
+profiles.</p>
+<p><img src="figure/clus_examples.Rmd/Sup-1.png" width="768" style="display: block; margin: auto;" /></p>
+</div>
+<div id="unsupervised-insitutype" class="section level2">
+<h2>Unsupervised InSituType</h2>
+<ol start="2" style="list-style-type: decimal">
+<li><a href="4.1_insitutype_unsup_clustering.html">Unsupervised
+clustering with InSituType + ScType annotation based on markers</a></li>
+</ol>
+<p>To run the InSituType unsupervised clustering method, the needed
+inputs are: 1) the raw, unnormalized expression matrix; 2) a vector with
+the mean negative probe expression per cell; and 3) a number or range of
+clusters to be evaluated.</p>
+<p>If a range is provided, the algorithm executes the clustering with
+all the different numbers of clusters and returns the one that provides
+the best fit.</p>
+<p>Afterwards, in the proposed pipeline, annotation has been performed
+using the ScType package, a computational method for automated
+annotation based on marker genes [5].</p>
+<p><img src="figure/clus_examples.Rmd/Unsup-1.png" width="768" style="display: block; margin: auto;" /></p>
+<ol start="3" style="list-style-type: decimal">
+<li><a href="4.2_seurat_unsup_clustering.html">Unsupervised clustering
+with Seurat-Louvain + ScType annotation based on markers</a></li>
+</ol>
+<p>In this case, the Seurat method can be run directly onto the Seurat
+object, providing the reduction and number of components to work
+with.</p>
+<p>This algorithm, unlike InSituType, does not require a specific number
+of clusters to be evaluated, instead, it calculates the appropriate
+number of clusters for the desired resolution. Afterwards, in the
+proposed pipeline, annotation has been performed using the ScType
+package [5], as previously.</p>
+<p><img src="figure/clus_examples.Rmd/SL-1.png" width="768" style="display: block; margin: auto;" /></p>
+</div>
+<div id="performance" class="section level2">
+<h2>Performance</h2>
+<table class="table table-striped table-hover table-condensed" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Chunk
+</th>
+<th style="text-align:right;">
+Time_sec
+</th>
+<th style="text-align:right;">
+Memory_Mb
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Sup
+</td>
+<td style="text-align:right;">
+988.45
+</td>
+<td style="text-align:right;">
+63.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Unsup
+</td>
+<td style="text-align:right;">
+159.81
+</td>
+<td style="text-align:right;">
+16.6
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+SNNClust
+</td>
+<td style="text-align:right;">
+64.89
+</td>
+<td style="text-align:right;">
+61.1
+</td>
+</tr>
+</tbody>
+</table>
+<p>In terms of time, the Seurat approach is faster out of the three.
+followed by InSituType unsupervised. However, it has to be mentioned
+that, in the supervised InSitutype method, a single step provides a full
+annotation of the cells, while in the unsupervised clustering methods,
+subsequent steps are needed to annotate the obtained clusters.</p>
+<p>On the other side, InSituType algorithm seems more memory efficient
+overall, showing very reduced memory consumption in the Unsupervised
+method and very comparable values between the supervised method and the
+unsupervised Seurat’s approach.</p>
+<hr />
+</div>
+</div>
+<div id="bibligraphy" class="section level1">
+<h1>Bibligraphy</h1>
+<ol style="list-style-type: decimal">
+<li><p>Qi R, Ma A, Ma Q, Zou Q. Clustering and classification methods
+for single-cell RNA-sequencing data. Briefings in Bioinformatics
+[Internet]. 2020 Jul 15 [cited 2025 May 7];21(4):1196–208. Available
+from: <a href="https://doi.org/10.1093/bib/bbz062"
+class="uri">https://doi.org/10.1093/bib/bbz062</a></p></li>
+<li><p>Zhang S, Li X, Lin J, Lin Q, Wong KC. Review of single-cell
+RNA-seq data clustering for cell-type identification and
+characterization. RNA [Internet]. 2023 May [cited 2025 May
+7];29(5):517–30. Available from: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10158997/"
+class="uri">https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10158997/</a></p></li>
+<li><p>Cheng A, Hu G, Li WV. Benchmarking cell-type clustering methods
+for spatially resolved transcriptomics data. Briefings in Bioinformatics
+[Internet]. 2023 Jan 1 [cited 2025 May 7];24(1):bbac475. Available from:
+<a href="https://doi.org/10.1093/bib/bbac475"
+class="uri">https://doi.org/10.1093/bib/bbac475</a></p></li>
+<li><p>Danaher P, Zhao E, Yang Z, Ross D, Gregory M, Reitz Z, et
+al. Insitutype: likelihood-based cell typing for single cell spatial
+transcriptomics [Internet]. Bioinformatics; 2022 [cited 2025 May 7].
+Available from: <a
+href="http://biorxiv.org/lookup/doi/10.1101/2022.10.19.512902"
+class="uri">http://biorxiv.org/lookup/doi/10.1101/2022.10.19.512902</a></p></li>
+<li><p>Ianevski A, Giri AK, Aittokallio T. Fully-automated and
+ultra-fast cell-type identification using specific marker combinations
+from single-cell transcriptomic data. Nat Commun [Internet]. 2022 Mar 10
+[cited 2025 Apr 16];13(1):1246. Available from: <a
+href="https://www.nature.com/articles/s41467-022-28803-w"
+class="uri">https://www.nature.com/articles/s41467-022-28803-w</a></p></li>
+</ol>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
+Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span></code></pre></div>
+<pre><code>R version 4.4.3 (2025-02-28 ucrt)
+Platform: x86_64-w64-mingw32/x64
+Running under: Windows 11 x64 (build 22000)
+
+Matrix products: default
+
+
+locale:
+[1] LC_COLLATE=Spanish_Spain.utf8  LC_CTYPE=Spanish_Spain.utf8   
+[3] LC_MONETARY=Spanish_Spain.utf8 LC_NUMERIC=C                  
+[5] LC_TIME=Spanish_Spain.utf8    
+
+time zone: Europe/Madrid
+tzcode source: internal
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+[1] patchwork_1.3.0    ggplot2_3.5.1      SeuratObject_4.1.4 Seurat_4.4.0      
+[5] kableExtra_1.4.0   dplyr_1.1.4        here_1.0.1         data.table_1.17.0 
+[9] workflowr_1.7.1   
+
+loaded via a namespace (and not attached):
+  [1] deldir_2.0-4           pbapply_1.7-2          gridExtra_2.3         
+  [4] rlang_1.1.6            magrittr_2.0.3         git2r_0.35.0          
+  [7] RcppAnnoy_0.0.22       spatstat.geom_3.3-5    matrixStats_1.5.0     
+ [10] ggridges_0.5.6         compiler_4.4.3         getPass_0.2-4         
+ [13] reshape2_1.4.4         png_0.1-8              systemfonts_1.2.1     
+ [16] callr_3.7.6            vctrs_0.6.5            stringr_1.5.1         
+ [19] pkgconfig_2.0.3        fastmap_1.2.0          labeling_0.4.3        
+ [22] promises_1.3.2         rmarkdown_2.29         ps_1.9.0              
+ [25] purrr_1.0.4            xfun_0.51              cachem_1.1.0          
+ [28] jsonlite_1.9.1         goftest_1.2-3          later_1.4.1           
+ [31] spatstat.utils_3.1-2   irlba_2.3.5.1          parallel_4.4.3        
+ [34] cluster_2.1.8          R6_2.6.1               ica_1.0-3             
+ [37] spatstat.data_3.1-6    bslib_0.9.0            stringi_1.8.4         
+ [40] RColorBrewer_1.1-3     reticulate_1.41.0.1    spatstat.univar_3.1-2 
+ [43] parallelly_1.43.0      scattermore_1.2        lmtest_0.9-40         
+ [46] jquerylib_0.1.4        Rcpp_1.0.14            knitr_1.50            
+ [49] tensor_1.5             future.apply_1.11.3    zoo_1.8-13            
+ [52] sctransform_0.4.1      httpuv_1.6.15          Matrix_1.7-2          
+ [55] splines_4.4.3          igraph_2.1.4           tidyselect_1.2.1      
+ [58] abind_1.4-8            rstudioapi_0.17.1      yaml_2.3.10           
+ [61] spatstat.random_3.3-2  spatstat.explore_3.3-4 codetools_0.2-20      
+ [64] miniUI_0.1.1.1         processx_3.8.6         listenv_0.9.1         
+ [67] plyr_1.8.9             lattice_0.22-6         tibble_3.2.1          
+ [70] withr_3.0.2            shiny_1.10.0           ROCR_1.0-11           
+ [73] evaluate_1.0.3         Rtsne_0.17             future_1.34.0         
+ [76] survival_3.8-3         polyclip_1.10-7        xml2_1.3.7            
+ [79] fitdistrplus_1.2-2     pillar_1.10.1          whisker_0.4.1         
+ [82] KernSmooth_2.23-26     plotly_4.10.4          generics_0.1.3        
+ [85] rprojroot_2.0.4        sp_2.2-0               munsell_0.5.1         
+ [88] scales_1.3.0           globals_0.16.3         xtable_1.8-4          
+ [91] glue_1.8.0             lazyeval_0.2.2         tools_4.4.3           
+ [94] RANN_2.6.2             fs_1.6.5               leiden_0.4.3.1        
+ [97] cowplot_1.1.3          grid_4.4.3             tidyr_1.3.1           
+[100] colorspace_2.1-1       nlme_3.1-167           cli_3.6.4             
+[103] spatstat.sparse_3.1-0  viridisLite_0.4.2      svglite_2.1.3         
+[106] uwot_0.2.3             gtable_0.3.6           sass_0.4.9            
+[109] digest_0.6.37          progressr_0.15.1       ggrepel_0.9.6         
+[112] htmlwidgets_1.6.4      farver_2.1.2           htmltools_0.5.8.1     
+[115] lifecycle_1.0.4        httr_1.4.7             mime_0.12             
+[118] MASS_7.3-65           </code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+https://docs.mathjax.org/en/latest/web/configuration.html. This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
