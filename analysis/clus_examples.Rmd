@@ -56,15 +56,35 @@ pr_ISTSup <- fread(here("output","performance_reports","4.0_insitutype_cell_typi
 pr_ISTUnsup <- fread(here("output","performance_reports","4.1_insitutype_unsup_clustering_PR.csv"))
 pr_SL <- fread(here("output","performance_reports","4.2_seurat_unsup_clustering_PR.csv"))
 ```
+
+```{r SortLevels, echo = FALSE}
+# Sort labels of the unsupervised Seurat objects and order them similarly
+# to improve visualization and comparison#
+levels_ISTUnsup <- sort(levels(Idents(seu_ISTUnsup))) # Current levels
+levels_SL <- sort(levels(Idents(seu_SL)))
+
+common <- intersect(levels_ISTUnsup, levels_SL) # Common levels
+
+rest_ISTUnsup <- setdiff(levels_ISTUnsup, common) # ISTUnsup exclusive levels
+rest_SL <- setdiff(levels_SL, common) # SL exclusive levels
+
+new_levels_ISTUnsup <- c(common, rest_ISTUnsup) # New levels
+new_levels_SL <- c(common, rest_SL)
+
+# Apply new level order to the Seurat object
+Idents(seu_ISTUnsup) <- factor(Idents(seu_ISTUnsup), 
+                               levels = new_levels_ISTUnsup)
+
+Idents(seu_SL) <- factor(Idents(seu_SL), 
+                         levels = new_levels_SL)
+```
+
 ```{r UMAPs, echo = FALSE}
 # Create custom color palettes
 n_ISTSup <- length(unique(Idents(seu_ISTSup)))
 cols_ISTSup <- gg_color_hue(n_ISTSup)
 
-n_ISTUnsup <- length(unique(Idents(seu_ISTUnsup)))
-cols_ISTUnsup <- gg_color_hue(n_ISTUnsup)
-
-n_SL <- length(unique(Idents(seu_SL)))
+n_SL <- length(unique(Idents(seu_SL))) # Share SL colors for both Unsup plots
 cols_SL <- gg_color_hue(n_SL)
 
 # DimPlots of each clustering method
@@ -72,7 +92,7 @@ p1 <- DimPlot(seu_ISTSup, reduction = "umap", label = FALSE, cols = cols_ISTSup,
               raster = FALSE) +
   ggtitle("Supervised InSituType")
 
-p2 <- DimPlot(seu_ISTUnsup, reduction = "umap", label = FALSE, cols = cols_ISTUnsup,
+p2 <- DimPlot(seu_ISTUnsup, reduction = "umap", label = FALSE, cols = cols_SL,
               raster = FALSE) +
   ggtitle("Unsupervised InSituType + ScType")
 
@@ -85,7 +105,7 @@ p3 <- DimPlot(seu_SL, reduction = "umap", label = FALSE, cols = cols_SL,
 
 ## Supervised InSituType
 
-1.  [Cell typing with InSituType Supervised classification](4.0_insitutype_cell_typing.html)
+[Cell typing with InSituType Supervised classification](4.0_insitutype_cell_typing.html)
 
 To run the InSituType supervised algorithm, three inputs are needed: 1) the raw, unnormalized expression matrix; 2) a vector with the mean negative probe expression per cell; and 3) a reference profile.
 
@@ -99,7 +119,7 @@ p1
 
 ## Unsupervised InSituType
 
-2.  [Unsupervised clustering with InSituType + ScType annotation based on markers](4.1_insitutype_unsup_clustering.html)
+[Unsupervised clustering with InSituType + ScType annotation based on markers](4.1_insitutype_unsup_clustering.html)
 
 To run the InSituType unsupervised clustering method, the needed inputs are: 1) the raw, unnormalized expression matrix; 2) a vector with the mean negative probe expression per cell; and 3) a number or range of clusters to be evaluated.
 
@@ -108,10 +128,12 @@ If a range is provided, the algorithm executes the clustering with all the diffe
 Afterwards, in the proposed pipeline, annotation has been performed using the ScType package, a computational method for automated annotation based on marker genes [5].
 
 ```{r Unsup, echo = FALSE, fig.width = 8, fig.height = 5}
-p2 + theme(legend.position = "bottom")
+p2
 ```
 
-3.  [Unsupervised clustering with Seurat-Louvain + ScType annotation based on markers](4.2_seurat_unsup_clustering.html)
+## Unsupervised Seurat-Louvain
+
+[Unsupervised clustering with Seurat-Louvain + ScType annotation based on markers](4.2_seurat_unsup_clustering.html)
 
 In this case, the Seurat method can be run directly onto the Seurat object, providing the reduction and number of components to work with.
 
@@ -134,9 +156,11 @@ knitr::kable(comp, row.names = FALSE, format = "html") %>%
   kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
 ```
 
-In terms of time, the Seurat approach is faster out of the three. followed by InSituType unsupervised. However, it has to be mentioned that, in the supervised InSitutype method, a single step provides a full annotation of the cells, while in the unsupervised clustering methods, subsequent steps are needed to annotate the obtained clusters.  
+In terms of time, the Seurat approach is faster out of the three, followed by unsupervised InSituType. On the other side, supervised InSituType algorithm takes almost 16 minutes to compute, but it is not more memory consuming than the Seurat approach, for example.  
 
-On the other side, InSituType algorithm seems more memory efficient overall, showing very reduced memory consumption in the Unsupervised method and very comparable values between the supervised method and the unsupervised Seurat's approach.  
+Overall, unsupervised InSituType is
+
+, but provides full cell annotation based on a very reliable profile and seems more memory efficient overall, showing very reduced memory consumption in the Unsupervised method and very comparable values between the supervised method and the unsupervised Seurat's approach.  
 
 ------------------------------------------------------------------------
 

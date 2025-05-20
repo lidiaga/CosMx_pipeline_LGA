@@ -131,7 +131,7 @@ knitr::kable(comp, row.names = FALSE, format = "html") %>%
   kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
 ```
 
-In terms of time and memory usage, methods "RC" and "LogNormalize" (including "FindVariableFeatures" and "ScaleData") are both less memory and time consuming, while "SCTransform" requires higher computing resources.
+In terms of time and memory usage, methods "RC" and "LogNormalize" (including "FindVariableFeatures" and "ScaleData") are both less memory and time consuming, while "SCTransform" requires higher computing resources, but provides a better UMAP.
 
 ------------------------------------------------------------------------
 
