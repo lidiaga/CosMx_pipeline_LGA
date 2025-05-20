@@ -560,13 +560,13 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrong2b284f3">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongdf0ca86">
 <span class="glyphicon glyphicon-ok text-success"
-aria-hidden="true"></span> <strong>Repository version:</strong> 2b284f3
+aria-hidden="true"></span> <strong>Repository version:</strong> df0ca86
 </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrong2b284f3"
+<div id="strongRepositoryversionstrongdf0ca86"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -575,7 +575,7 @@ and connecting the code version to the results is critical for
 reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version 2b284f3.
+The results in this page were generated with repository version df0ca86.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -621,6 +621,7 @@ Unstaged changes:
     Modified:   output/performance_reports/5.1_RC_dimensional_reduction_PR.csv
     Modified:   output/performance_reports/6.0_Log_normalization_PR.csv
     Modified:   output/performance_reports/6.1_Log_dimensional_reduction_PR.csv
+    Modified:   output/performance_reports/pipeline_PR.csv
 
 </code></pre>
 <p>
@@ -665,6 +666,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+df0ca86
+</td>
+<td>
+lidiaga
+</td>
+<td>
+2025-05-20
+</td>
+<td>
+Fix formatting errors in web sections
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+8a9f079
+</td>
+<td>
+lidiaga
+</td>
+<td>
+2025-05-20
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -778,6 +813,43 @@ is influencing the data and if any additional procedure is needed before
 continuing the analysis: increase filtering thresholds, try another
 normalization method, test a different number of PCs, etc.</p>
 <p><img src="figure/norm_examples.Rmd/UMAPs-1.png" width="1056" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-UMAPs-1">
+Past versions of UMAPs-1.png
+</button>
+</p>
+<div id="fig-UMAPs-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+8a9f079
+</td>
+<td>
+lidiaga
+</td>
+<td>
+2025-05-20
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <p>In this example, the UMAP plots in the right are by the total number
 of transcripts, and it can be observed that both “RC” and “SCTransform”
 seem to have corrected the technical effect of size coverage, while in
@@ -852,7 +924,7 @@ Norm
 <p>In terms of time and memory usage, methods “RC” and “LogNormalize”
 (including “FindVariableFeatures” and “ScaleData”) are both less memory
 and time consuming, while “SCTransform” requires higher computing
-resources.</p>
+resources, but provides a better UMAP.</p>
 <hr />
 </div>
 </div>

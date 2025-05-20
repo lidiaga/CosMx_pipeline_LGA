@@ -560,13 +560,13 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrong2b284f3">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongdf0ca86">
 <span class="glyphicon glyphicon-ok text-success"
-aria-hidden="true"></span> <strong>Repository version:</strong> 2b284f3
+aria-hidden="true"></span> <strong>Repository version:</strong> df0ca86
 </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrong2b284f3"
+<div id="strongRepositoryversionstrongdf0ca86"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -575,7 +575,7 @@ and connecting the code version to the results is critical for
 reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version 2b284f3.
+The results in this page were generated with repository version df0ca86.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -621,6 +621,7 @@ Unstaged changes:
     Modified:   output/performance_reports/5.1_RC_dimensional_reduction_PR.csv
     Modified:   output/performance_reports/6.0_Log_normalization_PR.csv
     Modified:   output/performance_reports/6.1_Log_dimensional_reduction_PR.csv
+    Modified:   output/performance_reports/pipeline_PR.csv
 
 </code></pre>
 <p>
@@ -665,6 +666,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+df0ca86
+</td>
+<td>
+lidiaga
+</td>
+<td>
+2025-05-20
+</td>
+<td>
+Fix formatting errors in web sections
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+8a9f079
+</td>
+<td>
+lidiaga
+</td>
+<td>
+2025-05-20
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -774,10 +809,8 @@ However, in this section, all three alternatives can be explored.</p>
 <h1>Examples</h1>
 <div id="supervised-insitutype" class="section level2">
 <h2>Supervised InSituType</h2>
-<ol style="list-style-type: decimal">
-<li><a href="4.0_insitutype_cell_typing.html">Cell typing with
-InSituType Supervised classification</a></li>
-</ol>
+<p><a href="4.0_insitutype_cell_typing.html">Cell typing with InSituType
+Supervised classification</a></p>
 <p>To run the InSituType supervised algorithm, three inputs are needed:
 1) the raw, unnormalized expression matrix; 2) a vector with the mean
 negative probe expression per cell; and 3) a reference profile.</p>
@@ -793,13 +826,48 @@ formatting</a>.</p>
 types from the reference to the cells according to their expression
 profiles.</p>
 <p><img src="figure/clus_examples.Rmd/Sup-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-Sup-1">
+Past versions of Sup-1.png
+</button>
+</p>
+<div id="fig-Sup-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+8a9f079
+</td>
+<td>
+lidiaga
+</td>
+<td>
+2025-05-20
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="unsupervised-insitutype" class="section level2">
 <h2>Unsupervised InSituType</h2>
-<ol start="2" style="list-style-type: decimal">
-<li><a href="4.1_insitutype_unsup_clustering.html">Unsupervised
-clustering with InSituType + ScType annotation based on markers</a></li>
-</ol>
+<p><a href="4.1_insitutype_unsup_clustering.html">Unsupervised
+clustering with InSituType + ScType annotation based on markers</a></p>
 <p>To run the InSituType unsupervised clustering method, the needed
 inputs are: 1) the raw, unnormalized expression matrix; 2) a vector with
 the mean negative probe expression per cell; and 3) a number or range of
@@ -811,10 +879,48 @@ the best fit.</p>
 using the ScType package, a computational method for automated
 annotation based on marker genes [5].</p>
 <p><img src="figure/clus_examples.Rmd/Unsup-1.png" width="768" style="display: block; margin: auto;" /></p>
-<ol start="3" style="list-style-type: decimal">
-<li><a href="4.2_seurat_unsup_clustering.html">Unsupervised clustering
-with Seurat-Louvain + ScType annotation based on markers</a></li>
-</ol>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-Unsup-1">
+Past versions of Unsup-1.png
+</button>
+</p>
+<div id="fig-Unsup-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+8a9f079
+</td>
+<td>
+lidiaga
+</td>
+<td>
+2025-05-20
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div id="unsupervised-seurat-louvain" class="section level2">
+<h2>Unsupervised Seurat-Louvain</h2>
+<p><a href="4.2_seurat_unsup_clustering.html">Unsupervised clustering
+with Seurat-Louvain + ScType annotation based on markers</a></p>
 <p>In this case, the Seurat method can be run directly onto the Seurat
 object, providing the reduction and number of components to work
 with.</p>
@@ -824,6 +930,43 @@ number of clusters for the desired resolution. Afterwards, in the
 proposed pipeline, annotation has been performed using the ScType
 package [5], as previously.</p>
 <p><img src="figure/clus_examples.Rmd/SL-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-SL-1">
+Past versions of SL-1.png
+</button>
+</p>
+<div id="fig-SL-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+8a9f079
+</td>
+<td>
+lidiaga
+</td>
+<td>
+2025-05-20
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="performance" class="section level2">
 <h2>Performance</h2>
@@ -877,15 +1020,16 @@ SNNClust
 </tr>
 </tbody>
 </table>
-<p>In terms of time, the Seurat approach is faster out of the three.
-followed by InSituType unsupervised. However, it has to be mentioned
-that, in the supervised InSitutype method, a single step provides a full
-annotation of the cells, while in the unsupervised clustering methods,
-subsequent steps are needed to annotate the obtained clusters.</p>
-<p>On the other side, InSituType algorithm seems more memory efficient
-overall, showing very reduced memory consumption in the Unsupervised
-method and very comparable values between the supervised method and the
-unsupervised Seurat’s approach.</p>
+<p>In terms of time, the Seurat approach is faster out of the three,
+followed by unsupervised InSituType. On the other side, supervised
+InSituType algorithm takes almost 16 minutes to compute, but it is not
+more memory consuming than the Seurat approach, for example.</p>
+<p>Overall, unsupervised InSituType is</p>
+<p>, but provides full cell annotation based on a very reliable profile
+and seems more memory efficient overall, showing very reduced memory
+consumption in the Unsupervised method and very comparable values
+between the supervised method and the unsupervised Seurat’s
+approach.</p>
 <hr />
 </div>
 </div>

@@ -559,13 +559,13 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrong2b284f3">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongdf0ca86">
 <span class="glyphicon glyphicon-ok text-success"
-aria-hidden="true"></span> <strong>Repository version:</strong> 2b284f3
+aria-hidden="true"></span> <strong>Repository version:</strong> df0ca86
 </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrong2b284f3"
+<div id="strongRepositoryversionstrongdf0ca86"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -574,7 +574,7 @@ and connecting the code version to the results is critical for
 reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version 2b284f3.
+The results in this page were generated with repository version df0ca86.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -620,6 +620,7 @@ Unstaged changes:
     Modified:   output/performance_reports/5.1_RC_dimensional_reduction_PR.csv
     Modified:   output/performance_reports/6.0_Log_normalization_PR.csv
     Modified:   output/performance_reports/6.1_Log_dimensional_reduction_PR.csv
+    Modified:   output/performance_reports/pipeline_PR.csv
 
 </code></pre>
 <p>
@@ -664,6 +665,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+df0ca86
+</td>
+<td>
+lidiaga
+</td>
+<td>
+2025-05-20
+</td>
+<td>
+Fix formatting errors in web sections
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+8a9f079
+</td>
+<td>
+lidiaga
+</td>
+<td>
+2025-05-20
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -893,8 +928,8 @@ Total
 </table>
 <p>In terms of time and memory usage, the example analysis shown in the
 pipeline vignettes (using SCTransform as normalization method and
-InSituType Supervised classification for cell typing) takes 22 minutes
-and 43 seconds to execute, and 62,9 Gb of memory consumption.</p>
+InSituType Supervised classification for cell typing) takes ~25 minutes
+to execute, and 62,9 Gb of memory consumption.</p>
 <p>However, other pipeline alternatives have also been executed in this
 project and their total performances in time and memory are:</p>
 <table class="table table-striped table-hover table-condensed" style="margin-left: auto; margin-right: auto;">
@@ -985,20 +1020,20 @@ consuption of the execution of the pipeline from data loading to
 dimensional reduction, using each of the different normalization
 alternatives:</p>
 <ul>
-<li><p><strong>RC:</strong> 4min 36sec and 34.2 Gb.</p></li>
-<li><p><strong>Log:</strong> 4min 8sec and 34.2 Gb.</p></li>
-<li><p><strong>SCT:</strong> 5min 10sec and 34.2 Gb.</p></li>
+<li><p><strong>RC:</strong> ~5 minutes and 34.2 Gb.</p></li>
+<li><p><strong>Log:</strong> ~5 minutes and 34.2 Gb.</p></li>
+<li><p><strong>SCT:</strong> ~6 minutes and 34.2 Gb.</p></li>
 </ul>
 <p>The last three rows correspond to the total time an memory consuption
 of the execution of the pipeline from data loading to cell typing, using
 the SCTransform normalization and each of the different cell typing
 alternatives:</p>
 <ul>
-<li><p><strong>SCT + Supervised InSituType:</strong> 22min 43sec to and
+<li><p><strong>SCT + Supervised InSituType:</strong> ~25 minutes and
 62,9 Gb.</p></li>
-<li><p><strong>SCT + Unsupervised InSituType:</strong> 10min 34sec to
-and 62,7 Gb.</p></li>
-<li><p><strong>SCT + Seurat-Louvain:</strong> 8min 54sec and 58,6
+<li><p><strong>SCT + Unsupervised InSituType:</strong> ~11 minutes and
+62,7 Gb.</p></li>
+<li><p><strong>SCT + Seurat-Louvain:</strong> ~9 minutes and 58,6
 Gb.</p></li>
 </ul>
 <hr />
