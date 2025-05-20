@@ -20,7 +20,13 @@ Finally, special mention to the *Scratch Space Vignette: Basics of CosMx Analysi
 
 The proposed pipeline consists of five main phases: data loading, QC and filtering, normalization, dimensional reduction and cell typing:
 
-![**Pipeline flowchart.** Created using Lucidchart software. **Blue:** potential input files to the pipeline; **Dark gray:** main processes; **Light gray:** subprocesses; **Orange:** output files, with those involved in later stages of the workflow highlighted in dark; **Solid lines:** gray, general pipeline flow, and blue, file input flow; **Dashed lines:** alternative or optional flows. Red represents processes that were not developed in this work due to time constraints, but could be included in future versions or pipeline improvements, such as the multi-sample integration phase or the semi-supervised clustering alternative.](images/Pipeline_eng.svg){width="463"}
+::: {style="text-align: center;"}
+![](images/Pipeline_eng.svg){width="500"}
+:::
+
+::: {style="font-size: smaller; text-align: justify;"}
+**Figure 1. Pipeline flowchart.** Created using Lucidchart software. **Blue:** potential input files to the pipeline; **Dark gray:** main processes; **Light gray:** subprocesses; **Orange:** output files, with those involved in later stages of the workflow highlighted in dark; **Solid lines:** gray, general pipeline flow, and blue, file input flow; **Dashed lines:** alternative or optional flows. Red represents processes that were not developed in this work due to time constraints, but could be included in future versions or pipeline improvements, such as the multi-sample integration phase or the semi-supervised clustering alternative.
+:::
 
 With the goal of creating a flexible pipeline, the documents have been parameterized, as far as possible, to allow for a variety of options without affecting their proper functioning. However, the Cell typing phase is subdivided into three independent scripts, given the complexity of executing the different alternatives that the pipeline contemplates:
 
@@ -54,20 +60,70 @@ source(
   local = knitr::knit_global())
 ```
 
-```{r TotalPR, echo = FALSE}
+```{r TotalPR1, echo = FALSE}
 # Load PR reports
 pr_files <- list.files(here("output","performance_reports"))
-pr_files <- pr_files[1:5] # Select only Main Pipeline PR reports
+pr_SCT_ISTSup <- pr_files[1:5] # Select PR reports of interest
 
 # Calculate total time and memory consumed in selected files
-totals <- total_time_mem(pr_files)
+totals <- total_time_mem(pr_SCT_ISTSup)
 
 # Show table
 knitr::kable(totals, row.names = FALSE, format = "html") %>%
   kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
 ```
 
-In terms of time and memory usage, the example analysis shown in the pipeline vignettes (using SCTransform as normalization method and InSituType Supervised classification for cell typing) takes 23 minutes and 52 seconds to execute, and 62,9 Gb of memory consumption.
+In terms of time and memory usage, the example analysis shown in the pipeline vignettes (using SCTransform as normalization method and InSituType Supervised classification for cell typing) takes 22 minutes and 43 seconds to execute, and 62,9 Gb of memory consumption.
+
+However, other pipeline alternatives have also been executed in this project and their total performances in time and memory are:
+
+```{r TotalPR2, echo = FALSE}
+# Select PR reports of other alternatives and extract the "Total" row (last)
+pr_list <- list(
+  RC = total_time_mem(pr_files[c(1,2,8,9)])[5,],
+  Log =total_time_mem(pr_files[c(1,2,10,11)])[5,],
+  SCT = total_time_mem(pr_files[c(1,2,3,4)])[5,],
+  SCT_ISTSup = total_time_mem(pr_files[c(1,2,3,4,5)])[6,],
+  SCT_ISTUnsup = total_time_mem(pr_files[c(1,2,3,4,6)])[6,],
+  SCT_SL = total_time_mem(pr_files[c(1,2,3,4,7)])[6,]
+)
+
+# Create table for display
+totals <- data.frame("Alternative" = character(0),
+                     "Total_time_sec" = numeric(0),
+                     "Total_memory_Mb" = numeric(0))
+
+for (i in 1:length(pr_list)) {
+  alt <- names(pr_list[i])
+  time <- pr_list[[i]][,2]
+  mem <- pr_list[[i]][,3]
+  totals <- rbind(totals,
+                  data.frame("Alternative" = alt,
+                             "Total_time_sec" = time,
+                             "Total_memory_Mb" = mem,
+                             stringsAsFactors = FALSE))
+  }
+
+# Show table
+knitr::kable(totals, row.names = FALSE, format = "html") %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
+```
+
+The first three rows correspond to the total time an memory consuption of the execution of the pipeline from data loading to dimensional reduction, using each of the different normalization alternatives:
+
+-   **RC:** 4min 36sec and 34.2 Gb.
+
+-   **Log:** 4min 8sec and 34.2 Gb.
+
+-   **SCT:** 5min 10sec and 34.2 Gb.
+
+The last three rows correspond to the total time an memory consuption of the execution of the pipeline from data loading to cell typing, using the SCTransform normalization and each of the different cell typing alternatives:
+
+-   **SCT + Supervised InSituType:** 22min 43sec to and 62,9 Gb.
+
+-   **SCT + Unsupervised InSituType:** 10min 34sec to and 62,7 Gb.
+
+-   **SCT + Seurat-Louvain:** 8min 54sec and 58,6 Gb.
 
 ------------------------------------------------------------------------
 
