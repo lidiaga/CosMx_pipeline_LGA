@@ -1,0 +1,16 @@
+"Chunk","Time_sec","Memory_Mb"
+"Libraries",2.55,147
+"LocateFiles",0.19,0
+"LoadSlide_1",6.28,219.4
+"ExploringFOVpositions",0.21,0.7
+"ExploringMetadata",0.22,0.1
+"ExploringExprMat",0.22,0
+"PreparingExprMat",4.4,2.8
+"PreparingFOVpositions",0.21,0.1
+"PreparingMetadata",0.71,2.8
+"SavingData",12.28,0
+"CreateSeuObj",2.29,215.5
+"UnassignedTxFrac",0.29,3.2
+"Coords",0.43,4.9
+"SavingSeuObj",15.61,0
+"Total",45.89,596.5
