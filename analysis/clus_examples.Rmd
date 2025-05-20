@@ -108,7 +108,7 @@ If a range is provided, the algorithm executes the clustering with all the diffe
 Afterwards, in the proposed pipeline, annotation has been performed using the ScType package, a computational method for automated annotation based on marker genes [5].
 
 ```{r Unsup, echo = FALSE, fig.width = 8, fig.height = 5}
-p2
+p2 + theme(legend.position = "bottom")
 ```
 
 3.  [Unsupervised clustering with Seurat-Louvain + ScType annotation based on markers](4.2_seurat_unsup_clustering.html)
