@@ -1,7 +1,7 @@
 name: CosMx_pipeline_LGA
 output_dir: ../docs
 navbar:
-  title: CosMx™ SMI Data Analysis - TFM UOC
+  title: CosMx™ SMI Data Analysis Pipeline
   left:
   - text: Home
     href: index.html
@@ -26,6 +26,10 @@ navbar:
   - text: Cell typing
     href: clus_examples.html
   right:
+  - text: About
+    href: about.html
+  - text: License
+    href: license.html
   - icon: fab fa-github
     text: Source code
     href: https://github.com/lidiaga/CosMx_pipeline_LGA

@@ -1,7 +1,7 @@
 "Chunk","Time_sec","Memory_Mb"
-"Libraries",2.54,146.8
-"LoadData",2.2,425.2
-"Norm",45.63,774.6
-"VizVar",1.02,11.3
-"SavingSeuObjs",47.53,0
-"Total",98.92,1357.9
+"Libraries",2.06,146.8
+"LoadData",1.94,425.2
+"Norm",41.02,774.5
+"VizVar",0.85,11.4
+"SavingSeuObjs",41.72,0
+"Total",87.59,1357.9

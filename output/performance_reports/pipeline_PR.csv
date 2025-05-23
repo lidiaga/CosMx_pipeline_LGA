@@ -1,7 +1,7 @@
 "Phase","Total_time_sec","Total_memory_Mb"
-"0.0_data_loading_PR.csv",42.44,596.5
-"1.0_qc_and_filtering_PR.csv",64.57,898.9
-"2.0_normalization_PR.csv",98.92,1357.9
-"3.0_dimensional_reduction_PR.csv",170.29,1415.9
-"4.2_seurat_unsup_clustering_PR.csv",164.18,1595
-"Total",540.4,5864.2
+"0.0_data_loading_PR.csv",42.77,596.4
+"1.0_qc_and_filtering_PR.csv",53.68,898.9
+"2.0_normalization_PR.csv",87.59,1357.9
+"3.0_dimensional_reduction_PR.csv",135.82,1416.1
+"4.2_seurat_unsup_clustering_PR.csv",166.67,1594.8
+"Total",486.53,5864.1
