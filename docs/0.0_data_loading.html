@@ -35,6 +35,8 @@
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <script src="site_libs/kePrint-0.0.1/kePrint.js"></script>
 <link href="site_libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-6.5.2/css/all.min.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet" />
 
 <link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/main/img/reproducible.png">
 <!-- Add a small amount of space between sections. -->
@@ -453,18 +455,19 @@ div.tocify {
   </ul>
 </li>
 <li>
-  <a href="clus_examples.html">Cell typing</a>
+  <a href="norm_examples.html">Normalization</a>
 </li>
 <li>
-  <a href="norm_examples.html">Normalization</a>
+  <a href="clus_examples.html">Cell typing</a>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="about.html">About</a>
-</li>
-<li>
-  <a href="license.html">License</a>
+  <a href="https://github.com/lidiaga/CosMx_pipeline_LGA">
+    <span class="fab fa-github"></span>
+     
+    Source code
+  </a>
 </li>
       </ul>
     </div><!--/.nav-collapse -->
@@ -480,7 +483,7 @@ Creation</h1>
 <h4 class="author">Lidia Getino Álvarez</h4>
 <address class="author_afil">
 M0.207 TFM - MU Bioinformática y Bioestadística
-(UOC)<br><h4 class="date">20 mayo 2025</h4>
+(UOC)<br><h4 class="date">23 mayo 2025</h4>
 
 </div>
 
@@ -509,7 +512,7 @@ class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2025-05-20
+<strong>Last updated:</strong> 2025-05-23
 </p>
 <p>
 <strong>Checks:</strong> <span
@@ -640,13 +643,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrong2b284f3">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomlidiagaCosMxpipelineLGAtree510334acb25df674e2ce3ef506935daee773a1e6targetblank510334aa">
 <span class="glyphicon glyphicon-ok text-success"
-aria-hidden="true"></span> <strong>Repository version:</strong> 2b284f3
+aria-hidden="true"></span> <strong>Repository version:</strong>
+<a href="https://github.com/lidiaga/CosMx_pipeline_LGA/tree/510334acb25df674e2ce3ef506935daee773a1e6" target="_blank">510334a</a>
 </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrong2b284f3"
+<div
+id="strongRepositoryversionstrongahrefhttpsgithubcomlidiagaCosMxpipelineLGAtree510334acb25df674e2ce3ef506935daee773a1e6targetblank510334aa"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -655,7 +660,8 @@ and connecting the code version to the results is critical for
 reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version 2b284f3.
+The results in this page were generated with repository version
+<a href="https://github.com/lidiaga/CosMx_pipeline_LGA/tree/510334acb25df674e2ce3ef506935daee773a1e6" target="_blank">510334a</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -688,12 +694,6 @@ Ignored files:
 
 Untracked files:
     Untracked:  analysis/images/
-
-Unstaged changes:
-    Modified:   output/performance_reports/0.0_data_loading_PR.csv
-    Modified:   output/performance_reports/1.0_qc_and_filtering_PR.csv
-    Modified:   output/performance_reports/2.0_normalization_PR.csv
-    Modified:   output/performance_reports/3.0_dimensional_reduction_PR.csv
 
 </code></pre>
 <p>
@@ -740,10 +740,27 @@ Message
 <tbody>
 <tr>
 <td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/lidiaga/CosMx_pipeline_LGA/8a9f0793310c4c606162910bca3828d6d78961ba/docs/0.0_data_loading.html" target="_blank">8a9f079</a>
+</td>
+<td>
+lidiaga
+</td>
+<td>
+2025-05-20
+</td>
+<td>
+Build site.
+</td>
+</tr>
+<tr>
+<td>
 Rmd
 </td>
 <td>
-8410a10
+<a href="https://github.com/lidiaga/CosMx_pipeline_LGA/blob/8410a10397cb5f667b39af5a9df106d5a9ed5706/analysis/0.0_data_loading.Rmd" target="_blank">8410a10</a>
 </td>
 <td>
 lidiaga
@@ -1249,7 +1266,7 @@ Memory_Mb
 Libraries
 </td>
 <td style="text-align:right;">
-2.22
+3.43
 </td>
 <td style="text-align:right;">
 147.0
@@ -1260,7 +1277,7 @@ Libraries
 LocateFiles
 </td>
 <td style="text-align:right;">
-0.18
+0.17
 </td>
 <td style="text-align:right;">
 0.0
@@ -1271,7 +1288,7 @@ LocateFiles
 LoadSlide_1
 </td>
 <td style="text-align:right;">
-4.85
+5.05
 </td>
 <td style="text-align:right;">
 219.4
@@ -1304,7 +1321,7 @@ ExploringMetadata
 ExploringExprMat
 </td>
 <td style="text-align:right;">
-0.22
+0.23
 </td>
 <td style="text-align:right;">
 0.0
@@ -1315,7 +1332,7 @@ ExploringExprMat
 PreparingExprMat
 </td>
 <td style="text-align:right;">
-4.18
+4.15
 </td>
 <td style="text-align:right;">
 2.8
@@ -1326,10 +1343,10 @@ PreparingExprMat
 PreparingFOVpositions
 </td>
 <td style="text-align:right;">
-0.18
+0.19
 </td>
 <td style="text-align:right;">
-0.1
+0.0
 </td>
 </tr>
 <tr>
@@ -1337,10 +1354,10 @@ PreparingFOVpositions
 PreparingMetadata
 </td>
 <td style="text-align:right;">
-0.63
+0.67
 </td>
 <td style="text-align:right;">
-2.8
+2.7
 </td>
 </tr>
 <tr>
@@ -1348,7 +1365,7 @@ PreparingMetadata
 SavingData
 </td>
 <td style="text-align:right;">
-11.50
+11.31
 </td>
 <td style="text-align:right;">
 0.0
@@ -1359,7 +1376,7 @@ SavingData
 CreateSeuObj
 </td>
 <td style="text-align:right;">
-2.13
+2.14
 </td>
 <td style="text-align:right;">
 215.5
@@ -1370,10 +1387,10 @@ CreateSeuObj
 UnassignedTxFrac
 </td>
 <td style="text-align:right;">
-0.23
+0.22
 </td>
 <td style="text-align:right;">
-3.2
+3.3
 </td>
 </tr>
 <tr>
@@ -1381,7 +1398,7 @@ UnassignedTxFrac
 Coords
 </td>
 <td style="text-align:right;">
-0.41
+0.40
 </td>
 <td style="text-align:right;">
 4.9
@@ -1392,7 +1409,7 @@ Coords
 SavingSeuObj
 </td>
 <td style="text-align:right;">
-15.33
+15.22
 </td>
 <td style="text-align:right;">
 0.0
@@ -1403,10 +1420,10 @@ SavingSeuObj
 Total
 </td>
 <td style="text-align:right;">
-42.44
+43.56
 </td>
 <td style="text-align:right;">
-596.5
+596.4
 </td>
 </tr>
 </tbody>

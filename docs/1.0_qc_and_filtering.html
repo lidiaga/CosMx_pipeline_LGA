@@ -35,6 +35,8 @@
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <script src="site_libs/kePrint-0.0.1/kePrint.js"></script>
 <link href="site_libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-6.5.2/css/all.min.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet" />
 
 <link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/main/img/reproducible.png">
 <!-- Add a small amount of space between sections. -->
@@ -453,18 +455,19 @@ div.tocify {
   </ul>
 </li>
 <li>
-  <a href="clus_examples.html">Cell typing</a>
+  <a href="norm_examples.html">Normalization</a>
 </li>
 <li>
-  <a href="norm_examples.html">Normalization</a>
+  <a href="clus_examples.html">Cell typing</a>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="about.html">About</a>
-</li>
-<li>
-  <a href="license.html">License</a>
+  <a href="https://github.com/lidiaga/CosMx_pipeline_LGA">
+    <span class="fab fa-github"></span>
+     
+    Source code
+  </a>
 </li>
       </ul>
     </div><!--/.nav-collapse -->
@@ -479,7 +482,7 @@ div.tocify {
 <h4 class="author">Lidia Getino Álvarez</h4>
 <address class="author_afil">
 M0.207 TFM - MU Bioinformática y Bioestadística
-(UOC)<br><h4 class="date">20 mayo 2025</h4>
+(UOC)<br><h4 class="date">23 mayo 2025</h4>
 
 </div>
 
@@ -508,7 +511,7 @@ class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2025-05-20
+<strong>Last updated:</strong> 2025-05-23
 </p>
 <p>
 <strong>Checks:</strong> <span
@@ -639,13 +642,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrong2b284f3">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomlidiagaCosMxpipelineLGAtree510334acb25df674e2ce3ef506935daee773a1e6targetblank510334aa">
 <span class="glyphicon glyphicon-ok text-success"
-aria-hidden="true"></span> <strong>Repository version:</strong> 2b284f3
+aria-hidden="true"></span> <strong>Repository version:</strong>
+<a href="https://github.com/lidiaga/CosMx_pipeline_LGA/tree/510334acb25df674e2ce3ef506935daee773a1e6" target="_blank">510334a</a>
 </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrong2b284f3"
+<div
+id="strongRepositoryversionstrongahrefhttpsgithubcomlidiagaCosMxpipelineLGAtree510334acb25df674e2ce3ef506935daee773a1e6targetblank510334aa"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -654,7 +659,8 @@ and connecting the code version to the results is critical for
 reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version 2b284f3.
+The results in this page were generated with repository version
+<a href="https://github.com/lidiaga/CosMx_pipeline_LGA/tree/510334acb25df674e2ce3ef506935daee773a1e6" target="_blank">510334a</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -690,9 +696,6 @@ Untracked files:
 
 Unstaged changes:
     Modified:   output/performance_reports/0.0_data_loading_PR.csv
-    Modified:   output/performance_reports/1.0_qc_and_filtering_PR.csv
-    Modified:   output/performance_reports/2.0_normalization_PR.csv
-    Modified:   output/performance_reports/3.0_dimensional_reduction_PR.csv
 
 </code></pre>
 <p>
@@ -739,10 +742,27 @@ Message
 <tbody>
 <tr>
 <td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/lidiaga/CosMx_pipeline_LGA/8a9f0793310c4c606162910bca3828d6d78961ba/docs/1.0_qc_and_filtering.html" target="_blank">8a9f079</a>
+</td>
+<td>
+lidiaga
+</td>
+<td>
+2025-05-20
+</td>
+<td>
+Build site.
+</td>
+</tr>
+<tr>
+<td>
 Rmd
 </td>
 <td>
-8410a10
+<a href="https://github.com/lidiaga/CosMx_pipeline_LGA/blob/8410a10397cb5f667b39af5a9df106d5a9ed5706/analysis/1.0_qc_and_filtering.Rmd" target="_blank">8410a10</a>
 </td>
 <td>
 lidiaga
@@ -816,6 +836,43 @@ assign each FOV to its corresponding tissue could be interesting.</p>
 <span id="cb3-14"><a href="#cb3-14" tabindex="-1"></a>        <span class="at">axis.title.y =</span> <span class="fu">element_text</span>(<span class="at">margin =</span> <span class="fu">margin</span>(<span class="at">r =</span> <span class="dv">15</span>)),</span>
 <span id="cb3-15"><a href="#cb3-15" tabindex="-1"></a>        <span class="at">panel.grid.major =</span> <span class="fu">element_line</span>(<span class="at">colour =</span> <span class="st">&quot;grey92&quot;</span>, <span class="at">linetype =</span> <span class="st">&quot;solid&quot;</span>))</span></code></pre></div>
 <p><img src="figure/1.0_qc_and_filtering.Rmd/VizFOV-1.png" width="384" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-VizFOV-1">
+Past versions of VizFOV-1.png
+</button>
+</p>
+<div id="fig-VizFOV-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/lidiaga/CosMx_pipeline_LGA/blob/8a9f0793310c4c606162910bca3828d6d78961ba/docs/figure/1.0_qc_and_filtering.Rmd/VizFOV-1.png" target="_blank">8a9f079</a>
+</td>
+<td>
+lidiaga
+</td>
+<td>
+2025-05-20
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <p>In this dataset, there is no information of multiple samples being
 scanned on the same slide, so it has been assumed that all FOVs belong
 to the same sample/tissue. Another possibility, for single-sample slides
@@ -864,6 +921,43 @@ the intensity of a particular stain.</p>
 <span id="cb4-33"><a href="#cb4-33" tabindex="-1"></a><span class="co"># Arrange plots</span></span>
 <span id="cb4-34"><a href="#cb4-34" tabindex="-1"></a>p1 <span class="sc">+</span> p2</span></code></pre></div>
 <p><img src="figure/1.0_qc_and_filtering.Rmd/VizCells-1.png" width="960" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-VizCells-1">
+Past versions of VizCells-1.png
+</button>
+</p>
+<div id="fig-VizCells-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/lidiaga/CosMx_pipeline_LGA/blob/8a9f0793310c4c606162910bca3828d6d78961ba/docs/figure/1.0_qc_and_filtering.Rmd/VizCells-1.png" target="_blank">8a9f079</a>
+</td>
+<td>
+lidiaga
+</td>
+<td>
+2025-05-20
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 </div>
 <div id="quality-control" class="section level1">
@@ -900,9 +994,46 @@ values.</p>
 <span id="cb5-18"><a href="#cb5-18" tabindex="-1"></a>        <span class="at">axis.title.x =</span> <span class="fu">element_text</span>(<span class="at">margin =</span> <span class="fu">margin</span>(<span class="at">t =</span> <span class="dv">15</span>)),</span>
 <span id="cb5-19"><a href="#cb5-19" tabindex="-1"></a>        <span class="at">axis.title.y =</span> <span class="fu">element_text</span>(<span class="at">margin =</span> <span class="fu">margin</span>(<span class="at">r =</span> <span class="dv">15</span>)),</span>
 <span id="cb5-20"><a href="#cb5-20" tabindex="-1"></a>        <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">90</span>, <span class="at">vjust =</span> <span class="fl">0.5</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span></code></pre></div>
-<p><img src="figure/1.0_qc_and_filtering.Rmd/VizUnTx-1.png" width="960" style="display: block; margin: auto;" />
-In this case, all FOVs are more or less within the same range, and none
-of them present extreme values.</p>
+<p><img src="figure/1.0_qc_and_filtering.Rmd/VizUnTx-1.png" width="960" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-VizUnTx-1">
+Past versions of VizUnTx-1.png
+</button>
+</p>
+<div id="fig-VizUnTx-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/lidiaga/CosMx_pipeline_LGA/blob/8a9f0793310c4c606162910bca3828d6d78961ba/docs/figure/1.0_qc_and_filtering.Rmd/VizUnTx-1.png" target="_blank">8a9f079</a>
+</td>
+<td>
+lidiaga
+</td>
+<td>
+2025-05-20
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>In this case, all FOVs are more or less within the same range, and
+none of them present extreme values.</p>
 </div>
 <div id="fov-qc" class="section level2">
 <h2>FOV QC</h2>
@@ -986,6 +1117,43 @@ results:</p>
 <span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a></span>
 <span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a><span class="fu">mtext</span>(<span class="st">&quot;Signal loss threshold: &gt; 60%&quot;</span>, <span class="at">outer =</span> <span class="cn">TRUE</span>, <span class="at">line =</span> <span class="dv">1</span>, <span class="at">at =</span> <span class="fl">0.5</span>, <span class="at">cex =</span> <span class="fl">1.5</span>, <span class="at">font =</span> <span class="dv">2</span>)</span></code></pre></div>
 <p><img src="figure/1.0_qc_and_filtering.Rmd/VizFOVQC1-1.png" width="1440" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-VizFOVQC1-1">
+Past versions of VizFOVQC1-1.png
+</button>
+</p>
+<div id="fig-VizFOVQC1-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/lidiaga/CosMx_pipeline_LGA/blob/8a9f0793310c4c606162910bca3828d6d78961ba/docs/figure/1.0_qc_and_filtering.Rmd/VizFOVQC1-1.png" target="_blank">8a9f079</a>
+</td>
+<td>
+lidiaga
+</td>
+<td>
+2025-05-20
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>))</span></code></pre></div>
 <p>As it can be observed, signal strength varies across FOVs relatively
 smoothly. However, two FOVs appear to have an overall lower signal.</p>
@@ -997,6 +1165,43 @@ bias reporters:</p>
 <span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a><span class="co"># Plot results from reporter bias</span></span>
 <span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a><span class="fu">FOVEffectsHeatmap</span>(fovqc50) </span></code></pre></div>
 <p><img src="figure/1.0_qc_and_filtering.Rmd/VizFOVQC2-1.png" width="960" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-VizFOVQC2-1">
+Past versions of VizFOVQC2-1.png
+</button>
+</p>
+<div id="fig-VizFOVQC2-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/lidiaga/CosMx_pipeline_LGA/blob/8a9f0793310c4c606162910bca3828d6d78961ba/docs/figure/1.0_qc_and_filtering.Rmd/VizFOVQC2-1.png" target="_blank">8a9f079</a>
+</td>
+<td>
+lidiaga
+</td>
+<td>
+2025-05-20
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="cell-qc" class="section level2">
 <h2>Cell QC</h2>
@@ -1039,9 +1244,46 @@ hybridization to non existing genes and suggest bad quality.</li>
 <span id="cb11-11"><a href="#cb11-11" tabindex="-1"></a></span>
 <span id="cb11-12"><a href="#cb11-12" tabindex="-1"></a><span class="co"># Arrange plots</span></span>
 <span id="cb11-13"><a href="#cb11-13" tabindex="-1"></a>p1 <span class="sc">/</span> (p2 <span class="sc">+</span> p3 <span class="sc">+</span> p4)</span></code></pre></div>
-<p><img src="figure/1.0_qc_and_filtering.Rmd/VizCellQC1-1.png" width="960" style="display: block; margin: auto;" />
-In sight of the violin plots, this dataset presents a low percentage of
-Negative probes, with some outliers that match those cells with the
+<p><img src="figure/1.0_qc_and_filtering.Rmd/VizCellQC1-1.png" width="960" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-VizCellQC1-1">
+Past versions of VizCellQC1-1.png
+</button>
+</p>
+<div id="fig-VizCellQC1-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/lidiaga/CosMx_pipeline_LGA/blob/8a9f0793310c4c606162910bca3828d6d78961ba/docs/figure/1.0_qc_and_filtering.Rmd/VizCellQC1-1.png" target="_blank">8a9f079</a>
+</td>
+<td>
+lidiaga
+</td>
+<td>
+2025-05-20
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>In sight of the violin plots, this dataset presents a low percentage
+of Negative probes, with some outliers that match those cells with the
 lower transcript counts and lower unique features. Therefore, the
 suggested filter cutoffs seem appropriate for this case.</p>
 <p>Some additional cutoff could be set in &gt;= 9000 total transcript
@@ -1094,6 +1336,43 @@ outliers or multiplets.</p>
 <span id="cb12-45"><a href="#cb12-45" tabindex="-1"></a><span class="co"># Arrange plots</span></span>
 <span id="cb12-46"><a href="#cb12-46" tabindex="-1"></a>(p1 <span class="sc">+</span> p2) <span class="sc">/</span> (p3 <span class="sc">+</span> p4)</span></code></pre></div>
 <p><img src="figure/1.0_qc_and_filtering.Rmd/VizCellQC2-1.png" width="960" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-VizCellQC2-1">
+Past versions of VizCellQC2-1.png
+</button>
+</p>
+<div id="fig-VizCellQC2-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/lidiaga/CosMx_pipeline_LGA/blob/8a9f0793310c4c606162910bca3828d6d78961ba/docs/figure/1.0_qc_and_filtering.Rmd/VizCellQC2-1.png" target="_blank">8a9f079</a>
+</td>
+<td>
+lidiaga
+</td>
+<td>
+2025-05-20
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <p>As it can be observed, there are not many cells affected by the
 suggested cutoffs, therefore, the majority of the cells present good
 enough quality to go ahead with downstream analysis.</p>
@@ -1128,8 +1407,45 @@ removed.</p>
 <span id="cb14-13"><a href="#cb14-13" tabindex="-1"></a>        <span class="at">axis.title.x =</span> <span class="fu">element_text</span>(<span class="at">margin =</span> <span class="fu">margin</span>(<span class="at">t =</span> <span class="dv">15</span>)),</span>
 <span id="cb14-14"><a href="#cb14-14" tabindex="-1"></a>        <span class="at">axis.title.y =</span> <span class="fu">element_text</span>(<span class="at">margin =</span> <span class="fu">margin</span>(<span class="at">r =</span> <span class="dv">15</span>)),</span>
 <span id="cb14-15"><a href="#cb14-15" tabindex="-1"></a>        <span class="at">panel.grid.major =</span> <span class="fu">element_line</span>(<span class="at">colour =</span> <span class="st">&quot;grey92&quot;</span>, <span class="at">linetype =</span> <span class="st">&quot;solid&quot;</span>))</span></code></pre></div>
-<p><img src="figure/1.0_qc_and_filtering.Rmd/VizFOVPostFilt-1.png" width="384" style="display: block; margin: auto;" />
-As it can be observed, FOVs 69, 95 are now not present in the
+<p><img src="figure/1.0_qc_and_filtering.Rmd/VizFOVPostFilt-1.png" width="384" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-VizFOVPostFilt-1">
+Past versions of VizFOVPostFilt-1.png
+</button>
+</p>
+<div id="fig-VizFOVPostFilt-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/lidiaga/CosMx_pipeline_LGA/blob/8a9f0793310c4c606162910bca3828d6d78961ba/docs/figure/1.0_qc_and_filtering.Rmd/VizFOVPostFilt-1.png" target="_blank">8a9f079</a>
+</td>
+<td>
+lidiaga
+</td>
+<td>
+2025-05-20
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>As it can be observed, FOVs 69, 95 are now not present in the
 dataset.</p>
 </div>
 <div id="filter-bad-quality-cells" class="section level2">
@@ -1164,6 +1480,43 @@ out.</p>
 <span id="cb16-12"><a href="#cb16-12" tabindex="-1"></a><span class="co"># Arrange plots</span></span>
 <span id="cb16-13"><a href="#cb16-13" tabindex="-1"></a>p1 <span class="sc">/</span> (p2 <span class="sc">+</span> p3 <span class="sc">+</span> p4)</span></code></pre></div>
 <p><img src="figure/1.0_qc_and_filtering.Rmd/VizPostFilt-1.png" width="960" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-VizPostFilt-1">
+Past versions of VizPostFilt-1.png
+</button>
+</p>
+<div id="fig-VizPostFilt-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/lidiaga/CosMx_pipeline_LGA/blob/8a9f0793310c4c606162910bca3828d6d78961ba/docs/figure/1.0_qc_and_filtering.Rmd/VizPostFilt-1.png" target="_blank">8a9f079</a>
+</td>
+<td>
+lidiaga
+</td>
+<td>
+2025-05-20
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="save-the-seurat-object" class="section level2">
 <h2>Save the Seurat object</h2>
@@ -1201,10 +1554,10 @@ Memory_Mb
 Libraries
 </td>
 <td style="text-align:right;">
-2.12
+2.45
 </td>
 <td style="text-align:right;">
-146.9
+146.8
 </td>
 </tr>
 <tr>
@@ -1212,7 +1565,7 @@ Libraries
 LoadData
 </td>
 <td style="text-align:right;">
-1.94
+1.95
 </td>
 <td style="text-align:right;">
 427.0
@@ -1223,7 +1576,7 @@ LoadData
 VizFOV
 </td>
 <td style="text-align:right;">
-2.11
+2.07
 </td>
 <td style="text-align:right;">
 23.6
@@ -1234,7 +1587,7 @@ VizFOV
 VizCells
 </td>
 <td style="text-align:right;">
-3.40
+3.34
 </td>
 <td style="text-align:right;">
 13.7
@@ -1245,10 +1598,10 @@ VizCells
 VizUnTx
 </td>
 <td style="text-align:right;">
-0.44
+0.47
 </td>
 <td style="text-align:right;">
-4.2
+4.3
 </td>
 </tr>
 <tr>
@@ -1256,10 +1609,10 @@ VizUnTx
 FOVQc
 </td>
 <td style="text-align:right;">
-6.47
+6.91
 </td>
 <td style="text-align:right;">
-215.0
+215.1
 </td>
 </tr>
 <tr>
@@ -1267,7 +1620,7 @@ FOVQc
 VizFOVQC1
 </td>
 <td style="text-align:right;">
-1.50
+1.13
 </td>
 <td style="text-align:right;">
 5.3
@@ -1278,7 +1631,7 @@ VizFOVQC1
 VizFOVQC2
 </td>
 <td style="text-align:right;">
-0.44
+0.70
 </td>
 <td style="text-align:right;">
 2.4
@@ -1289,10 +1642,10 @@ VizFOVQC2
 FalseProbesPerc
 </td>
 <td style="text-align:right;">
-0.28
+0.37
 </td>
 <td style="text-align:right;">
-1.6
+1.4
 </td>
 </tr>
 <tr>
@@ -1300,10 +1653,10 @@ FalseProbesPerc
 VizCellQC1
 </td>
 <td style="text-align:right;">
-10.25
+7.94
 </td>
 <td style="text-align:right;">
-27.7
+27.8
 </td>
 </tr>
 <tr>
@@ -1311,10 +1664,10 @@ VizCellQC1
 VizCellQC2
 </td>
 <td style="text-align:right;">
-2.34
+0.97
 </td>
 <td style="text-align:right;">
--5.0
+-5.2
 </td>
 </tr>
 <tr>
@@ -1322,7 +1675,7 @@ VizCellQC2
 FOVFiltering
 </td>
 <td style="text-align:right;">
-1.92
+1.34
 </td>
 <td style="text-align:right;">
 8.2
@@ -1333,10 +1686,10 @@ FOVFiltering
 VizFOVPostFilt
 </td>
 <td style="text-align:right;">
-3.11
+2.25
 </td>
 <td style="text-align:right;">
-13.0
+13.2
 </td>
 </tr>
 <tr>
@@ -1344,7 +1697,7 @@ VizFOVPostFilt
 CellFiltering
 </td>
 <td style="text-align:right;">
-1.33
+1.03
 </td>
 <td style="text-align:right;">
 8.5
@@ -1355,7 +1708,7 @@ CellFiltering
 VizPostFilt
 </td>
 <td style="text-align:right;">
-9.24
+7.36
 </td>
 <td style="text-align:right;">
 6.8
@@ -1366,7 +1719,7 @@ VizPostFilt
 SavingSeuObj
 </td>
 <td style="text-align:right;">
-17.68
+15.71
 </td>
 <td style="text-align:right;">
 0.0
@@ -1377,7 +1730,7 @@ SavingSeuObj
 Total
 </td>
 <td style="text-align:right;">
-64.57
+55.99
 </td>
 <td style="text-align:right;">
 898.9

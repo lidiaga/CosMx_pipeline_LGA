@@ -35,6 +35,8 @@
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <script src="site_libs/kePrint-0.0.1/kePrint.js"></script>
 <link href="site_libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-6.5.2/css/all.min.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet" />
 
 <link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/main/img/reproducible.png">
 <!-- Add a small amount of space between sections. -->
@@ -453,18 +455,19 @@ div.tocify {
   </ul>
 </li>
 <li>
-  <a href="clus_examples.html">Cell typing</a>
+  <a href="norm_examples.html">Normalization</a>
 </li>
 <li>
-  <a href="norm_examples.html">Normalization</a>
+  <a href="clus_examples.html">Cell typing</a>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="about.html">About</a>
-</li>
-<li>
-  <a href="license.html">License</a>
+  <a href="https://github.com/lidiaga/CosMx_pipeline_LGA">
+    <span class="fab fa-github"></span>
+     
+    Source code
+  </a>
 </li>
       </ul>
     </div><!--/.nav-collapse -->
@@ -480,7 +483,7 @@ and scType annotation</h1>
 <h4 class="author">Lidia Getino Álvarez</h4>
 <address class="author_afil">
 M0.207 TFM - MU Bioinformática y Bioestadística
-(UOC)<br><h4 class="date">20 mayo 2025</h4>
+(UOC)<br><h4 class="date">23 mayo 2025</h4>
 
 </div>
 
@@ -509,7 +512,7 @@ class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2025-05-20
+<strong>Last updated:</strong> 2025-05-23
 </p>
 <p>
 <strong>Checks:</strong> <span
@@ -640,13 +643,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrong2b284f3">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomlidiagaCosMxpipelineLGAtree510334acb25df674e2ce3ef506935daee773a1e6targetblank510334aa">
 <span class="glyphicon glyphicon-ok text-success"
-aria-hidden="true"></span> <strong>Repository version:</strong> 2b284f3
+aria-hidden="true"></span> <strong>Repository version:</strong>
+<a href="https://github.com/lidiaga/CosMx_pipeline_LGA/tree/510334acb25df674e2ce3ef506935daee773a1e6" target="_blank">510334a</a>
 </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrong2b284f3"
+<div
+id="strongRepositoryversionstrongahrefhttpsgithubcomlidiagaCosMxpipelineLGAtree510334acb25df674e2ce3ef506935daee773a1e6targetblank510334aa"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -655,7 +660,8 @@ and connecting the code version to the results is critical for
 reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version 2b284f3.
+The results in this page were generated with repository version
+<a href="https://github.com/lidiaga/CosMx_pipeline_LGA/tree/510334acb25df674e2ce3ef506935daee773a1e6" target="_blank">510334a</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -743,10 +749,27 @@ Message
 <tbody>
 <tr>
 <td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/lidiaga/CosMx_pipeline_LGA/8a9f0793310c4c606162910bca3828d6d78961ba/docs/4.2_seurat_unsup_clustering.html" target="_blank">8a9f079</a>
+</td>
+<td>
+lidiaga
+</td>
+<td>
+2025-05-20
+</td>
+<td>
+Build site.
+</td>
+</tr>
+<tr>
+<td>
 Rmd
 </td>
 <td>
-8410a10
+<a href="https://github.com/lidiaga/CosMx_pipeline_LGA/blob/8410a10397cb5f667b39af5a9df106d5a9ed5706/analysis/4.2_seurat_unsup_clustering.Rmd" target="_blank">8410a10</a>
 </td>
 <td>
 lidiaga
@@ -840,6 +863,43 @@ approaches, this pipeline will follow CosMxLite procedure and perform a
 <span id="cb4-12"><a href="#cb4-12" tabindex="-1"></a><span class="co"># Inspect clustering resolutions</span></span>
 <span id="cb4-13"><a href="#cb4-13" tabindex="-1"></a><span class="fu">clustree</span>(seu, <span class="at">prefix =</span> prefix, <span class="at">return =</span> <span class="st">&quot;plot&quot;</span>)</span></code></pre></div>
 <p><img src="figure/4.2_seurat_unsup_clustering.Rmd/VizRes1-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-VizRes1-1">
+Past versions of VizRes1-1.png
+</button>
+</p>
+<div id="fig-VizRes1-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/lidiaga/CosMx_pipeline_LGA/blob/8a9f0793310c4c606162910bca3828d6d78961ba/docs/figure/4.2_seurat_unsup_clustering.Rmd/VizRes1-1.png" target="_blank">8a9f079</a>
+</td>
+<td>
+lidiaga
+</td>
+<td>
+2025-05-20
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <p>The “Clustree” plot shows the number and size of clusters at each
 resolution and how they change with increasing resolutions. In this
 example, it can be observed that, in general, most cell groups are very
@@ -856,6 +916,43 @@ detailed desired or having a look at the UMAP plots.</p>
 <span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a><span class="co"># Arrange plots</span></span>
 <span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a><span class="fu">wrap_plots</span>(plots, <span class="at">ncol =</span> <span class="dv">3</span>)</span></code></pre></div>
 <p><img src="figure/4.2_seurat_unsup_clustering.Rmd/VizRes2-1.png" width="1440" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-VizRes2-1">
+Past versions of VizRes2-1.png
+</button>
+</p>
+<div id="fig-VizRes2-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/lidiaga/CosMx_pipeline_LGA/blob/8a9f0793310c4c606162910bca3828d6d78961ba/docs/figure/4.2_seurat_unsup_clustering.Rmd/VizRes2-1.png" target="_blank">8a9f079</a>
+</td>
+<td>
+lidiaga
+</td>
+<td>
+2025-05-20
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <p>In sight of the UMAP representations, the 0.1 resolution could be a
 good fit if not a great level of detail is needed, while higher
 resolutions seem to differentiate sub-populations. For this example,
@@ -884,6 +981,43 @@ useful to further inspect the resulting clusters:</p>
 <span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a>                     <span class="at">cols =</span> cols, <span class="at">raster =</span> <span class="cn">FALSE</span>)</span>
 <span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a>clus_plot</span></code></pre></div>
 <p><img src="figure/4.2_seurat_unsup_clustering.Rmd/VizClus1-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-VizClus1-1">
+Past versions of VizClus1-1.png
+</button>
+</p>
+<div id="fig-VizClus1-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/lidiaga/CosMx_pipeline_LGA/blob/8a9f0793310c4c606162910bca3828d6d78961ba/docs/figure/4.2_seurat_unsup_clustering.Rmd/VizClus1-1.png" target="_blank">8a9f079</a>
+</td>
+<td>
+lidiaga
+</td>
+<td>
+2025-05-20
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <p>Finally, the visualization of “nFeature” and “nCount” allows to
 identify clusters with better/lower representation by the CosMx
 panel.</p>
@@ -894,6 +1028,43 @@ panel.</p>
 <span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a><span class="fu">VlnPlot</span>(seu, <span class="at">features =</span> <span class="fu">c</span>(<span class="st">&quot;nFeature_RNA&quot;</span>, <span class="st">&quot;nCount_RNA&quot;</span>), <span class="at">ncol =</span> <span class="dv">1</span>, <span class="at">pt.size =</span> <span class="dv">0</span>, </span>
 <span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a>        <span class="at">group.by =</span> <span class="st">&quot;seurat_clusters&quot;</span>)</span></code></pre></div>
 <p><img src="figure/4.2_seurat_unsup_clustering.Rmd/VizClus2-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-VizClus2-1">
+Past versions of VizClus2-1.png
+</button>
+</p>
+<div id="fig-VizClus2-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/lidiaga/CosMx_pipeline_LGA/blob/8a9f0793310c4c606162910bca3828d6d78961ba/docs/figure/4.2_seurat_unsup_clustering.Rmd/VizClus2-1.png" target="_blank">8a9f079</a>
+</td>
+<td>
+lidiaga
+</td>
+<td>
+2025-05-20
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 </div>
 <div id="cell-annotation---sctype" class="section level1">
@@ -1009,8 +1180,47 @@ Glutamatergic neurons , and 5 and 14 as Cancer stem cells.</p>
 <span id="cb13-15"><a href="#cb13-15" tabindex="-1"></a></span>
 <span id="cb13-16"><a href="#cb13-16" tabindex="-1"></a><span class="co"># Arrange plots</span></span>
 <span id="cb13-17"><a href="#cb13-17" tabindex="-1"></a>p1 <span class="sc">+</span> p2</span></code></pre></div>
-<p><img src="figure/4.2_seurat_unsup_clustering.Rmd/VizAnn-1.png" width="1920" style="display: block; margin: auto;" />
-## Save the Seurat object</p>
+<p><img src="figure/4.2_seurat_unsup_clustering.Rmd/VizAnn-1.png" width="1920" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-VizAnn-1">
+Past versions of VizAnn-1.png
+</button>
+</p>
+<div id="fig-VizAnn-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/lidiaga/CosMx_pipeline_LGA/blob/8a9f0793310c4c606162910bca3828d6d78961ba/docs/figure/4.2_seurat_unsup_clustering.Rmd/VizAnn-1.png" target="_blank">8a9f079</a>
+</td>
+<td>
+lidiaga
+</td>
+<td>
+2025-05-20
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div id="save-the-seurat-object" class="section level2">
+<h2>Save the Seurat object</h2>
 <div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="co"># Save the Seurat object before annotation</span></span>
 <span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a>name <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">&quot;seu_&quot;</span>, folder, <span class="st">&quot;_SL.RDS&quot;</span>)</span>
 <span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a><span class="fu">saveRDS</span>(seu, <span class="fu">here</span>(<span class="st">&quot;output&quot;</span>,<span class="st">&quot;processed_data&quot;</span>,folder,name))</span></code></pre></div>
@@ -1035,6 +1245,43 @@ specifically highlighted:</p>
 <span id="cb15-11"><a href="#cb15-11" tabindex="-1"></a><span class="co"># Arrange plots</span></span>
 <span id="cb15-12"><a href="#cb15-12" tabindex="-1"></a>p1 <span class="sc">+</span> p2</span></code></pre></div>
 <p><img src="figure/4.2_seurat_unsup_clustering.Rmd/SpatialViz-1.png" width="3900" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-SpatialViz-1">
+Past versions of SpatialViz-1.png
+</button>
+</p>
+<div id="fig-SpatialViz-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/lidiaga/CosMx_pipeline_LGA/blob/8a9f0793310c4c606162910bca3828d6d78961ba/docs/figure/4.2_seurat_unsup_clustering.Rmd/SpatialViz-1.png" target="_blank">8a9f079</a>
+</td>
+<td>
+lidiaga
+</td>
+<td>
+2025-05-20
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <p>Another interesting visualization would be to plot gene expression
 markers in its spatial context. For example, one typical maker for
 Oligodendrocytes is <em>Olig1</em>:</p>
@@ -1042,8 +1289,45 @@ Oligodendrocytes is <em>Olig1</em>:</p>
 <span id="cb16-2"><a href="#cb16-2" tabindex="-1"></a><span class="do">## Points are removed from violin plots as CosMx datasets can contain over 1 million cells and may hide the violin plot</span></span>
 <span id="cb16-3"><a href="#cb16-3" tabindex="-1"></a></span>
 <span id="cb16-4"><a href="#cb16-4" tabindex="-1"></a><span class="fu">VlnPlot</span>(seu, <span class="at">features =</span> <span class="st">&quot;Olig1&quot;</span>,<span class="at">pt.size =</span> <span class="dv">0</span>, <span class="at">y.max =</span> <span class="dv">20</span>) <span class="sc">+</span> <span class="fu">NoLegend</span>()</span></code></pre></div>
-<p><img src="figure/4.2_seurat_unsup_clustering.Rmd/MarkerViz1-1.png" width="672" style="display: block; margin: auto;" />
-As expected, it is highly expressed in Oligodendrocytes and
+<p><img src="figure/4.2_seurat_unsup_clustering.Rmd/MarkerViz1-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-MarkerViz1-1">
+Past versions of MarkerViz1-1.png
+</button>
+</p>
+<div id="fig-MarkerViz1-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/lidiaga/CosMx_pipeline_LGA/blob/8a9f0793310c4c606162910bca3828d6d78961ba/docs/figure/4.2_seurat_unsup_clustering.Rmd/MarkerViz1-1.png" target="_blank">8a9f079</a>
+</td>
+<td>
+lidiaga
+</td>
+<td>
+2025-05-20
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>As expected, it is highly expressed in Oligodendrocytes and
 Oligodendrocyte precursor cells, but it can also be observed in its
 spatial context:</p>
 <div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" tabindex="-1"></a><span class="do">## Code adapted from CosMxLite vignette</span></span>
@@ -1064,6 +1348,43 @@ spatial context:</p>
 <span id="cb17-16"><a href="#cb17-16" tabindex="-1"></a><span class="co"># Arrange plots</span></span>
 <span id="cb17-17"><a href="#cb17-17" tabindex="-1"></a>p1 <span class="sc">+</span> p2</span></code></pre></div>
 <p><img src="figure/4.2_seurat_unsup_clustering.Rmd/SpatialViz2-1.png" width="3900" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-SpatialViz2-1">
+Past versions of SpatialViz2-1.png
+</button>
+</p>
+<div id="fig-SpatialViz2-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/lidiaga/CosMx_pipeline_LGA/blob/8a9f0793310c4c606162910bca3828d6d78961ba/docs/figure/4.2_seurat_unsup_clustering.Rmd/SpatialViz2-1.png" target="_blank">8a9f079</a>
+</td>
+<td>
+lidiaga
+</td>
+<td>
+2025-05-20
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="performance-and-session-info" class="section level1">
 <h1>Performance and Session Info</h1>
@@ -1091,10 +1412,10 @@ Memory_Mb
 Libraries
 </td>
 <td style="text-align:right;">
-2.98
+3.00
 </td>
 <td style="text-align:right;">
-148.7
+148.8
 </td>
 </tr>
 <tr>
@@ -1102,7 +1423,7 @@ Libraries
 LoadData
 </td>
 <td style="text-align:right;">
-5.94
+5.32
 </td>
 <td style="text-align:right;">
 1214.4
@@ -1113,7 +1434,7 @@ LoadData
 SNNClust
 </td>
 <td style="text-align:right;">
-64.89
+67.31
 </td>
 <td style="text-align:right;">
 61.1
@@ -1124,10 +1445,10 @@ SNNClust
 VizRes1
 </td>
 <td style="text-align:right;">
-12.61
+11.91
 </td>
 <td style="text-align:right;">
-25.5
+25.4
 </td>
 </tr>
 <tr>
@@ -1135,7 +1456,7 @@ VizRes1
 VizRes2
 </td>
 <td style="text-align:right;">
-9.54
+9.62
 </td>
 <td style="text-align:right;">
 58.2
@@ -1157,10 +1478,10 @@ SetRes
 VizClus1
 </td>
 <td style="text-align:right;">
-1.88
+1.93
 </td>
 <td style="text-align:right;">
-11.1
+11.0
 </td>
 </tr>
 <tr>
@@ -1168,7 +1489,7 @@ VizClus1
 VizClus2
 </td>
 <td style="text-align:right;">
-1.15
+1.18
 </td>
 <td style="text-align:right;">
 7.6
@@ -1179,10 +1500,10 @@ VizClus2
 scTypePrep
 </td>
 <td style="text-align:right;">
-0.83
+0.92
 </td>
 <td style="text-align:right;">
-16.9
+17.0
 </td>
 </tr>
 <tr>
@@ -1190,7 +1511,7 @@ scTypePrep
 RunscType
 </td>
 <td style="text-align:right;">
-7.22
+7.11
 </td>
 <td style="text-align:right;">
 13.4
@@ -1212,10 +1533,10 @@ AddAnn
 VizAnn
 </td>
 <td style="text-align:right;">
-3.39
+3.53
 </td>
 <td style="text-align:right;">
-12.9
+12.8
 </td>
 </tr>
 <tr>
@@ -1223,7 +1544,7 @@ VizAnn
 SavingSeuObj_clus
 </td>
 <td style="text-align:right;">
-42.94
+42.84
 </td>
 <td style="text-align:right;">
 0.0
@@ -1234,10 +1555,10 @@ SavingSeuObj_clus
 SpatialViz
 </td>
 <td style="text-align:right;">
-4.68
+4.56
 </td>
 <td style="text-align:right;">
-11.9
+11.8
 </td>
 </tr>
 <tr>
@@ -1245,10 +1566,10 @@ SpatialViz
 MarkerViz1
 </td>
 <td style="text-align:right;">
-0.70
+0.68
 </td>
 <td style="text-align:right;">
-3.0
+2.8
 </td>
 </tr>
 <tr>
@@ -1256,7 +1577,7 @@ MarkerViz1
 SpatialViz2
 </td>
 <td style="text-align:right;">
-4.85
+4.80
 </td>
 <td style="text-align:right;">
 8.3
@@ -1267,10 +1588,10 @@ SpatialViz2
 Total
 </td>
 <td style="text-align:right;">
-164.18
+165.29
 </td>
 <td style="text-align:right;">
-1595.0
+1594.6
 </td>
 </tr>
 </tbody>
