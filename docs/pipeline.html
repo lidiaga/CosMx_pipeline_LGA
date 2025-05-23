@@ -568,15 +568,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomlidiagaCosMxpipelineLGAtree51b3104402b64a5a5909d727ccaff220b0720017targetblank51b3104a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomlidiagaCosMxpipelineLGAtree349fa2a5617603ff4486bfa96f256984ad9487eetargetblank349fa2aa">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/lidiaga/CosMx_pipeline_LGA/tree/51b3104402b64a5a5909d727ccaff220b0720017" target="_blank">51b3104</a>
+<a href="https://github.com/lidiaga/CosMx_pipeline_LGA/tree/349fa2a5617603ff4486bfa96f256984ad9487ee" target="_blank">349fa2a</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomlidiagaCosMxpipelineLGAtree51b3104402b64a5a5909d727ccaff220b0720017targetblank51b3104a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomlidiagaCosMxpipelineLGAtree349fa2a5617603ff4486bfa96f256984ad9487eetargetblank349fa2aa"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -586,7 +586,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/lidiaga/CosMx_pipeline_LGA/tree/51b3104402b64a5a5909d727ccaff220b0720017" target="_blank">51b3104</a>.
+<a href="https://github.com/lidiaga/CosMx_pipeline_LGA/tree/349fa2a5617603ff4486bfa96f256984ad9487ee" target="_blank">349fa2a</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -619,21 +619,6 @@ Ignored files:
 
 Untracked files:
     Untracked:  analysis/images/
-
-Unstaged changes:
-    Modified:   analysis/_site.yml
-    Modified:   output/performance_reports/0.0_data_loading_PR.csv
-    Modified:   output/performance_reports/1.0_qc_and_filtering_PR.csv
-    Modified:   output/performance_reports/2.0_normalization_PR.csv
-    Modified:   output/performance_reports/3.0_dimensional_reduction_PR.csv
-    Modified:   output/performance_reports/4.0_insitutype_cell_typing_PR.csv
-    Modified:   output/performance_reports/4.1_insitutype_unsup_clustering_PR.csv
-    Modified:   output/performance_reports/4.2_seurat_unsup_clustering_PR.csv
-    Modified:   output/performance_reports/5.0_RC_normalization_PR.csv
-    Modified:   output/performance_reports/5.1_RC_dimensional_reduction_PR.csv
-    Modified:   output/performance_reports/6.0_Log_normalization_PR.csv
-    Modified:   output/performance_reports/6.1_Log_dimensional_reduction_PR.csv
-    Modified:   output/performance_reports/pipeline_PR.csv
 
 </code></pre>
 <p>
@@ -678,6 +663,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/lidiaga/CosMx_pipeline_LGA/blob/349fa2a5617603ff4486bfa96f256984ad9487ee/analysis/pipeline.Rmd" target="_blank">349fa2a</a>
+</td>
+<td>
+lidiaga
+</td>
+<td>
+2025-05-23
+</td>
+<td>
+Add final executing times in pipeline.Rmd
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/lidiaga/CosMx_pipeline_LGA/56a8ca8ee47c2aa6a74b4a02dd8a1eee11a15c28/docs/pipeline.html" target="_blank">56a8ca8</a>
+</td>
+<td>
+lidiaga
+</td>
+<td>
+2025-05-23
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 html
@@ -880,10 +899,10 @@ contemplates:</p>
 <ol style="list-style-type: decimal">
 <li><p><strong>Two starting points</strong> are available:</p>
 <ol style="list-style-type: decimal">
-<li>If starting from the AtoMx™ SIP exported flat files (.csv): start in
-0.0_data_loading.Rmd file.</li>
-<li>If starting from the AtoMx™ SIP exported Seurat object: start in
-1.0_qc_and_filtering.Rmd file.</li>
+<li><p>If starting from the AtoMx™ SIP exported flat files (.csv): start
+in 0.0_data_loading.Rmd file.</p></li>
+<li><p>If starting from the AtoMx™ SIP exported Seurat object: start in
+1.0_qc_and_filtering.Rmd file.</p></li>
 </ol></li>
 <li><p><strong>Three normalization methods</strong> are available: RC,
 Log and SCT (see <a href="norm_examples.html">Normalization</a> section
@@ -992,7 +1011,7 @@ Total
 </table>
 <p>In terms of time and memory usage, the example analysis shown in the
 pipeline vignettes (using SCTransform as normalization method and
-InSituType Supervised classification for cell typing) takes ~25 minutes
+InSituType Supervised classification for cell typing) takes ~23 minutes
 to execute, and 62,9 Gb of memory consumption.</p>
 <p>However, other pipeline alternatives have also been executed in this
 project and their total performances in time and memory are:</p>
@@ -1084,20 +1103,20 @@ consuption of the execution of the pipeline from data loading to
 dimensional reduction, using each of the different normalization
 alternatives:</p>
 <ul>
-<li><p><strong>RC:</strong> ~5 minutes and 34.2 Gb.</p></li>
-<li><p><strong>Log:</strong> ~5 minutes and 34.2 Gb.</p></li>
-<li><p><strong>SCT:</strong> ~6 minutes and 34.2 Gb.</p></li>
+<li><p><strong>RC:</strong> ~4 minutes and 34.2 Gb.</p></li>
+<li><p><strong>Log:</strong> ~4 minutes and 34.2 Gb.</p></li>
+<li><p><strong>SCT:</strong> ~5 minutes and 42.7 Gb.</p></li>
 </ul>
 <p>The last three rows correspond to the total time an memory consuption
 of the execution of the pipeline from data loading to cell typing, using
 the SCTransform normalization and each of the different cell typing
 alternatives:</p>
 <ul>
-<li><p><strong>SCT + Supervised InSituType:</strong> ~25 minutes and
+<li><p><strong>SCT + Supervised InSituType:</strong> ~23 minutes and
 62,9 Gb.</p></li>
-<li><p><strong>SCT + Unsupervised InSituType:</strong> ~11 minutes and
+<li><p><strong>SCT + Unsupervised InSituType:</strong> ~10 minutes and
 62,7 Gb.</p></li>
-<li><p><strong>SCT + Seurat-Louvain:</strong> ~9 minutes and 58,6
+<li><p><strong>SCT + Seurat-Louvain:</strong> ~8 minutes and 58,6
 Gb.</p></li>
 </ul>
 <hr />
