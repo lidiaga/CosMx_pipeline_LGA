@@ -33,6 +33,7 @@ With the goal of creating a flexible pipeline, the documents have been parameter
 1.  **Two starting points** are available:
 
     1.  If starting from the AtoMx™ SIP exported flat files (.csv): start in 0.0_data_loading.Rmd file.
+
     2.  If starting from the AtoMx™ SIP exported Seurat object: start in 1.0_qc_and_filtering.Rmd file.
 
 2.  **Three normalization methods** are available: RC, Log and SCT (see [Normalization](norm_examples.html) section for more information)
@@ -73,7 +74,7 @@ knitr::kable(totals, row.names = FALSE, format = "html") %>%
   kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
 ```
 
-In terms of time and memory usage, the example analysis shown in the pipeline vignettes (using SCTransform as normalization method and InSituType Supervised classification for cell typing) takes \~25 minutes to execute, and 62,9 Gb of memory consumption.
+In terms of time and memory usage, the example analysis shown in the pipeline vignettes (using SCTransform as normalization method and InSituType Supervised classification for cell typing) takes \~23 minutes to execute, and 62,9 Gb of memory consumption.
 
 However, other pipeline alternatives have also been executed in this project and their total performances in time and memory are:
 
@@ -111,19 +112,19 @@ knitr::kable(totals, row.names = FALSE, format = "html") %>%
 
 The first three rows correspond to the total time an memory consuption of the execution of the pipeline from data loading to dimensional reduction, using each of the different normalization alternatives:
 
--   **RC:** \~5 minutes and 34.2 Gb.
+-   **RC:** \~4 minutes and 34.2 Gb.
 
--   **Log:** \~5 minutes and 34.2 Gb.
+-   **Log:** \~4 minutes and 34.2 Gb.
 
--   **SCT:** \~6 minutes and 34.2 Gb.
+-   **SCT:** \~5 minutes and 42.7 Gb.
 
 The last three rows correspond to the total time an memory consuption of the execution of the pipeline from data loading to cell typing, using the SCTransform normalization and each of the different cell typing alternatives:
 
--   **SCT + Supervised InSituType:** \~25 minutes and 62,9 Gb.
+-   **SCT + Supervised InSituType:** \~23 minutes and 62,9 Gb.
 
--   **SCT + Unsupervised InSituType:** \~11 minutes and 62,7 Gb.
+-   **SCT + Unsupervised InSituType:** \~10 minutes and 62,7 Gb.
 
--   **SCT + Seurat-Louvain:** \~9 minutes and 58,6 Gb.
+-   **SCT + Seurat-Louvain:** \~8 minutes and 58,6 Gb.
 
 ------------------------------------------------------------------------
 
