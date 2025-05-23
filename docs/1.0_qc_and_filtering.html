@@ -417,7 +417,7 @@ div.tocify {
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="index.html">CosMx™ SMI Data Analysis - TFM UOC</a>
+      <a class="navbar-brand" href="index.html">CosMx™ SMI Data Analysis Pipeline</a>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
@@ -463,6 +463,12 @@ div.tocify {
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="license.html">License</a>
+</li>
+<li>
   <a href="https://github.com/lidiaga/CosMx_pipeline_LGA">
     <span class="fab fa-github"></span>
      
@@ -642,15 +648,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomlidiagaCosMxpipelineLGAtree510334acb25df674e2ce3ef506935daee773a1e6targetblank510334aa">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomlidiagaCosMxpipelineLGAtree51b3104402b64a5a5909d727ccaff220b0720017targetblank51b3104a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/lidiaga/CosMx_pipeline_LGA/tree/510334acb25df674e2ce3ef506935daee773a1e6" target="_blank">510334a</a>
+<a href="https://github.com/lidiaga/CosMx_pipeline_LGA/tree/51b3104402b64a5a5909d727ccaff220b0720017" target="_blank">51b3104</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomlidiagaCosMxpipelineLGAtree510334acb25df674e2ce3ef506935daee773a1e6targetblank510334aa"
+id="strongRepositoryversionstrongahrefhttpsgithubcomlidiagaCosMxpipelineLGAtree51b3104402b64a5a5909d727ccaff220b0720017targetblank51b3104a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -660,7 +666,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/lidiaga/CosMx_pipeline_LGA/tree/510334acb25df674e2ce3ef506935daee773a1e6" target="_blank">510334a</a>.
+<a href="https://github.com/lidiaga/CosMx_pipeline_LGA/tree/51b3104402b64a5a5909d727ccaff220b0720017" target="_blank">51b3104</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -695,7 +701,19 @@ Untracked files:
     Untracked:  analysis/images/
 
 Unstaged changes:
+    Modified:   analysis/_site.yml
     Modified:   output/performance_reports/0.0_data_loading_PR.csv
+    Modified:   output/performance_reports/1.0_qc_and_filtering_PR.csv
+    Modified:   output/performance_reports/2.0_normalization_PR.csv
+    Modified:   output/performance_reports/3.0_dimensional_reduction_PR.csv
+    Modified:   output/performance_reports/4.0_insitutype_cell_typing_PR.csv
+    Modified:   output/performance_reports/4.1_insitutype_unsup_clustering_PR.csv
+    Modified:   output/performance_reports/4.2_seurat_unsup_clustering_PR.csv
+    Modified:   output/performance_reports/5.0_RC_normalization_PR.csv
+    Modified:   output/performance_reports/5.1_RC_dimensional_reduction_PR.csv
+    Modified:   output/performance_reports/6.0_Log_normalization_PR.csv
+    Modified:   output/performance_reports/6.1_Log_dimensional_reduction_PR.csv
+    Modified:   output/performance_reports/pipeline_PR.csv
 
 </code></pre>
 <p>
@@ -740,6 +758,23 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/lidiaga/CosMx_pipeline_LGA/51b3104402b64a5a5909d727ccaff220b0720017/docs/1.0_qc_and_filtering.html" target="_blank">51b3104</a>
+</td>
+<td>
+lidiaga
+</td>
+<td>
+2025-05-23
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 html
@@ -1554,7 +1589,7 @@ Memory_Mb
 Libraries
 </td>
 <td style="text-align:right;">
-2.45
+2.13
 </td>
 <td style="text-align:right;">
 146.8
@@ -1565,7 +1600,7 @@ Libraries
 LoadData
 </td>
 <td style="text-align:right;">
-1.95
+1.93
 </td>
 <td style="text-align:right;">
 427.0
@@ -1576,7 +1611,7 @@ LoadData
 VizFOV
 </td>
 <td style="text-align:right;">
-2.07
+2.09
 </td>
 <td style="text-align:right;">
 23.6
@@ -1587,10 +1622,10 @@ VizFOV
 VizCells
 </td>
 <td style="text-align:right;">
-3.34
+3.36
 </td>
 <td style="text-align:right;">
-13.7
+13.8
 </td>
 </tr>
 <tr>
@@ -1598,10 +1633,10 @@ VizCells
 VizUnTx
 </td>
 <td style="text-align:right;">
-0.47
+0.46
 </td>
 <td style="text-align:right;">
-4.3
+4.2
 </td>
 </tr>
 <tr>
@@ -1609,7 +1644,7 @@ VizUnTx
 FOVQc
 </td>
 <td style="text-align:right;">
-6.91
+6.57
 </td>
 <td style="text-align:right;">
 215.1
@@ -1620,7 +1655,7 @@ FOVQc
 VizFOVQC1
 </td>
 <td style="text-align:right;">
-1.13
+1.14
 </td>
 <td style="text-align:right;">
 5.3
@@ -1631,7 +1666,7 @@ VizFOVQC1
 VizFOVQC2
 </td>
 <td style="text-align:right;">
-0.70
+0.46
 </td>
 <td style="text-align:right;">
 2.4
@@ -1642,7 +1677,7 @@ VizFOVQC2
 FalseProbesPerc
 </td>
 <td style="text-align:right;">
-0.37
+0.23
 </td>
 <td style="text-align:right;">
 1.4
@@ -1653,7 +1688,7 @@ FalseProbesPerc
 VizCellQC1
 </td>
 <td style="text-align:right;">
-7.94
+7.61
 </td>
 <td style="text-align:right;">
 27.8
@@ -1664,7 +1699,7 @@ VizCellQC1
 VizCellQC2
 </td>
 <td style="text-align:right;">
-0.97
+0.93
 </td>
 <td style="text-align:right;">
 -5.2
@@ -1675,7 +1710,7 @@ VizCellQC2
 FOVFiltering
 </td>
 <td style="text-align:right;">
-1.34
+1.12
 </td>
 <td style="text-align:right;">
 8.2
@@ -1686,7 +1721,7 @@ FOVFiltering
 VizFOVPostFilt
 </td>
 <td style="text-align:right;">
-2.25
+2.05
 </td>
 <td style="text-align:right;">
 13.2
@@ -1697,7 +1732,7 @@ VizFOVPostFilt
 CellFiltering
 </td>
 <td style="text-align:right;">
-1.03
+0.91
 </td>
 <td style="text-align:right;">
 8.5
@@ -1708,7 +1743,7 @@ CellFiltering
 VizPostFilt
 </td>
 <td style="text-align:right;">
-7.36
+7.45
 </td>
 <td style="text-align:right;">
 6.8
@@ -1719,7 +1754,7 @@ VizPostFilt
 SavingSeuObj
 </td>
 <td style="text-align:right;">
-15.71
+15.24
 </td>
 <td style="text-align:right;">
 0.0
@@ -1730,7 +1765,7 @@ SavingSeuObj
 Total
 </td>
 <td style="text-align:right;">
-55.99
+53.68
 </td>
 <td style="text-align:right;">
 898.9
