@@ -7,9 +7,9 @@
 
 My name is Lidia Getino Álvarez and this repository, and its corresponding GitHub Pages website, serves the purpose of transparently sharing all the code, results and documentation of the final project of my Master's in Bioinformatics and Biostatistics of Universitat Oberta de Catalunya: ***"Implementation of a bioinformatics pipeline for the analysis of spatial transcriptomics data"***.
 
-| **University:** Universitat Oberta de Catalunya
-| **Tutor:** Mireia Ferrer Almirall
-| **Developed at:** Statistics and Bioinformatics Unit (Vall d'Hebron Research Institute - VHIR)
+| **University:** Universitat Oberta de Catalunya  
+| **Tutor:** Mireia Ferrer Almirall  
+| **Developed at:** Statistics and Bioinformatics Unit (Vall d'Hebron Research Institute - VHIR)  
 
 Here you will find a modular and reproducible pipeline for the analysis of spatial transcriptomics data generated with the CosMx™ SMI technology by Nanostring®. The pipeline begins from the AtoMx™ SIP exported flat files, although it is optimized to work with an AtoMx™ SIP exported Seurat object too.
 
@@ -53,7 +53,7 @@ CosMx_pipeline_LGA/
   |           └── README.md
   |
   ├── docs/
-  │     └── ... # resulting html files
+  │     └── ... # resulting html files and figures
   |
   ├── output/
   │     ├── performance_reports/
@@ -66,7 +66,8 @@ CosMx_pipeline_LGA/
   ├── .Rprofile
   ├── _workflowr.yml
   ├── CosMx_pipeline_LGA.Rproj
-  └── README.md
+  ├── README.md
+  └── workflowr_project_setup.R
 ```
 
 ## Requirements
