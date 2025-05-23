@@ -1,11 +1,11 @@
-# CosMx™ SMI Data Analysis
+# CosMx™ SMI Data Analysis Pipeline
 
 **Author:** Getino-Álvarez, Lidia\
 **Date:** 04-Jun-2025
 
 ## Welcome to my Master's thesis repository
 
-My name is Lidia Getino Álvarez and this repository, and its corresponding GitHub Pages website, serves the purpose of transparently sharing all the code and results of my work summarizes all the code, documentation the final project of my Master's in Bioinformatics and Biostatistics of Universitat Oberta de Catalunya: ***"Implementation of a bioinformatics pipeline for the analysis of spatial transcriptomics data"***.
+My name is Lidia Getino Álvarez and this repository, and its corresponding GitHub Pages website, serves the purpose of transparently sharing all the code, results and documentation of the final project of my Master's in Bioinformatics and Biostatistics of Universitat Oberta de Catalunya: ***"Implementation of a bioinformatics pipeline for the analysis of spatial transcriptomics data"***.
 
 | **University:** Universitat Oberta de Catalunya
 | **Tutor:** Mireia Ferrer Almirall
@@ -84,7 +84,7 @@ All the code has been developed in R (v4.4.3), using the RStudio (v2024.12.1.563
 | KableExtra v1.4.0  |  clustree v0.5.1   |
 |   Seurat v4.4.0    | HGNChelper v0.8.15 |
 
-~*\*The complete set of dependencies and versions can be found in the Session Info section of each Rmarkdown file.*~
+*\*The complete set of dependencies and versions can be found in the Session Info section of each Rmarkdown file.*
 
 ## Workflowr and webpage
 
@@ -190,7 +190,7 @@ With the goal of creating a flexible pipeline, the documents have been parameter
 
     2.  Then, to ensure reproducibility, the analysis can be run using `worflowr`, which automatically sets the same seed for all files and runs, and helps to keep version control with Git: run `wflow_build(c("0.0_data_loading.Rmd", "1.0_qc_and_filtering.Rmd", ...))` indicating the corresponding Rmd files to run.
 
-~*\*For\ more\ information,\ consult\ the\ "Normalization"\ and\ "Cell\ typing"\ sections\ of\ the\ webpage.*~
+*\*For more information, consult the "Normalization" and "Cell typing" sections of the webpage.*
 
 ## Dataset
 

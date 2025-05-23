@@ -127,7 +127,7 @@ The last three rows correspond to the total time an memory consuption of the exe
 
 ------------------------------------------------------------------------
 
-# Bibligraphy
+# Bibliography
 
 1.  Blampey Q, Mulder K, Gardet M, Christodoulidis S, Dutertre CA, André F, et al. Sopa: a technology-invariant pipeline for analyses of image-based spatial omics. Nat Commun [Internet]. 2024 Jun 11 [cited 2025 Mar 3];15(1):4981. Available from: <https://www.nature.com/articles/s41467-024-48981-z>
 

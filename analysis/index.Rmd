@@ -28,8 +28,12 @@ This website, and its corresponding GitHub repository, serves the purpose of tra
 
 1.  [CosMx™ SMI Data Analysis Pipeline](pipeline.html)
 
-2.  [Examples of different cell typing methods](clus_examples.html)
+2.  [Examples of different normalization methods](norm_examples.html)
 
-3.  [Examples of different normalization methods](norm_examples.html)
+3.  [Examples of different cell typing methods](clus_examples.html)
 
 Hopefully, soon my thesis document will be available too, as reference for a more profound insight on my work. For now, I hope what you find here is useful and interesting!
+
+------------------------------------------------------------------------
+
+A [workflowr](https://github.com/workflowr/workflowr) project.

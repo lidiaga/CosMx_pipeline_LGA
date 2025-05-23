@@ -158,13 +158,9 @@ knitr::kable(comp, row.names = FALSE, format = "html") %>%
 
 In terms of time, the Seurat approach is faster out of the three, followed by unsupervised InSituType. On the other side, supervised InSituType algorithm takes almost 16 minutes to compute, but it is not more memory consuming than the Seurat approach, for example.  
 
-Overall, unsupervised InSituType is
-
-, but provides full cell annotation based on a very reliable profile and seems more memory efficient overall, showing very reduced memory consumption in the Unsupervised method and very comparable values between the supervised method and the unsupervised Seurat's approach.  
-
 ------------------------------------------------------------------------
 
-# Bibligraphy
+# Bibliography
 
 1.  Qi R, Ma A, Ma Q, Zou Q. Clustering and classification methods for single-cell RNA-sequencing data. Briefings in Bioinformatics [Internet]. 2020 Jul 15 [cited 2025 May 7];21(4):1196–208. Available from: <https://doi.org/10.1093/bib/bbz062>
 
