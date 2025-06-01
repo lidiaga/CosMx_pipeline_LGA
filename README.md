@@ -11,9 +11,9 @@ My name is Lidia Getino Álvarez and this repository, and its corresponding GitH
 | **Tutor:** Mireia Ferrer Almirall  
 | **Developed at:** Statistics and Bioinformatics Unit (Vall d'Hebron Research Institute - VHIR)  
 
-Here you will find a modular and reproducible pipeline for the analysis of spatial transcriptomics data generated with the CosMx™ SMI technology by Nanostring®. The pipeline begins from the AtoMx™ SIP exported flat files, although it is optimized to work with an AtoMx™ SIP exported Seurat object too.
+Here you will find a modular and reproducible pipeline for the analysis of spatial transcriptomics data generated with the CosMx™ SMI technology by Nanostring®. The pipeline begins from the AtoMx™ SIP exported flat files, although it is optimized to work with an AtoMx™ SIP exported Seurat object, too.
 
-Hopefully, soon my thesis document will be available too, as reference for a more profound insight on my work. For now, I hope what you find here is useful and interesting!
+Hopefully, soon my thesis document will be available too, as a reference for a more profound insight into my work. For now, I hope what you find here is useful and interesting!
 
 ## Project directory structure
 
@@ -72,7 +72,7 @@ CosMx_pipeline_LGA/
 
 ## Requirements
 
-All the code has been developed in R (v4.4.3), using the RStudio (v2024.12.1.563) environment. In order to reproduce the work the following packages and versions will be needed\*:
+All the code has been developed in R (v4.4.3), using the RStudio (v2024.12.1.563) environment. To reproduce the work, the following packages and versions will be needed\*:
 
 |                    |                    |
 |:------------------:|:------------------:|
@@ -91,7 +91,7 @@ All the code has been developed in R (v4.4.3), using the RStudio (v2024.12.1.563
 
 This repository and its associated webpage have been developed using the [workflowr](https://github.com/workflowr/workflowr) package. To know how this project was managed with this tool, check the `workflowr_project_setup.R` script above.
 
-In the website, a dynamic presentation of the proposed pipeline, methodology used and an example of use with a public dataset can be found.
+In the website, a dynamic presentation of the proposed pipeline, the methodology used, and an example of use with a public dataset can be found.
 
 ## Pipeline
 
@@ -111,7 +111,7 @@ CosMx_pipeline_LGA/
   ...
 ```
 
-With the goal of creating a flexible pipeline, the documents have been parameterized, as far as possible, to allow for a variety of options without affecting their proper functioning (check [Usage]). However, the Cell typing phase is subdivided into three independent scripts, given the complexity of executing the different alternatives that the pipeline contemplates, please check the website "Cell typing" section for more information.
+To create a flexible pipeline, the documents have been parameterized, as far as possible, to allow for a variety of options without affecting their proper functioning (check [Usage](https://github.com/lidiaga/CosMx_pipeline_LGA/edit/master/README.md#usage)). However, the Cell typing phase is subdivided into three independent scripts, given the complexity of executing the different alternatives that the pipeline contemplates. Please check the website "Cell typing" section for more information.
 
 ## Usage
 
@@ -121,7 +121,7 @@ With the goal of creating a flexible pipeline, the documents have been parameter
 
 2.  Download the dataset and place the required files in the appropriate folder:
 
-    1.  Follow the link from [Dataset] section and download the files and place the following files in the appropriate folder (data/flatFiles/CoronalHemisphere/): exprMat_file.csv, fov_positions_file.csv and metadata_file.csv.
+    1.  Follow the link from the [Dataset](https://github.com/lidiaga/CosMx_pipeline_LGA/edit/master/README.md#dataset) section and download the files and place the following files in the appropriate folder (data/flatFiles/CoronalHemisphere/): exprMat_file.csv, fov_positions_file.csv, and metadata_file.csv.
 
         ```         
         CosMx_pipeline_LGA/
@@ -143,7 +143,7 @@ With the goal of creating a flexible pipeline, the documents have been parameter
     1.  Option 1: knit each Rmd file independently and in order.
     2.  Option 2: run all Rmd files in order using `worflowr`: run `wflow_build()` or `wflow_build(c("0.0_data_loading.Rmd", "1.0_qc_and_filtering.Rmd", "2.0_normalization.Rmd", "3.0_dimensional_reduction.Rmd", "4.0_insitutype_cell_typing.Rmd", "4.1_insitutype_unsup_clustering.Rmd", "4.2_seurat_unsup_clustering.Rmd"))`
 
-### Use pipeline with other data
+### Use the pipeline with other data
 
 1.  Clone the repository.
 
@@ -170,7 +170,7 @@ With the goal of creating a flexible pipeline, the documents have been parameter
           ...
         ```
 
-    2.  Alternativelly, if using the pipeline with an AtoMx™ SIP exported Seurat object, simply place the .RDS file inside the "seuAtoMx" folder (data/seuAtomx/).
+    2.  Alternatively, if using the pipeline with an AtoMx™ SIP exported Seurat object, simply place the .RDS file inside the "seuAtoMx" folder (data/seuAtomx/).
 
 3.  Run the Rmarkdown documents (analysis/) in order.
 
@@ -185,7 +185,7 @@ With the goal of creating a flexible pipeline, the documents have been parameter
 
         3.  Three cell typing methods are available\*:
 
-            1.  Choose between supervised classification with InSituType, unsupervied clustering with InSitutype or unsupervised clustering with Seurat. In both unsupervised clustering methods, cluster annotation is performed with ScType. However, this can be changed if desired.
+            1.  Choose between supervised classification with InSituType, unsupervised clustering with InSitutype, or unsupervised clustering with Seurat. In both unsupervised clustering methods, cluster annotation is performed with ScType. However, this can be changed if desired.
 
             2.  Run the appropriate Rmd file: `4.0_insitutype_cell_typing.Rmd`, `4.1_insitutype_unsup_clustering.Rmd` or `4.2_seurat_unsup_clustering.Rmd`.
 
@@ -197,7 +197,7 @@ With the goal of creating a flexible pipeline, the documents have been parameter
 
 The dataset used for the pipeline construction and generation of example vignettes corresponds to the Coronal Hemisphere sample from the CosMx SMI Mouse Brain FFPE Dataset. This dataset is publicly available for download from the NanoString® website and consists of samples from various sections of FFPE mouse brain tissue, analyzed using the CosMx™ SMI technology and the CosMx™ Mouse Neuroscience Panel, specifically designed to detect up to 1,000 genes in neuronal tissues.
 
-The raw data has not been included in the GitHub repository, as it does not originate from this project and may be subject to third-party usage restrictions. For replication purposes, the original files can be accessed and download from the Nanostring® website using the following links: <https://nanostring.com/resources/coronal-hemisphere-basic-data-files/>.
+The raw data has not been included in the GitHub repository, as it does not originate from this project and may be subject to third-party usage restrictions. For replication purposes, the original files can be accessed and downloaded from the Nanostring® website using the following links: <https://nanostring.com/resources/coronal-hemisphere-basic-data-files/>.
 
 ## License
 
@@ -215,7 +215,7 @@ All written content on this site is licensed under the **Creative Commons Attrib
 
 If you use or reference this work in academic or technical materials, please cite it as follows:
 
-Getino-Álvarez, L. *Implementación de un pipeline bioinformático para análisis de datos de Spatial Transcriptomics*. GitHub repository, [URL]. Accessed on [Date].
+Getino-Álvarez, L. *Implementación de un pipeline bioinformático para análisis de datos de Spatial Transcriptomics*. GitHub repository, available at: https://github.com/lidiaga/CosMx_pipeline_LGA. Accessed on [Date].
 
 ## Acknowledgments
 
