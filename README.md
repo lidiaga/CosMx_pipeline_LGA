@@ -111,7 +111,7 @@ CosMx_pipeline_LGA/
   ...
 ```
 
-To create a flexible pipeline, the documents have been parameterized, as far as possible, to allow for a variety of options without affecting their proper functioning (check [Usage](https://github.com/lidiaga/CosMx_pipeline_LGA/edit/master/README.md#usage)). However, the Cell typing phase is subdivided into three independent scripts, given the complexity of executing the different alternatives that the pipeline contemplates. Please check the website "Cell typing" section for more information.
+To create a flexible pipeline, the documents have been parameterized, as far as possible, to allow for a variety of options without affecting their proper functioning (check [Usage](https://github.com/lidiaga/CosMx_pipeline_LGA?tab=readme-ov-file#usage)). However, the Cell typing phase is subdivided into three independent scripts, given the complexity of executing the different alternatives that the pipeline contemplates. Please check the website "Cell typing" section for more information.
 
 ## Usage
 
@@ -121,7 +121,7 @@ To create a flexible pipeline, the documents have been parameterized, as far as 
 
 2.  Download the dataset and place the required files in the appropriate folder:
 
-    1.  Follow the link from the [Dataset](https://github.com/lidiaga/CosMx_pipeline_LGA/edit/master/README.md#dataset) section and download the files and place the following files in the appropriate folder (data/flatFiles/CoronalHemisphere/): exprMat_file.csv, fov_positions_file.csv, and metadata_file.csv.
+    1.  Follow the link from the [Dataset](https://github.com/lidiaga/CosMx_pipeline_LGA?tab=readme-ov-file#dataset) section and download the files and place the following files in the appropriate folder (data/flatFiles/CoronalHemisphere/): exprMat_file.csv, fov_positions_file.csv, and metadata_file.csv.
 
         ```         
         CosMx_pipeline_LGA/
