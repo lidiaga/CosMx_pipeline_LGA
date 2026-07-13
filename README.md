@@ -13,7 +13,7 @@ My name is Lidia Getino Álvarez and this repository, and its corresponding GitH
 
 Here you will find a modular and reproducible pipeline for the analysis of spatial transcriptomics data generated with the CosMx™ SMI technology by Nanostring®. The pipeline begins from the AtoMx™ SIP exported flat files, although it is optimized to work with an AtoMx™ SIP exported Seurat object, too.
 
-Hopefully, soon my thesis document will be available too, as a reference for a more profound insight into my work. For now, I hope what you find here is useful and interesting!
+Yo can also find my thesis document, as a reference for a more profound insight into my work, in the following link: [https://openaccess.uoc.edu/items/5f157f99-a9cd-4bdc-8eff-cc4f88187399#page=1](https://openaccess.uoc.edu/items/5f157f99-a9cd-4bdc-8eff-cc4f88187399#page=1). Hope you like it!
 
 ## Project directory structure
 
